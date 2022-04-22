@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name" translatable="false">Pharmacist assistant</string>
+    <string name="information" translatable="false"><![CDATA[ Hints ->
+        This is the void is Purchasing Price —> if u need increment values input (+) before numbers or decrease input (-) before numbers
+But !!! Make sure
+  You will change all the values in column and  not one row
+        thanks my Dear for listen to my spoke …]]></string>
+    <string name="name" translatable="false">name</string>
+    <string name="code" translatable="false">code</string>
+    <string name="purchasing_price" translatable="false">Purchasing price</string>
+    <string name="selling_price" translatable="false">selling price</string>
+    <string name="dosage" translatable="false">Dosage</string>
+    <string name="mg_kg" translatable="false">mg/kg</string>
+    <string name="weight" translatable="false">Weight</string>
+    <string name="kg" translatable="false">kg</string>
+    <string name="mg" translatable="false">mg</string>
+    <string name="per_volume" translatable="false">Per Volume</string>
+    <string name="ml" translatable="false">ml</string>
+    <string name="result" translatable="false">Result</string>
+    <string name="dose" translatable="false">Dose</string>
+    <string name="mg_daily" translatable="false">mg Daily</string>
+    <string name="liquid" translatable="false">Liquid</string>
+    <string name="camera" translatable="false">camera</string>
+    <string name="total" translatable="false">Total</string>
+    <string name="calculate_the_dosage_of_the_drug_based_on_the_weight" translatable="false">Calculate the dosage of the drug based on the weight</string>
+    <string name="update" translatable="false">Update</string>
+    <string name="purchase_price_update" translatable="false">Purchase price update</string>
+    <string name="sell_price_update" translatable="false">Sell Price Update</string>
+    <string name="purchase" translatable="false">purchase</string>
+    <string name="sell" translatable="false">Sell</string>
+    <string name="add" translatable="false">Add</string>
+    <string name="open_camera" translatable="false">Open Camera</string>
+    <string name="search_name" translatable="false">Search name</string>
+    <string name="export" translatable="false">export</string>
+    <string name="the_dose" translatable="false">The Dose</string>
+    <string name="data_update" translatable="false">Data update</string>
+    <string name="price_calculation" translatable="false">order account</string>
+    <string name="import_Data" translatable="false">Import</string>
+    <string name="drug_name" translatable="false">Drug name</string>
+    <string name="most_side_effect" translatable="false">Most Side Effect</string>
+    <string name="mechanism_of_action" translatable="false">Mechanism Of Action</string>
+    <string name="pregnancy" translatable="false">Pregnancy</string>
+    <string name="drug" translatable="false">Drug</string>
+    <string name="search_in_barcode" translatable="false">Search in BarCode</string>
+    <string name="login" translatable="false">Login</string>
+    <string name="fullName" translatable="false">Full Name</string>
+    <string name="phone" translatable="false">Phone</string>
+    <string name="loginbutton" translatable="false">Login</string>
+    <string name="clickhere" translatable="false">Click Here</string>
+    <string name="Doyouhaveakey" translatable="false">Do you have a Key</string>
+    <string name="help" translatable="false">Help</string>
+    <string name="Entry" translatable="false">Enter</string>
+    <string name="helping" translatable="false">To get the key:</string>
+    <string name="Here" translatable="false">Here</string>
+    <string name="SpeechToText" translatable="false">Speech To Text</string>
+
+</resources>

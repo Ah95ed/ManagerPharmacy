@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_left"
+    android:id="@+id/bar"
+    app:circularflow_defaultRadius="@dimen/cardview_compat_inset_shadow"
+    tools:context=".RegisterActivity">
+
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_below="@+id/bar"
+        android:background="@drawable/shape_left"
+        android:padding="10dp"
+        android:src="@drawable/pharmacy"
+        tools:ignore="NotSibling" />
+
+    <TextView
+        android:id="@+id/Login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo"
+        android:text="@string/login"
+        android:textAlignment="center"
+        android:textColor="#371212"
+        android:textSize="25sp" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="@string/fullName"
+        app:hintTextColor="@color/black"
+        android:id="@+id/labelTest"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:startIconDrawable="@drawable/ic_person"
+        android:layout_below="@+id/Login">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/user"
+            android:shadowColor="@color/black"
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="@string/phone"
+        app:startIconDrawable="@drawable/ic_phone"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="12dp"
+        android:id="@+id/test"
+        android:layout_marginEnd="12dp"
+        android:layout_below="@+id/labelTest">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/phone"
+        android:shadowColor="@color/black"
+        android:inputType="phone"
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.gms.common.internal.SignInButtonImpl
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/test"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/shape_left"
+        android:gravity="center"
+        android:text="@string/loginbutton"
+        android:textSize="23sp" />
+
+    <LinearLayout
+        android:id="@+id/liner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/register"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_left"
+        android:orientation="horizontal">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/have"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:text="@string/Doyouhaveakey"
+            android:textAlignment="textEnd"
+            android:textColor="#371212"
+            android:textSize="22sp" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/goToLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_weight="1"
+
+            android:text="@string/clickhere"
+            android:textColor="#ff5131"
+            android:textSize="22sp" />
+
+
+    </LinearLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/toHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_centerInParent="true"
+        android:text="@string/help"
+        android:layout_below="@+id/liner"
+        android:textColor="#ff5131"
+        android:textSize="22sp" />
+
+</RelativeLayout>

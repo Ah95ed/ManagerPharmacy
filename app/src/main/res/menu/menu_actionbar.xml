@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item android:id="@+id/search"
+        app:showAsAction="always"
+        android:title="@string/search_name"
+        android:icon="@drawable/ic_search"
+
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+    <item
+        android:id="@+id/Backup"
+        android:title="@string/export"/>
+
+    <item android:id="@+id/restore"
+        android:title="@string/import_Data"/>
+    <item
+        android:id="@+id/listShow"
+        android:title="@string/price_calculation"/>
+    <item
+        android:id="@+id/camera"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_camera"
+        android:title="@string/open_camera" />
+    <item
+        app:showAsAction="ifRoom"
+        android:title="@string/data_update"
+        android:icon="@drawable/ic_update"
+        android:id="@+id/update"/>
+    <item
+        app:showAsAction="ifRoom"
+        android:title="@string/the_dose"
+        android:icon="@drawable/ic_update"
+        android:id="@+id/Calculate"/>
+    <item
+        app:showAsAction="ifRoom"
+        android:title="Delete All"
+        android:icon="@drawable/ic_delete"
+        android:id="@+id/deleted"/>
+</menu>

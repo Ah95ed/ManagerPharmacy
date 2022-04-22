@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "586342329600",
+    "firebase_url": "https://manager-pharmacy-default-rtdb.firebaseio.com",
+    "project_id": "manager-pharmacy",
+    "storage_bucket": "manager-pharmacy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586342329600:android:285dde686398cc615a57e5",
+        "android_client_info": {
+          "package_name": "com.Ahmed.managerpharmacy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "586342329600-nr28jdjugt3v75j9a9uhp345jsfru49q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Ahmed.managerpharmacy",
+            "certificate_hash": "776e33638dd61bb4ea8fe9b1b7cff20e6c040698"
+          }
+        },
+        {
+          "client_id": "586342329600-p6pjsl3m0o1cg9ek3khi3d5aemfe0hrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBri34lq-OVXTHTCMZFs9nRylOa4g7MMuk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "586342329600-p6pjsl3m0o1cg9ek3khi3d5aemfe0hrl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

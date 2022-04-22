@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        app:showAsAction="always"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search_name"
+        android:id="@+id/searchName"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+    <item
+        app:showAsAction="always"
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete"
+        android:title="Delete All"/>
+    <item
+        app:showAsAction="always"
+        android:id="@+id/print"
+        android:icon="@drawable/print"
+        android:title="ShareData"/>
+
+</menu>

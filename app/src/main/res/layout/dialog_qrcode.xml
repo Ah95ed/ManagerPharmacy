@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/barcode_scanner"
+            android:layout_width="wrap_content"
+            android:layout_height="413dp"
+            android:layout_gravity="center"
+            app:zxing_preview_scaling_strategy="centerCrop"
+            app:zxing_use_texture_view="false">
+
+                <com.google.android.gms.common.internal.SignInButtonImpl
+                    android:id="@+id/close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_left"
+                    android:text="Close"
+                    android:textColor="@color/purple_700"
+                    android:textSize="18sp" />
+        </com.journeyapps.barcodescanner.DecoratedBarcodeView>
+
+</FrameLayout>

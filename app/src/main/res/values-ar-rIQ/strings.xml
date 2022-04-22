@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مساعد الصيدلي</string>
+    <string name="information" translatable="false">تلميح أذا كنت تريد زيادة ادخل (+)قبل الرقم او تريد تنقص ضع (-)قبل الرقم..لكن تاكد انك ستغير كل الحقول وليس حقل واحد</string>
+    <string name="name" translatable="false">اسم العلاج</string>
+    <string name="code" translatable="false">كود العلاج</string>
+    <string name="purchasing_price" translatable="false">سعر الشراء</string>
+    <string name="selling_price" translatable="false">سعر البيع</string>
+    <string name="result" translatable="false">الناتج</string>
+    <string name="camera" translatable="false">كاميرا</string>
+    <string name="total" translatable="false">المجموع</string>
+    <string name="dosage">الجرعة</string>
+    <string name="mg_kg">ملغ\\كغم</string>
+    <string name="weight">وزن</string>
+    <string name="kg">كغم</string>
+    <string name="dose">جرع</string>
+    <string name="mg">ملغ</string>
+    <string name="per_volume">لكل حجم</string>
+    <string name="ml">مل</string>
+    <string name="mg_daily">ملغ يومي</string>
+    <string name="liquid">سائل</string>
+    <string name="calculate_the_dosage_of_the_drug_based_on_the_weight" translatable="false">احسب جرعة الدواء على أساس الوزن</string>
+    <string name="update" translatable="false">تحديث</string>
+    <string name="purchase_price_update" translatable="false">تحديث سعر الشراء</string>
+    <string name="sell_price_update" translatable="false">تحديث سعر البيع</string>
+    <string name="purchase" translatable="false">الشراء</string>
+    <string name="sell" translatable="false">البيع</string>
+    <string name="add" translatable="false">أضافة</string>
+    <string name="open_camera" translatable="false">فتح الكاميرا</string>
+    <string name="search_name" translatable="false">بحث بالاسم</string>
+    <string name="export" translatable="false">تصدير</string>
+    <string name="the_dose" translatable="false">الدوز</string>
+    <string name="data_update" translatable="false">تحديث الداتا</string>
+    <string name="price_calculation" translatable="false">حساب الطلبات</string>
+    <string name="import_Data" translatable="false">أستيراد</string>
+    <string name="search_in_barcode" translatable="false">بحث بالكود</string>
+    <string name="drug_name">" اسم الدواء"</string>
+    <string name="most_side_effect">" الآثار الجانبية"</string>
+    <string name="mechanism_of_action">آلية العمل</string>
+    <string name="pregnancy">حمل</string>
+    <string name="login">التسجيل</string>
+    <string name="fullName">ألأسم كاملاً</string>
+    <string name="phone">رقم الهاتف</string>
+    <string name="loginbutton">تسجيل</string>
+    <string name="clickhere">اضغط هنا</string>
+    <string name="Doyouhaveakey">هل تملك مفتاح</string>
+    <string name="help">المساعدة</string>
+    <string name="drug" translatable="false">دواء</string>
+    <string name="Entry">دخول</string>
+    <string name="helping" translatable="false">للحصول على المفتاح</string>
+    <string name="Here" translatable="false">هنا</string>
+    <string name="SpeechToText" translatable="false">تحويل الكلام الى نص</string>
+</resources>
