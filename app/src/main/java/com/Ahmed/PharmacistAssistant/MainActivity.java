@@ -279,7 +279,6 @@ public class MainActivity extends AppCompatActivity{
         } catch (Exception e) {
             Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
-//        onResume();
     }
     private void loadRecords() {
         AdapterRecord adapter = new AdapterRecord(MainActivity.this, db.getAllRecords(DBSqlite.C_ID));
@@ -441,6 +440,7 @@ public class MainActivity extends AppCompatActivity{
                     Toast.makeText(this, "نحتاج صلاحيات للذاكرة" + requestCode, Toast.LENGTH_LONG).show();
                 }
             }
+            break;
             case CAMERA_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] ==
                         PackageManager.PERMISSION_GRANTED) {

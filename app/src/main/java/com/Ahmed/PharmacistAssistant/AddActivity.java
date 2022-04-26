@@ -16,12 +16,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.ScanOptions;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 public class AddActivity extends AppCompatActivity {
@@ -99,14 +96,13 @@ public class AddActivity extends AppCompatActivity {
                     ""+mechanism,""+pregnancy);
             Toast.makeText(AddActivity.this, "تم تحديث المعلومات", Toast.LENGTH_SHORT).show();
             onResume();
-//            onBackPressed();
+
         } else{
             long result = dataBase.insertData("" + name, "" + code, "" + cost, "" + sell,
                     ""+dose,""+drug,""+most,""+mechanism,""+pregnancy);
             if (result != -1) {
                 Toast.makeText(AddActivity.this, "تمت الاضافة", Toast.LENGTH_SHORT).show();
                 onResume();
-//                onBackPressed();
             } else {
                 Toast.makeText(AddActivity.this, "فشلت الاضافة", Toast.LENGTH_SHORT).show();
             }
@@ -135,7 +131,6 @@ public class AddActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void openCamera(){
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
@@ -168,7 +163,6 @@ public class AddActivity extends AppCompatActivity {
         dialog.setView(v);
         dialog.show();
     }
-
     private boolean checkStoragePermission(){
         boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
         return result;

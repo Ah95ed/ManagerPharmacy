@@ -32,6 +32,7 @@ import android.os.StrictMode;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -59,23 +60,29 @@ public class CameraOpenActivity extends AppCompatActivity {
     private CameraSettings cameraSettings;
     private DBSqlite db;
     private TextView result;
+    private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
     private EditText et_text;
     private String txt,id,named,selles,cost,code;
     private RecyclerView recyclerview;
     private double results;
     private String[] cameraPermissions;
-    private static final int CAMERA_REQUEST_CODE=100;
-    private static final int STORAGE_REQUEST_CODE=102;;
+    private static final byte CAMERA_REQUEST_CODE=100;
+    private static final byte STORAGE_REQUEST_CODE=102;;
     private DB d ;
     private double res,calc;
     private byte numberPage =1;
     private AdapterTwo adapterRecord;
+    private String[] storagePermissions;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_open);
         d = new DB(this);
+        cameraPermissions = new String[]{Manifest.permission.CAMERA};
+        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
+                , Manifest.permission.READ_EXTERNAL_STORAGE};
         recyclerview = findViewById(R.id.recordR);
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         barcodeView = findViewById(R.id.barcode_scanner);
@@ -105,6 +112,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         barcodeView.pause();
         db = new DBSqlite(this);
     }
+
     private void openCam() {
 
         cameraSettings.setRequestedCameraId(0);
@@ -206,14 +214,39 @@ public class CameraOpenActivity extends AppCompatActivity {
         }
         else if (ide == R.id.print)
         {
+
             try {
-                createPdf();
-                printPDF();
+                if (checkStoragePermission()) {
+                    createPdf();
+                    printPDF();
+                }else
+                    getReadStoragePermission();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void requestStoragePermissionImport() {
+        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE_IMPORT);
+    }
+    private void getReadStoragePermission(){
+          requestStoragePermissionImport();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                false == Environment.isExternalStorageManager()) {
+            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                false == Environment.isExternalStorageManager()) {
+            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
+                false == Environment.isExternalStorageManager()) {
+            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+        }
+
     }
 
     @Override
@@ -229,9 +262,16 @@ public class CameraOpenActivity extends AppCompatActivity {
                 requestCameraPermission();
             }
             break;
-            case STORAGE_REQUEST_CODE:{
-                boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            case STORAGE_REQUEST_CODE_IMPORT: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
 
+                    } catch (Exception e) {
+                        Toast.makeText(CameraOpenActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "نحتاج صلاحيات للذاكرة" + requestCode, Toast.LENGTH_LONG).show();
+                }
             }
             break;
             default:
@@ -252,6 +292,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+//        getReadStoragePermission();
         openCam();
         adapterRecord = new AdapterTwo(d.getFav(DB.id), CameraOpenActivity.this);
         adapterRecord.updateItems(d.getFav(DB.id));
@@ -259,25 +300,21 @@ public class CameraOpenActivity extends AppCompatActivity {
         recyclerview.hasFixedSize();
         recyclerview.setAdapter(adapterRecord);
     }
+    private boolean checkStoragePermission() {
+        boolean result = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                (PackageManager.PERMISSION_GRANTED);
+        return result;
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         openCam();
-        getPermission();
 
+//        requestStoragePermissionImport();
     }
-    private void getPermission()
-    {
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) ==
-                    PackageManager.PERMISSION_DENIED){
-                requestPermissions(cameraPermissions,CAMERA_REQUEST_CODE);
-            }
-        }else{
-            checkSelfPermission(Manifest.permission.CAMERA);
-        }
-    }
+
 
     @SuppressLint("ResourceAsColor")
     private void createPdf() throws IOException {
@@ -290,26 +327,29 @@ public class CameraOpenActivity extends AppCompatActivity {
                 .create();
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
-        File file = new File(Environment.getExternalStorageDirectory(),"/First.pdf");
+        File file = new File(
+                Environment.getExternalStorageDirectory(),
+                "/First.pdf"
+        );
         paint.setTextSize(12);
         canvas.drawText("By Developer Ah3iq",140,12,paint);
         canvas.drawText(DB.name,20,30,paint);
         canvas.drawText("الكمية",235,30,paint);
         canvas.drawText(DB.sell,pageInfo.getPageWidth() - 60,30,paint);
          int StartY = 60;
-         byte num =1;
+         byte numberItem =1;
         for (int i = 0; i < arrayList.size(); i++)
         {
-            canvas.drawText(String.valueOf(num),5,StartY,paint);
+            canvas.drawText(String.valueOf(numberItem),5,StartY,paint);
             canvas.drawText(arrayList.get(i).getName(),22,StartY,paint);
             canvas.drawText(arrayList.get(i).getQuantity(),235,StartY,paint);
             canvas.drawText(arrayList.get(i).getSell(),pageInfo.getPageWidth() - 75,StartY,paint);
             canvas.drawLine(10,StartY+4,pageInfo.getPageWidth() - 10,StartY+4,paint);
             StartY +=20;
-            num ++;
-            if (num == 30){
+            numberItem ++;
+            if (numberItem == 30){
                 numberPage +=1;
-                num =0;
+                numberItem =0;
             }
         }
         paint.setTextAlign(Paint.Align.CENTER);
