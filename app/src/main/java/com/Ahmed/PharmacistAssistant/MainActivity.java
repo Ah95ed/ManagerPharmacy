@@ -34,6 +34,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -529,7 +531,7 @@ public class MainActivity extends AppCompatActivity{
                     }
     }
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         loadRecords();
         getPermission();

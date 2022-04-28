@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant;
+package com.Ahmed.PharmacistAssistant.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,6 +13,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.Ahmed.PharmacistAssistant.AddActivity;
+import com.Ahmed.PharmacistAssistant.DBSqlite;
+import com.Ahmed.PharmacistAssistant.MainActivity;
+import com.Ahmed.PharmacistAssistant.Model;
+import com.Ahmed.PharmacistAssistant.R;
+import com.Ahmed.PharmacistAssistant.RecordDetailActivity;
 
 import java.util.ArrayList;
 
@@ -96,7 +103,7 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
                    ((MainActivity)context).onStart();
                }else if (i == 1){
 //                   تعديل
-                   Intent intent =new Intent(context,AddActivity.class);
+                   Intent intent =new Intent(context, AddActivity.class);
                    intent.putExtra("ID",id);
                    intent.putExtra("NAME",name);
                    intent.putExtra("CODE",code);

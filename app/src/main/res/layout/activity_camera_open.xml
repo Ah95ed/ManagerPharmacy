@@ -63,6 +63,7 @@
         android:nextFocusUp="@android:color/transparent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/recycler" />
+
     <TextView
         android:id="@+id/tv_total"
         android:layout_width="match_parent"

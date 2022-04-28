@@ -3,6 +3,7 @@ package com.Ahmed.PharmacistAssistant;
 
 
 
+import static com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo.result;
 import static com.Ahmed.PharmacistAssistant.DBSqlite.C_CODE;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -59,7 +62,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     private DecoratedBarcodeView barcodeView;
     private CameraSettings cameraSettings;
     private DBSqlite db;
-    private TextView result;
+    public TextView result;
     private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
     private EditText et_text;
     private String txt,id,named,selles,cost,code;
@@ -67,7 +70,6 @@ public class CameraOpenActivity extends AppCompatActivity {
     private double results;
     private String[] cameraPermissions;
     private static final byte CAMERA_REQUEST_CODE=100;
-    private static final byte STORAGE_REQUEST_CODE=102;;
     private DB d ;
     private double res,calc;
     private byte numberPage =1;
@@ -290,7 +292,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,cameraPermissions,CAMERA_REQUEST_CODE);
     }
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
 //        getReadStoragePermission();
         openCam();
@@ -299,6 +301,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         recyclerview.setLayoutManager(new LinearLayoutManager(CameraOpenActivity.this));
         recyclerview.hasFixedSize();
         recyclerview.setAdapter(adapterRecord);
+        result.setText(AdapterTwo.result);
     }
     private boolean checkStoragePermission() {
         boolean result = ContextCompat.checkSelfPermission(this,
@@ -308,11 +311,10 @@ public class CameraOpenActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         openCam();
 
-//        requestStoragePermissionImport();
     }
 
 
@@ -393,4 +395,5 @@ public class CameraOpenActivity extends AppCompatActivity {
             Log.d("PDF" , e.getMessage());
         }
     }
+
 }
