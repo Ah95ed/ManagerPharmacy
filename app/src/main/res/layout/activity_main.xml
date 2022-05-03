@@ -8,7 +8,7 @@
     app:circularflow_defaultRadius="@dimen/cardview_default_radius"
     android:id="@+id/Relative"
     android:background="#F5FFFC"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recordRv"

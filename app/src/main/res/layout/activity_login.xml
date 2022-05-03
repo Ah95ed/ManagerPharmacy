@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
 
     <LinearLayout
@@ -67,8 +67,8 @@
         />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.gms.common.internal.SignInButtonImpl
-        android:id="@+id/searchKey"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/keyinput"

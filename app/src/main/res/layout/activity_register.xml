@@ -7,7 +7,7 @@
     android:background="@drawable/shape_left"
     android:id="@+id/bar"
     app:circularflow_defaultRadius="@dimen/cardview_compat_inset_shadow"
-    tools:context=".RegisterActivity">
+    tools:context=".activity.RegisterActivity">
 
 
     <ImageView
@@ -75,7 +75,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.gms.common.internal.SignInButtonImpl
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

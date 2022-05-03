@@ -63,7 +63,7 @@
         android:layout_below="@+id/results"
         android:layout_centerInParent="true"
         >
-        <com.google.android.gms.common.internal.SignInButtonImpl
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
             android:text="تعديل"
             android:textSize="16sp" />
 
-        <com.google.android.gms.common.internal.SignInButtonImpl
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

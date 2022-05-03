@@ -29,7 +29,7 @@
         android:theme="@style/Theme.ManagerPharmacy"
         tools:targetApi="s">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activity.RegisterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,35 +38,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".CalculateActivity"
+            android:name=".activity.CalculateActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".CameraOpenActivity"
+            android:name=".activity.CameraOpenActivity"
             android:exported="true" />
         <activity
-            android:name=".UpdateColumnActivity"
+            android:name=".activity.UpdateColumnActivity"
             android:exported="true" />
         <activity
-            android:name=".RecordDetailActivity"
+            android:name=".activity.RecordDetailActivity"
             android:exported="true" />
         <activity
-            android:name=".AddActivity"
+            android:name=".activity.AddActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".Capture"
+            android:name=".AdapterAndService.Capture"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />
 
         <service
-            android:name=".MyJobService"
+            android:name=".AdapterAndService.MyJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <provider
             android:authorities="com.Ahmed.PharmacistAssistant.fileprovider"

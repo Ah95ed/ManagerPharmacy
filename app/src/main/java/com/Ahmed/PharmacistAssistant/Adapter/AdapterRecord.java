@@ -14,12 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.Ahmed.PharmacistAssistant.AddActivity;
-import com.Ahmed.PharmacistAssistant.DBSqlite;
-import com.Ahmed.PharmacistAssistant.MainActivity;
-import com.Ahmed.PharmacistAssistant.Model;
+import com.Ahmed.PharmacistAssistant.activity.AddActivity;
+import com.Ahmed.PharmacistAssistant.database.DBSqlite;
+import com.Ahmed.PharmacistAssistant.activity.MainActivity;
+import com.Ahmed.PharmacistAssistant.model.Model;
 import com.Ahmed.PharmacistAssistant.R;
-import com.Ahmed.PharmacistAssistant.RecordDetailActivity;
+import com.Ahmed.PharmacistAssistant.activity.RecordDetailActivity;
 
 import java.util.ArrayList;
 

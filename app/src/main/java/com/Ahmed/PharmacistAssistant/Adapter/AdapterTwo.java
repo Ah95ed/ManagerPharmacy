@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,9 +18,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.Ahmed.PharmacistAssistant.CameraOpenActivity;
-import com.Ahmed.PharmacistAssistant.DB;
-import com.Ahmed.PharmacistAssistant.Model;
+import com.Ahmed.PharmacistAssistant.activity.CameraOpenActivity;
+import com.Ahmed.PharmacistAssistant.database.DB;
+import com.Ahmed.PharmacistAssistant.model.Model;
 import com.Ahmed.PharmacistAssistant.R;
 
 import java.util.ArrayList;
