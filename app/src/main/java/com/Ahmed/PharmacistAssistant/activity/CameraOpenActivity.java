@@ -24,9 +24,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,12 +42,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo;
-import com.Ahmed.PharmacistAssistant.AdapterAndService.Capture;
+
 import com.Ahmed.PharmacistAssistant.AdapterAndService.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.BuildConfig;
 import com.Ahmed.PharmacistAssistant.R;
@@ -58,7 +58,7 @@ import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.CaptureManager;
+
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import java.io.File;
@@ -68,7 +68,7 @@ import java.util.ArrayList;
 
 
 public class CameraOpenActivity extends AppCompatActivity {
-    private CaptureManager capture;
+
     private DecoratedBarcodeView barcodeView;
     private CameraSettings cameraSettings;
     private DBSqlite db;
@@ -85,15 +85,19 @@ public class CameraOpenActivity extends AppCompatActivity {
     private byte numberPage =1;
     private AdapterTwo adapterRecord;
     private String[] storagePermissions;
-    private boolean isFlashOn;
+    private ImageButton Flash;
+    private boolean isFlash;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_open);
+
+        isFlash = false;
+
         d = new DB(this);
-        isFlashOn = false;
+        Flash = findViewById(R.id.flash);
         cameraPermissions = new String[]{Manifest.permission.CAMERA};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
                 , Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -125,6 +129,18 @@ public class CameraOpenActivity extends AppCompatActivity {
         barcodeView.resume();
         barcodeView.pause();
         db = new DBSqlite(this);
+        Flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isFlash){
+                    barcodeView.setTorchOn();
+                    isFlash = true;
+                }else {
+                    barcodeView.setTorchOff();
+                    isFlash = false;
+                }
+            }
+        });
     }
 
 

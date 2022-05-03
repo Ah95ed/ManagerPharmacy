@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
+
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -31,13 +32,13 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
-import android.view.KeyEvent;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+
 import android.widget.Toast;
 
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
@@ -492,7 +493,6 @@ public class MainActivity extends AppCompatActivity{
                     searchBar(result.getText());
                     barcodeView.pause();
                     dialog.dismiss();
-                    barcodeView.setTorchOff();
                 }
             }
         });
@@ -510,12 +510,13 @@ public class MainActivity extends AppCompatActivity{
         flash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               if (isFlash) {
+               if (!isFlash) {
                    barcodeView.setTorchOn();
+                   isFlash = true;
                }
                else {
                    barcodeView.setTorchOff();
-
+                   isFlash = false;
                }
 
             }
@@ -523,23 +524,7 @@ public class MainActivity extends AppCompatActivity{
         dialog.setView(v);
         dialog.show();
     }
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_FOCUS:
-            case KeyEvent.KEYCODE_CAMERA:
-                // Handle these events so they don't launch the Camera app
-                return true;
-            // Use volume up/down to turn on light
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                barcodeView.setTorchOff();
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                barcodeView.setTorchOn();
-                return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
     private void searchBar(String results) {
         AdapterRecord adapterRecord = new AdapterRecord(MainActivity.this, db.searchCamera(results));
         recordRv.setAdapter(adapterRecord);
@@ -559,7 +544,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
-                    finish();
+                finish();
                 } else if (i == 1) {
                     dialogInterface.dismiss();
                 }

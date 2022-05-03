@@ -17,8 +17,8 @@ android {
         applicationId "com.Ahmed.managerpharmacy"
         minSdk 24
         targetSdk 32
-        versionCode 5
-        versionName "2.3"
+        versionCode 6
+        versionName "3.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

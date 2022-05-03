@@ -31,6 +31,7 @@ public class AddActivity extends AppCompatActivity {
     public static String ID,name,code,cost,sell,dose,drug,most,mechanism,pregnancy;
     private DBSqlite dataBase;
     private boolean isEditMode = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

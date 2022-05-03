@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -18,7 +17,9 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 public class Helper {
     public static DecoratedBarcodeView barcodeView;
     public static CameraSettings cameraSettings;
+    private static boolean isFlash = false ;
     public static void openCamera(Context context, EditText codeEt){
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View v = LayoutInflater.from(context).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
@@ -40,12 +41,26 @@ public class Helper {
                 }
             }
         });
-        ImageButton Close = v.findViewById(R.id.close);
+        Button Close = v.findViewById(R.id.close);
+        Button flash = v.findViewById(R.id.flash);
+
         Close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 barcodeView.pause();
                 dialog.dismiss();
+            }
+        });
+        flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isFlash){
+                    barcodeView.setTorchOn();
+                    isFlash = true;
+                }else{
+                    barcodeView.setTorchOff();
+                    isFlash = false;
+                }
             }
         });
         dialog.setView(v);
