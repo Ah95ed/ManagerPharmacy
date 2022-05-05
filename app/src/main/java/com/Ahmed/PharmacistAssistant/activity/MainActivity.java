@@ -591,7 +591,7 @@ public class MainActivity extends AppCompatActivity{
         JobInfo info;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N){
             info= new JobInfo.Builder(10,componentName)
-                    .setPeriodic(60000)
+                    .setPeriodic(5000)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .build();
 
@@ -599,7 +599,7 @@ public class MainActivity extends AppCompatActivity{
         else
         {
             info= new JobInfo.Builder(10,componentName)
-                    .setMinimumLatency(60000)
+                    .setMinimumLatency(5000)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .build();
         }

@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void getDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String options [] = {"فيسبوك","وتساب","تليكرام"};
+        String [] options  = {"فيسبوك","وتساب","تليكرام"};
         builder.setTitle("أختر للمراسلة");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override

@@ -8,6 +8,7 @@ import android.app.job.JobService;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -22,9 +23,9 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class MyJobService extends JobService {
-    private Long time;
+    private Long time,LoginDate;
     private String dateOld,date,deviceId;
-
+    private int Expired;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private DatabaseReference ref;
@@ -32,6 +33,8 @@ public class MyJobService extends JobService {
     @SuppressLint("HardwareIds")
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
+        Log.d("HAH","start");
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simple = new SimpleDateFormat("dd-MM-yyyy");
         deviceId =android.provider.Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 android.provider.Settings.Secure.ANDROID_ID);
@@ -40,8 +43,8 @@ public class MyJobService extends JobService {
         ref.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long LoginDate = snapshot.child(deviceId).child("DateLogin").getValue(Long.class);
-                int Expired = snapshot.child(deviceId).child("Expired").getValue(Integer.class);
+                 LoginDate = snapshot.child(deviceId).child("DateLogin").getValue(Long.class);
+                 Expired = snapshot.child(deviceId).child("Expired").getValue(Integer.class);
                 time = snapshot.child(deviceId).child("TimeStamp").getValue(Long.class);
                 dateOld = simple.format(LoginDate);
                 date = simple.format(time);
@@ -51,6 +54,7 @@ public class MyJobService extends JobService {
                 try {
                     Date date1;
                     Date date2;
+                    @SuppressLint("SimpleDateFormat")
                     SimpleDateFormat dates = new SimpleDateFormat("dd-MM-yyyy");
                     date1 = dates.parse(dateOld);
                     date2 = dates.parse(date);
@@ -65,6 +69,7 @@ public class MyJobService extends JobService {
                     if (differenceDates >= Expired){
                         ref.child("Users").child(deviceId).child("key").setValue("");
                         ref.child("Users").child(deviceId).child("DateLogin").setValue("");
+                        ref.child("Users").child(deviceId).child("Expired").setValue("");
                         preferences = getSharedPreferences("My preferences", MODE_PRIVATE);
                     editor = preferences.edit();
                     editor.clear();
@@ -87,11 +92,11 @@ public class MyJobService extends JobService {
 
             }
         });
-        return false;
+        return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
-        return false;
+        return true;
     }
 }
