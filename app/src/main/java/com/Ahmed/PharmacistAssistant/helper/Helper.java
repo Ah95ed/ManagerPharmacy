@@ -38,6 +38,7 @@ public class Helper {
                     codeEt.setText(result.getText());
                     barcodeView.pause();
                     dialog.dismiss();
+                    isFlash = false;
                 }
             }
         });

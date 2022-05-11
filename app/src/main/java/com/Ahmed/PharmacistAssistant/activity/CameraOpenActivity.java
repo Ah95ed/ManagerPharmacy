@@ -435,5 +435,9 @@ public class CameraOpenActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        isFlash = false;
+    }
 }

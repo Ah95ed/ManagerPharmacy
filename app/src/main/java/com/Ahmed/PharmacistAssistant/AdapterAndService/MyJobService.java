@@ -49,7 +49,7 @@ public class MyJobService extends JobService {
                 dateOld = simple.format(LoginDate);
                 date = simple.format(time);
                 /**
-                 * That is true calculate time day--> focuses { DAY }
+                 * That is true calculate time day--> focus { DAY }
                  **/
                 try {
                     Date date1;

@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.Ahmed.PharmacistAssistant">
-
+    <uses-permission android:name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,6 +18,9 @@
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -27,7 +31,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ManagerPharmacy"
+        tools:ignore="DataExtractionRules"
         tools:targetApi="s">
+        <service
+            android:name=".AdapterAndService.MyService"
+            android:enabled="true"
+            android:exported="true">
+
+        </service>
+
+        <receiver
+            android:name=".AdapterAndService.MyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".activity.RegisterActivity"
             android:exported="true">
@@ -68,18 +92,15 @@
         <service
             android:name=".AdapterAndService.MyJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <provider
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.Ahmed.PharmacistAssistant.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true"
-
-            android:name="androidx.core.content.FileProvider">
-
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/providerpaths"
-                />
-
+                android:resource="@xml/providerpaths" />
         </provider>
     </application>
 

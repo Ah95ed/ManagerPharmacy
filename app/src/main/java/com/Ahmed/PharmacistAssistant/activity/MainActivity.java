@@ -13,18 +13,18 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
-
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.CursorWindow;
 import android.icu.util.Calendar;
-
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,21 +32,19 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
 import android.widget.Toast;
-
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyJobService;
+import com.Ahmed.PharmacistAssistant.AdapterAndService.MyReceiver;
+import com.Ahmed.PharmacistAssistant.AdapterAndService.MyService;
 import com.Ahmed.PharmacistAssistant.BuildConfig;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
-
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,11 +54,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -105,6 +101,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         isFlash = false;
+        jobService();
         calendar = Calendar.getInstance();
         simple = new SimpleDateFormat("dd-MM-yyyy");
         date = simple.format(calendar.getTime());
@@ -233,17 +230,15 @@ public class MainActivity extends AppCompatActivity{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                onResume();
+
                              onStart();
                             }
                         });
-//                        Toast.makeText(MainActivity.this, "تم الاسترداد", Toast.LENGTH_SHORT).show();
+
                     } catch (Exception e) {
-//                        Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
                         Log.d("IMPORT",e.getMessage());
                     }
-
-
                 }
             });
             thread.start();
@@ -385,7 +380,6 @@ public class MainActivity extends AppCompatActivity{
                 requestCameraPermission();
 
             }
-//            Helper.openCamera();
             openCamera();
         } else if (id == R.id.update) {
             updateAllCostAndSell();
@@ -468,22 +462,17 @@ public class MainActivity extends AppCompatActivity{
                 break;
         }
     }
-
-
     private void openCamera() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
-
         dialog.setCanceledOnTouchOutside(false);
         barcodeView = v.findViewById(R.id.barcode_scanner);
         cameraSettings =new CameraSettings();
         cameraSettings.setRequestedCameraId(0);
         cameraSettings.setAutoFocusEnabled(true);
-
         barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-
         barcodeView.resume();
 
         barcodeView.decodeSingle(new BarcodeCallback() {
@@ -493,6 +482,7 @@ public class MainActivity extends AppCompatActivity{
                     searchBar(result.getText());
                     barcodeView.pause();
                     dialog.dismiss();
+                    barcodeView.setTorchOff();
                 }
             }
         });
@@ -555,12 +545,13 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         dialogCancel();
+        isFlash = false;
     }
     @Override
     protected void onResume() {
         super.onResume();
         Expired();
-        jobService();
+
     }
     private void Expired() {
         preferences = getSharedPreferences("My preferences", MODE_PRIVATE);
@@ -586,7 +577,12 @@ public class MainActivity extends AppCompatActivity{
             }
         }
     }
+
     public  void jobService() {
+
+        MyReceiver receiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(receiver,filter);
         ComponentName componentName = new ComponentName(MainActivity.this, MyJobService.class);
         JobInfo info;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N){
@@ -594,7 +590,6 @@ public class MainActivity extends AppCompatActivity{
                     .setPeriodic(5000)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .build();
-
         }
         else
         {
@@ -605,5 +600,6 @@ public class MainActivity extends AppCompatActivity{
         }
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.schedule(info);
+//        startService(new Intent(getBaseContext(), MyService.class));
     }
 }
