@@ -91,7 +91,7 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
                     if (delete > 0) {
                         db.close();
                         ((CameraOpenActivity) context).onStart();
-                        Toast.makeText(context, "تم الحذف" + n, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, " تم حذف " + n, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                     }

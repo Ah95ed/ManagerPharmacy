@@ -5,12 +5,14 @@
       <map>
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/drawable/ic_flash_on.xml" value="0.1355" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/drawable/text.xml" value="0.1195" />
+        <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/activity_add.xml" value="0.264" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/activity_camera_open.xml" value="0.2234375" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/activity_login.xml" value="0.2234375" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/activity_main.xml" value="0.2234375" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/activity_register.xml" value="0.2234375" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/custom_layout_dialog.xml" value="0.2234375" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/dialog_qrcode.xml" value="0.264" />
+        <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/recycler.xml" value="0.2234375" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/row_record.xml" value="0.2234375" />
       </map>
     </option>

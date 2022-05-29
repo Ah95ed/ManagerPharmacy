@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.AdapterAndService;
+package com.Ahmed.PharmacistAssistant.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -72,7 +72,7 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
         }
         catch (Exception e) {
             writeResultCallback.onWriteFailed(e.getMessage());
-            Log.d("PDFTRUE",e.getMessage().toString());
+//            Log.d("PDFTRUE",e.getMessage().toString());
         }
         finally {
             try {
@@ -80,7 +80,7 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
                 out.close();
             }
             catch (IOException e) {
-                Log.d("PDFTRUE",e.getMessage().toString());
+//                Log.d("PDFTRUE",e.getMessage().toString());
             }
         }
     }

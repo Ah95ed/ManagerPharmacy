@@ -204,29 +204,29 @@ public class DBSqlite extends SQLiteAssetHelper {
         db.close();
         return recordList;
     }
-    public ArrayList<Model> SearchAdd(String query){
-        ArrayList<Model> records = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + query + "%'";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery,null);
-        if (cursor.moveToFirst()){
-                Model model = new Model(
-                        ""+cursor.getString(0),
-                        ""+cursor.getString(1),
-                        ""+cursor.getString(2),
-                        ""+cursor.getString(3),
-                        ""+cursor.getString(4),
-                        ""+cursor.getString(5),
-                        ""+cursor.getString(6),
-                        ""+cursor.getString(7),
-                        ""+cursor.getString(8),
-                        ""+cursor.getString(9)
-                );
-                records.add(model);
-          cursor.moveToNext();
-        }
-        db.close();
-        return records;
-    }
+//    public ArrayList<Model> SearchAdd(String query){
+//        ArrayList<Model> records = new ArrayList<>();
+//        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + query + "%'";
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery(selectQuery,null);
+//        if (cursor.moveToFirst()){
+//                Model model = new Model(
+//                        ""+cursor.getString(0),
+//                        ""+cursor.getString(1),
+//                        ""+cursor.getString(2),
+//                        ""+cursor.getString(3),
+//                        ""+cursor.getString(4),
+//                        ""+cursor.getString(5),
+//                        ""+cursor.getString(6),
+//                        ""+cursor.getString(7),
+//                        ""+cursor.getString(8),
+//                        ""+cursor.getString(9)
+//                );
+//                records.add(model);
+//          cursor.moveToNext();
+//        }
+//        db.close();
+//        return records;
+//    }
 
 }

@@ -4,6 +4,7 @@ package com.Ahmed.PharmacistAssistant.activity;
 
 
 import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_CODE;
+import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_NAME;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -50,7 +51,7 @@ import android.widget.Toast;
 
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo;
 
-import com.Ahmed.PharmacistAssistant.AdapterAndService.PdfDocumentAdapter;
+import com.Ahmed.PharmacistAssistant.Adapter.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.BuildConfig;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DB;
@@ -158,7 +159,26 @@ public class CameraOpenActivity extends AppCompatActivity {
                 }
         });
     }
-
+    private void getDataName(String N) {
+        String selectQuery = "SELECT * FROM " + DBSqlite.DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + N + "%'";
+        SQLiteDatabase database = db.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                named = "" + cursor.getString(0);
+                code = ""+cursor.getString(1);
+                cost = ""+cursor.getString(2);
+                selles = "" + cursor.getString(3);
+                id = "" + cursor.getString(4);
+            }while (cursor.moveToNext());
+            Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+            dialogNum();
+        }else {
+            Toast.makeText(this, "Not Found !!", Toast.LENGTH_SHORT).show();
+        }
+        database.close();
+//        openCam();
+    }
 
 
 
@@ -176,7 +196,7 @@ public class CameraOpenActivity extends AppCompatActivity {
                 selles = "" + cursor.getString(3);
                 id = "" + cursor.getString(4);
             }while (cursor.moveToNext());
-            Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
             dialogNum();
         }else {
             Toast.makeText(this, "Not Found !!", Toast.LENGTH_SHORT).show();
@@ -216,7 +236,7 @@ public class CameraOpenActivity extends AppCompatActivity {
             onResume();
             results += res;
             result.setText(String.valueOf(results));
-            Toast.makeText(this, " Done ", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, " Done ", Toast.LENGTH_SHORT).show();
 
         } else {
             Toast.makeText(this, "Field", Toast.LENGTH_SHORT).show();
@@ -234,6 +254,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                getDataName(query);
                 return true;
             }
             @Override
