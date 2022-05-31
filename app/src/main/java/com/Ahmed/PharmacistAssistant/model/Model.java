@@ -17,6 +17,10 @@ public class Model {
         this.pregnancy= pregnancy;
     }
 
+    public Model (String sell){
+        this.sell = sell;
+    }
+
     public Model( String name, String code, String cost, String sell,String id,String quantity) {
 
         this.name = name;

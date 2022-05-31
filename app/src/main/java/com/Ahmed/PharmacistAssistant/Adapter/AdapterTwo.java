@@ -1,9 +1,14 @@
 package com.Ahmed.PharmacistAssistant.Adapter;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.Ahmed.PharmacistAssistant.activity.CameraOpenActivity;
 import com.Ahmed.PharmacistAssistant.database.DB;
+import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.Ahmed.PharmacistAssistant.R;
 
@@ -31,8 +37,9 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
     private DB db;
     @SuppressLint("StaticFieldLeak")
     public TextView textView;
-    public static String result;
-
+    public  String result;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     public AdapterTwo(ArrayList<Model> array, Context context) {
         this.array = array;
         this.context = context;
@@ -40,6 +47,7 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
     }
 
     /**
+     * Notion
      *   @SuppressLint("NotifyDataSetChanged")
      *     public void updateItems(ArrayList<Model> newList) {
      *         array = newList;
@@ -85,10 +93,24 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
                     db = new DB(context);
+                    String getSell = sellDeleted(id);
+                    double minSell =  Double.parseDouble(getSell);
+                    textView = ((CameraOpenActivity)context).result;
+                    if (textView.getText().toString().equals("المجموع")){
+                         db.deleteList(Integer.parseInt(id));
+                         deleteShared();
+                        ((CameraOpenActivity) context).onStart();
+                        return;
+                    }else {
+                        double resultDeleted = Double.parseDouble(textView.getText().toString()) - minSell;
+                        textView.setText(String.valueOf(resultDeleted));
+                        ((CameraOpenActivity) context).onStart();
+                    }
                     int delete = db.deleteList(Integer.parseInt(id));
                     array.remove(array.get(position));
                     AdapterTwo.this.notifyDataSetChanged();
                     if (delete > 0) {
+
                         db.close();
                         ((CameraOpenActivity) context).onStart();
                         Toast.makeText(context, " تم حذف " + n, Toast.LENGTH_SHORT).show();
@@ -130,7 +152,13 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
                             if (result) {
                                 Toast.makeText(context, "تم التعديل", Toast.LENGTH_SHORT).show();
                                 updateItems(db.getFav(id));
-
+                                /**
+                                 *
+                                 * أخذ القيمة من الاكتفتي
+                                 * وارجاعها بعد التعديل
+                                 *
+                                 * */
+                                textView.setText(theResult.getText().toString());
                                 ((CameraOpenActivity) context).onStart();
                                 dialog.dismiss();
                             } else {
@@ -150,6 +178,35 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
             }
         }).create().show();
     }
+
+    private void deleteShared() {
+        preferences =context.getSharedPreferences("My AllPrice",MODE_PRIVATE);
+        editor = preferences.edit();
+        if (preferences.contains("AllPrice")){
+            String x = preferences.getString("AllPrice","");
+            if (x.isEmpty() || x.equals("المجموع"))
+                return;
+            }
+        editor.clear();
+        editor.remove("AllPrice");
+        editor.commit();
+    }
+
+    private String sellDeleted(String id) {
+        String getSell = null;
+        String selectQuery = "SELECT * FROM " + DB.DB_TABLE + " WHERE " +
+                DB.id + " =\""+ id +"\"";
+        SQLiteDatabase database = db.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery,null);
+        if (cursor.moveToFirst()){
+            do {
+                getSell = ""+cursor.getString(3);
+            }while (cursor.moveToNext());
+        }
+        database.close();
+        return getSell;
+    }
+
     @Override
     public int getItemCount() {
         return array.size();

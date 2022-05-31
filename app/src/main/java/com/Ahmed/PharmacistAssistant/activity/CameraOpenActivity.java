@@ -19,6 +19,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -69,16 +70,17 @@ import java.util.ArrayList;
 
 
 public class CameraOpenActivity extends AppCompatActivity {
-
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     private DecoratedBarcodeView barcodeView;
     private CameraSettings cameraSettings;
     private DBSqlite db;
-    public TextView result;
+    public  TextView result;
     private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
     private EditText et_text;
     private String txt,id,named,selles,cost,code;
     private RecyclerView recyclerview;
-    private double results;
+    public  double results;
     private String[] cameraPermissions;
     private static final byte CAMERA_REQUEST_CODE=100;
     private DB d ;
@@ -95,7 +97,22 @@ public class CameraOpenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_open);
 
+        preferences = getSharedPreferences("My AllPrice",MODE_PRIVATE);
+        editor = preferences.edit();
+//
         isFlash = false;
+//        getShared();
+//        if (preferences.contains("AllPrice")){
+//            String x = preferences.getString("AllPrice","0.0");
+//            if (x.isEmpty() || x.equals("المجموع")) {
+//                return;
+//            }else {
+//                results = Double.parseDouble(x);
+//                result.setText(results+"");
+//                editor.remove("AllPrice");
+//                editor.commit();
+//            }
+//        }
 
         d = new DB(this);
         Flash = findViewById(R.id.flash);
@@ -116,8 +133,8 @@ public class CameraOpenActivity extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    getData(charSequence.toString());
 
+                getData(charSequence.toString());
             }
             @Override
             public void afterTextChanged(Editable editable) {
@@ -233,9 +250,13 @@ public class CameraOpenActivity extends AppCompatActivity {
             adapterRecord = new AdapterTwo(new ArrayList<Model>(),CameraOpenActivity.this);
             adapterRecord.updateItems(d.getFav(id));
             recyclerview.setAdapter(adapterRecord);
-            onResume();
-            results += res;
-            result.setText(String.valueOf(results));
+
+            if (!result.getText().toString().isEmpty()){
+                results += res;
+                result.setText(String.valueOf(results));
+                onStart();
+            }
+
 //            Toast.makeText(this, " Done ", Toast.LENGTH_SHORT).show();
 
         } else {
@@ -270,9 +291,14 @@ public class CameraOpenActivity extends AppCompatActivity {
         if (ide == R.id.delete)
         {
             d.deletedList();
-            result.setText("");
             onStart();
+            editor = preferences.edit();
+            editor.clear();
+            editor.remove("AllPrice");
+            editor.commit();
+            result.setText("المجموع");
         }
+
         else if (ide == R.id.print)
         {
 
@@ -350,31 +376,12 @@ public class CameraOpenActivity extends AppCompatActivity {
     private void requestCameraPermission(){
         ActivityCompat.requestPermissions(this,cameraPermissions,CAMERA_REQUEST_CODE);
     }
-    @Override
-    public void onStart() {
-        super.onStart();
 
-//        getReadStoragePermission();
-        openCam();
-        adapterRecord = new AdapterTwo(d.getFav(DB.id), CameraOpenActivity.this);
-        adapterRecord.updateItems(d.getFav(DB.id));
-        recyclerview.setLayoutManager(new LinearLayoutManager(CameraOpenActivity.this));
-        recyclerview.hasFixedSize();
-        recyclerview.setAdapter(adapterRecord);
-        result.setText(AdapterTwo.result);
-    }
     private boolean checkStoragePermission() {
         boolean result = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 (PackageManager.PERMISSION_GRANTED);
         return result;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        openCam();
-
     }
 
 
@@ -394,7 +401,7 @@ public class CameraOpenActivity extends AppCompatActivity {
                 "/First.pdf"
         );
         paint.setTextSize(12);
-        canvas.drawText("By Developer Ah3iq",140,12,paint);
+        canvas.drawText("By Developer AhMeD ",140,12,paint);
         canvas.drawText(DB.name,20,30,paint);
         canvas.drawText("الكمية",235,30,paint);
         canvas.drawText(DB.sell,pageInfo.getPageWidth() - 60,30,paint);
@@ -457,8 +464,86 @@ public class CameraOpenActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sharedPreference();
+        barcodeView.pause();
+
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
+        sharedPreference();
+        barcodeView.pause();
         isFlash = false;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        barcodeView.resume();
+        openCam();
+//        getShared();
+    }
+
+    private void getShared() {
+        preferences = getSharedPreferences("My AllPrice",MODE_PRIVATE);
+        if (preferences.contains("AllPrice")){
+            String x = preferences.getString("AllPrice","");
+            if (x.isEmpty() || x.equals("المجموع")) {
+                return;
+            }else {
+                results = Double.parseDouble(x);
+                result.setText(String.valueOf(results));
+                editor.remove("AllPrice");
+                editor.commit();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        barcodeView.pause();
+    }
+
+    private void sharedPreference() {
+        if (result.getText().toString().isEmpty() || result.getText().toString().equals("المجموع")){
+            return;
+        }
+        else {
+            editor = preferences.edit();
+            editor.putString("AllPrice",result.getText().toString());
+            editor.commit();
+            editor.apply();
+        }
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        sharedPreference();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        barcodeView.resume();
+        getShared();
+//        openCam();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        barcodeView.resume();
+        sharedPreference();
+//        getShared();
+        adapterRecord = new AdapterTwo(d.getFav(DB.id), CameraOpenActivity.this);
+        adapterRecord.updateItems(d.getFav(DB.id));
+        recyclerview.setLayoutManager(new LinearLayoutManager(CameraOpenActivity.this));
+        recyclerview.hasFixedSize();
+        recyclerview.setAdapter(adapterRecord);
+//        result.setText(AdapterTwo.result);
     }
 }

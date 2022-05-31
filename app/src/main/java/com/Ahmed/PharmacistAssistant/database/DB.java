@@ -95,4 +95,21 @@ public class DB extends SQLiteOpenHelper {
        else
            return false;
     }
+
+//    public ArrayList<Model> getSell(String Id){
+//        ArrayList<Model> records = new ArrayList<>();
+//        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE " + id + " LIKE '%" + Id + "%'";
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery(selectQuery,null);
+//        if (cursor.moveToFirst()){
+//            do{
+//                Model model = new Model(
+//                        ""+cursor.getString(3)
+//                );
+//                records.add(model);
+//            }while (cursor.moveToNext());
+//        }
+//        db.close();
+//        return records;
+//    }
 }
