@@ -70,6 +70,8 @@ import java.util.ArrayList;
 
 
 public class CameraOpenActivity extends AppCompatActivity {
+    private final String savePrice ="My AllPrice";
+    private final String All = "AllPrice";
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private DecoratedBarcodeView barcodeView;
@@ -97,23 +99,9 @@ public class CameraOpenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_open);
 
-        preferences = getSharedPreferences("My AllPrice",MODE_PRIVATE);
+        preferences = getSharedPreferences(savePrice,MODE_PRIVATE);
         editor = preferences.edit();
-//
         isFlash = false;
-//        getShared();
-//        if (preferences.contains("AllPrice")){
-//            String x = preferences.getString("AllPrice","0.0");
-//            if (x.isEmpty() || x.equals("المجموع")) {
-//                return;
-//            }else {
-//                results = Double.parseDouble(x);
-//                result.setText(results+"");
-//                editor.remove("AllPrice");
-//                editor.commit();
-//            }
-//        }
-
         d = new DB(this);
         Flash = findViewById(R.id.flash);
         cameraPermissions = new String[]{Manifest.permission.CAMERA};
@@ -291,12 +279,11 @@ public class CameraOpenActivity extends AppCompatActivity {
         if (ide == R.id.delete)
         {
             d.deletedList();
-            onStart();
             editor = preferences.edit();
-            editor.clear();
-            editor.remove("AllPrice");
+            editor.remove(All);
             editor.commit();
             result.setText("المجموع");
+            onStart();
         }
 
         else if (ide == R.id.print)
@@ -466,7 +453,6 @@ public class CameraOpenActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sharedPreference();
         barcodeView.pause();
 
     }
@@ -482,22 +468,18 @@ public class CameraOpenActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         barcodeView.resume();
-        openCam();
-//        getShared();
     }
 
-    private void getShared() {
-        preferences = getSharedPreferences("My AllPrice",MODE_PRIVATE);
-        if (preferences.contains("AllPrice")){
-            String x = preferences.getString("AllPrice","");
-            if (x.isEmpty() || x.equals("المجموع")) {
-                return;
-            }else {
-                results = Double.parseDouble(x);
-                result.setText(String.valueOf(results));
-                editor.remove("AllPrice");
-                editor.commit();
-            }
+    public void getShared() {
+        preferences = getSharedPreferences(savePrice,MODE_PRIVATE);
+
+        if (!preferences.contains(All)){
+            return;
+        }else {
+            result.setText(preferences.getString(All,"0.0"));
+            editor.remove(All);
+            editor.clear();
+            editor.commit();
         }
     }
 
@@ -505,6 +487,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         barcodeView.pause();
+        sharedPreference();
     }
 
     private void sharedPreference() {
@@ -513,7 +496,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         }
         else {
             editor = preferences.edit();
-            editor.putString("AllPrice",result.getText().toString());
+            editor.putString(All,result.getText().toString());
             editor.commit();
             editor.apply();
         }
@@ -523,7 +506,8 @@ public class CameraOpenActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        sharedPreference();
+        sharedPreference();
+        barcodeView.pause();
     }
 
     @Override
@@ -531,19 +515,19 @@ public class CameraOpenActivity extends AppCompatActivity {
         super.onRestart();
         barcodeView.resume();
         getShared();
-//        openCam();
+
     }
     @Override
     public void onStart() {
         super.onStart();
         barcodeView.resume();
-        sharedPreference();
-//        getShared();
+        getShared();
         adapterRecord = new AdapterTwo(d.getFav(DB.id), CameraOpenActivity.this);
         adapterRecord.updateItems(d.getFav(DB.id));
         recyclerview.setLayoutManager(new LinearLayoutManager(CameraOpenActivity.this));
         recyclerview.hasFixedSize();
         recyclerview.setAdapter(adapterRecord);
-//        result.setText(AdapterTwo.result);
+
     }
+
 }

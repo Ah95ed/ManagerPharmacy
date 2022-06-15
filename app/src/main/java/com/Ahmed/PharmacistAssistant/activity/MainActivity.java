@@ -68,6 +68,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity{
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity{
                     startActivity(new Intent(Intent.ACTION_VIEW
                             , Uri.parse("https://pharmacist-assistant.ar.uptodown.com/android/download")));
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }).create().show();
@@ -262,11 +263,12 @@ public class MainActivity extends AppCompatActivity{
         recordArray.clear();
         recordArray = db.getAllRecords(DBSqlite.C_ID);
 
+
         try {
             FileWriter fw = new FileWriter(filePathAndName);
-            fw.getEncoding().getBytes(StandardCharsets.UTF_8).toString();
+            Arrays.toString(fw.getEncoding().getBytes(StandardCharsets.UTF_8));
             for (int i = 0; i < recordArray.size(); i++) {
-                fw.append("" + recordArray.get(i).getName());
+                fw.append(recordArray.get(i).getName());
                 fw.append(",");
                 fw.append(recordArray.get(i).getCode());
                 fw.append(",");
@@ -463,7 +465,6 @@ public class MainActivity extends AppCompatActivity{
         }
     }
     private void openCamera() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
@@ -508,7 +509,6 @@ public class MainActivity extends AppCompatActivity{
                    barcodeView.setTorchOff();
                    isFlash = false;
                }
-
             }
         });
         dialog.setView(v);
@@ -600,6 +600,6 @@ public class MainActivity extends AppCompatActivity{
         }
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.schedule(info);
-//        startService(new Intent(getBaseContext(), MyService.class));
+
     }
 }
