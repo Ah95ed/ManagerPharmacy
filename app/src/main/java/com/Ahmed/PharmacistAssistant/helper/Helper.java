@@ -3,9 +3,9 @@ package com.Ahmed.PharmacistAssistant.helper;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import com.Ahmed.PharmacistAssistant.R;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -16,24 +16,21 @@ public class Helper {
     public static DecoratedBarcodeView barcodeView;
     public static CameraSettings cameraSettings;
     private static boolean isFlash = false ;
-//    private static ToneGenerator toneGen1;
-//    private SurfaceView surfaceView;
-//
-//    private BarcodeDetector barcodeDetector;
-//    private CameraSource cameraSource;
-//    private static final int REQUEST_CAMERA_PERMISSION = 201;
-//    //This class provides methods to play DTMF tones
-//    private String barcodeData;
-    public void openCamera(Context context, EditText codeEt){
+    private Context context;
+    private EditText text;
+
+    public Helper (Context context,EditText text)
+    {
+        this.context = context;
+        this.text = text;
+    }
+
+    public void openCamera(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View v = LayoutInflater.from(context).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
         dialog.setCanceledOnTouchOutside(false);
-
-
-
-
         barcodeView = v.findViewById(R.id.barcode_scanner);
         cameraSettings =new CameraSettings();
         cameraSettings.setRequestedCameraId(0);
@@ -45,21 +42,22 @@ public class Helper {
             @Override
             public void barcodeResult(BarcodeResult result) {
                 if (result.getText() != null) {
-                    codeEt.setText(result.getText());
+                    text.setText(result.getText());
                     barcodeView.pause();
                     dialog.dismiss();
                     isFlash = false;
                 }
             }
         });
-        Button Close = v.findViewById(R.id.close);
-        Button flash = v.findViewById(R.id.flash);
+        AppCompatButton Close = v.findViewById(R.id.close);
+        AppCompatButton flash = v.findViewById(R.id.flash);
 
         Close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 barcodeView.pause();
                 dialog.dismiss();
+                isFlash =false;
             }
         });
         flash.setOnClickListener(new View.OnClickListener() {

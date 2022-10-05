@@ -2,6 +2,8 @@ package com.Ahmed.PharmacistAssistant.model;
 
 public class Model {
     String id,name,code,cost,sell,quantity,dose,drugName,mostSideEffect,mechanismOfAction,pregnancy;
+
+
     public Model(String name, String code, String cost, String sell,String id,String dose,String drugName,
     String mostSideEffect,String mechanismOfAction ,String pregnancy) {
 
@@ -16,7 +18,19 @@ public class Model {
         this.mechanismOfAction = mechanismOfAction;
         this.pregnancy= pregnancy;
     }
+    public Model(String name, String code, String cost, String sell,String dose,String drugName,
+                 String mostSideEffect,String mechanismOfAction ,String pregnancy) {
 
+        this.name = name;
+        this.code = code;
+        this.cost = cost;
+        this.sell = sell;
+        this.dose =dose;
+        this.drugName = drugName;
+        this.mostSideEffect = mostSideEffect;
+        this.mechanismOfAction = mechanismOfAction;
+        this.pregnancy= pregnancy;
+    }
     public Model (String sell){
         this.sell = sell;
     }

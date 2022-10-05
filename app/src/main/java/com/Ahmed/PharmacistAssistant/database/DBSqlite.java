@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 
 import androidx.annotation.Nullable;
@@ -32,7 +33,6 @@ public class DBSqlite extends SQLiteAssetHelper {
         super(context, DB_NAME, null, VERSION);
         db = this.getWritableDatabase();
     }
-
     /*______________أستعادة الداتا من ملف csv______________*/
     public long importData(String name, String code, String cost, String price){
 //    ,String dose,String drug,String mostSideEffect,String mechanismOfAction,String pregnancy){
@@ -53,19 +53,18 @@ public class DBSqlite extends SQLiteAssetHelper {
         return result;
     }
     /*______________أدخال البيانات الى الداتا بيز______________*/
-    public long insertData(String name,String code,String cost,String price,String dose,String drug,
-                           String mostSideEffect,String mechanismOfAction,String pregnancy){
+    public long insertData(Model model){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(C_NAME,name);
-        cv.put(C_CODE,code);
-        cv.put(C_COST,cost);
-        cv.put(C_PRICE,price);
-        cv.put(C_DOSE,dose);
-        cv.put(C_DRUG,drug);
-        cv.put(C_MOST_SIDE,mostSideEffect);
-        cv.put(C_MECHANISM,mechanismOfAction);
-        cv.put(C_PREGNANCY,pregnancy);
+        cv.put(C_NAME,model.getName());
+        cv.put(C_CODE,model.getCode());
+        cv.put(C_COST,model.getCost());
+        cv.put(C_PRICE,model.getSell());
+        cv.put(C_DOSE,model.getDose());
+        cv.put(C_DRUG,model.getDrugName());
+        cv.put(C_MOST_SIDE,model.getMostSideEffect());
+        cv.put(C_MECHANISM,model.getMechanismOfAction());
+        cv.put(C_PREGNANCY,model.getPregnancy());
         long result = db.insert(DB_TABLE,null,cv);
         db.close();
         return result;

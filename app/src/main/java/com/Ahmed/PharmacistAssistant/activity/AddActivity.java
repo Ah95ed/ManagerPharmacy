@@ -1,21 +1,28 @@
 package com.Ahmed.PharmacistAssistant.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.helper.Helper;
+import com.Ahmed.PharmacistAssistant.model.Model;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
@@ -31,14 +38,15 @@ public class AddActivity extends AppCompatActivity {
     public static String ID,name,code,cost,sell,dose,drug,most,mechanism,pregnancy;
     private DBSqlite dataBase;
     private boolean isEditMode = false;
-    private Helper helper;
+    private boolean isFlash = false ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         actionBar = getSupportActionBar();
-        helper = new Helper();
+
         actionBar.setTitle("@string/addItem");
         nameEt = findViewById(R.id.nameEt);
         codeEt = findViewById(R.id.barCodeEt);
@@ -99,8 +107,9 @@ public class AddActivity extends AppCompatActivity {
             onResume();
 
         } else{
-            long result = dataBase.insertData("" + name, "" + code, "" + cost, "" + sell,
-                    ""+dose,""+drug,""+most,""+mechanism,""+pregnancy);
+//            Model model = new Model(name,code,cost,sell,dose,drug,most,mechanism,pregnancy);
+            long result = dataBase.insertData(
+                    new Model(name,code,cost,sell,dose,drug,most,mechanism,pregnancy));
             if (result != -1) {
                 Toast.makeText(AddActivity.this, "تمت الاضافة", Toast.LENGTH_SHORT).show();
                 onResume();
@@ -125,46 +134,62 @@ public class AddActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.OpenCamera){
 //            Helper.openCamera(AddActivity.this,codeEt);
-            helper.openCamera(getApplicationContext(),codeEt);
+//           String result = helper.openCamera();
+//           codeEt.setText(helper.openCamera());
+            openCamera();
         }
         else if (id == R.id.addItem){
             insertData();
         }
         return super.onOptionsItemSelected(item);
     }
-//    public void openCamera(AddActivity.this,EditText text){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
-//        AlertDialog dialog=builder.create();
-//        dialog.setCanceledOnTouchOutside(false);
-//        barcodeView = v.findViewById(R.id.barcode_scanner);
-//        cameraSettings =new CameraSettings();
-//        cameraSettings.setRequestedCameraId(0);
-//        cameraSettings.setAutoFocusEnabled(true);
-//        cameraSettings.setAutoFocusEnabled(true);
-//        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-//        barcodeView.resume();
-//        barcodeView.decodeSingle(new BarcodeCallback() {
-//            @Override
-//            public void barcodeResult(BarcodeResult result) {
-//                if (result.getText() != null) {
-//                    codeEt.setText(result.getText());
-//                    barcodeView.pause();
-//                    dialog.dismiss();
-//                }
-//            }
-//        });
-//        Button Close = v.findViewById(R.id.close);
-//        Close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                barcodeView.pause();
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.setView(v);
-//        dialog.show();
-//    }
+    public void openCamera(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
+        AlertDialog dialog=builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        barcodeView = v.findViewById(R.id.barcode_scanner);
+        cameraSettings =new CameraSettings();
+        cameraSettings.setRequestedCameraId(0);
+        cameraSettings.setAutoFocusEnabled(true);
+        cameraSettings.setAutoFocusEnabled(true);
+        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
+        barcodeView.resume();
+        barcodeView.decodeSingle(new BarcodeCallback() {
+            @Override
+            public void barcodeResult(BarcodeResult result) {
+                if (result.getText() != null) {
+                    codeEt.setText(result.getText());
+                    barcodeView.pause();
+                    dialog.dismiss();
+                    isFlash =false;
+                }
+            }
+        });
+        AppCompatButton flash = v.findViewById(R.id.flash);
+        AppCompatButton Close = v.findViewById(R.id.close);
+        Close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                barcodeView.pause();
+                dialog.dismiss();
+            }
+        });
+        flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isFlash){
+                    barcodeView.setTorchOn();
+                    isFlash = true;
+                }else{
+                    barcodeView.setTorchOff();
+                    isFlash = false;
+                }
+            }
+        });
+        dialog.setView(v);
+        dialog.show();
+    }
     private boolean checkStoragePermission(){
         boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
         return result;
@@ -192,9 +217,10 @@ public class AddActivity extends AppCompatActivity {
                 {
                     checkCameraPermissions();
                     checkStoragePermission();
-                }else
+                }else {
                     requestCameraPermission();
-                requestStoragePermission();
+                    requestStoragePermission();
+                }
             }
         }
     }

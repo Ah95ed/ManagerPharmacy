@@ -7,6 +7,7 @@
 
     <FrameLayout
         android:id="@+id/frame"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_left"
@@ -29,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/flash"
+                android:layout_margin="6dp"
                 android:src="@drawable/ic_flash_on"
                 />
         </com.journeyapps.barcodescanner.DecoratedBarcodeView>
