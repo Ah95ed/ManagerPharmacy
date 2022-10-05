@@ -10,6 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="450dp"
             android:layout_gravity="center"
+            android:layout_margin="4dp"
             app:zxing_preview_scaling_strategy="centerCrop"
             app:zxing_use_texture_view="false">
 

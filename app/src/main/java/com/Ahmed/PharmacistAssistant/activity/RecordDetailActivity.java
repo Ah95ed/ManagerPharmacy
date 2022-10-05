@@ -48,15 +48,15 @@ public class RecordDetailActivity extends AppCompatActivity {
                  most = ""+cursor.getString(7);
                  mechanism = ""+cursor.getString(8);
                  pregnancy = ""+cursor.getString(9);
-                tv_name.setText(nameItem);
-                tv_code.setText(code);
-                tv_cost.setText(cost);
-                tv_sell.setText(sell);
-                tv_dose.setText(dose);
-                tv_drug.setText(drug);
-                tv_most.setText(most);
-                tv_mechanism.setText(mechanism);
-                tv_pregnancy.setText(pregnancy);
+                    tv_name.setText(nameItem);
+                    tv_code.setText(code);
+                    tv_cost.setText(cost);
+                    tv_sell.setText(sell);
+                    tv_dose.setText(dose);
+                    tv_drug.setText(drug);
+                    tv_most.setText(most);
+                    tv_mechanism.setText(mechanism);
+                    tv_pregnancy.setText(pregnancy);
 
             }while (cursor.moveToNext());
         }

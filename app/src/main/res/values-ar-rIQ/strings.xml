@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">مساعد الصيدلي</string>
     <string name="information" translatable="false">تلميح أذا كنت تريد زيادة ادخل (+)قبل الرقم او تريد تنقص ضع (-)قبل الرقم..لكن تاكد انك ستغير كل الحقول وليس حقل واحد</string>
-    <string name="name" translatable="false">اسم العلاج</string>
-    <string name="code" translatable="false">كود العلاج</string>
-    <string name="purchasing_price" translatable="false">سعر الشراء</string>
-    <string name="selling_price" translatable="false">سعر البيع</string>
+    <string name="name" translatable="false">الاسم</string>
+    <string name="code" translatable="false">كود</string>
+    <string name="purchasing_price" translatable="false">الشراء</string>
+    <string name="selling_price" translatable="false">" البيع"</string>
     <string name="result" translatable="false">الناتج</string>
     <string name="camera" translatable="false">كاميرا</string>
     <string name="total" translatable="false">المجموع</string>

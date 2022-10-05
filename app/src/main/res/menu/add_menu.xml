@@ -4,7 +4,7 @@
     <item
         android:title="@string/open_camera"
         app:showAsAction="always"
-        android:icon="@drawable/ic_camera"
+        android:icon="@drawable/ic_qr_code_scanner"
         android:id="@+id/OpenCamera"/>
 
     <item

@@ -53,8 +53,8 @@ public class UpdateColumnActivity extends AppCompatActivity {
             while(!cursor.isAfterLast()){
                 cursor.moveToLast();
                 cursor.getInt(3);
-                boolean updatesell= db.updateSellInDatabase(price);
-                if (updatesell)
+                boolean updateSell= db.updateSellInDatabase(price);
+                if (updateSell)
                     Toast.makeText(this, "تم تحديث البيع", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(this, "فشل", Toast.LENGTH_SHORT).show();
@@ -70,7 +70,7 @@ public class UpdateColumnActivity extends AppCompatActivity {
                     cursor.moveToLast();
                     cursor.getInt(2);
                     boolean isUpdate = db.updateCostInDatabase(text);
-                    if (isUpdate == true) {
+                    if (isUpdate) {
                         Toast.makeText(UpdateColumnActivity.this, "تمت زيادة الاسعار", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(UpdateColumnActivity.this, "فشل زيادة الاسعار", Toast.LENGTH_LONG).show();

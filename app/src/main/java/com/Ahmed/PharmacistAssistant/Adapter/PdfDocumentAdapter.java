@@ -47,7 +47,10 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
     }
 
     @Override
-    public void onWrite(PageRange[] pageRanges, ParcelFileDescriptor parcelFileDescriptor, CancellationSignal cancellationSignal, WriteResultCallback writeResultCallback) {
+    public void onWrite(PageRange[] pageRanges
+            , ParcelFileDescriptor parcelFileDescriptor,
+                        CancellationSignal cancellationSignal,
+                        WriteResultCallback writeResultCallback) {
         InputStream in=null;
         OutputStream out=null;
         try {
@@ -76,7 +79,9 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
         }
         finally {
             try {
+                assert in != null;
                 in.close();
+                assert out != null;
                 out.close();
             }
             catch (IOException e) {

@@ -14,6 +14,15 @@
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/dialog_qrcode.xml" value="0.264" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/recycler.xml" value="0.2234375" />
         <entry key="..\:/Users/msi/Desktop/ManagerPharmacy/app/src/main/res/layout/row_record.xml" value="0.2234375" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/drawable/ic_camera.xml" value="0.124" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/drawable/print.xml" value="0.124" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/layout/activity_camera_open.xml" value="0.2234375" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/layout/activity_main.xml" value="0.2234375" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/layout/activity_record_detail.xml" value="0.2234375" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/layout/dialog_qrcode.xml" value="0.2234375" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/menu/add_menu.xml" value="0.2234375" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/menu/menu_actionbar.xml" value="0.2234375" />
+        <entry key="..\:/Users/msi/StudioProjects/ManagerPharmacy/app/src/main/res/menu/search_name.xml" value="0.2234375" />
       </map>
     </option>
   </component>

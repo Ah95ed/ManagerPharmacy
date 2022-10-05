@@ -5,7 +5,6 @@ package com.Ahmed.PharmacistAssistant.activity;
 
 import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_CODE;
 import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_NAME;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +25,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,27 +40,22 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
-
 import android.view.Menu;
 import android.view.MenuItem;
-
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo;
-
 import com.Ahmed.PharmacistAssistant.Adapter.PdfDocumentAdapter;
-import com.Ahmed.PharmacistAssistant.BuildConfig;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DB;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
+import com.google.firebase.installations.BuildConfig;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import java.io.File;
@@ -92,15 +87,16 @@ public class CameraOpenActivity extends AppCompatActivity {
     private String[] storagePermissions;
     private ImageButton Flash;
     private boolean isFlash;
+    private ToneGenerator toneGen1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_open);
-
         preferences = getSharedPreferences(savePrice,MODE_PRIVATE);
         editor = preferences.edit();
+        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC,150);
         isFlash = false;
         d = new DB(this);
         Flash = findViewById(R.id.flash);
@@ -134,6 +130,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
         barcodeView.resume();
         barcodeView.pause();
+        openCam();
         db = new DBSqlite(this);
         Flash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +158,8 @@ public class CameraOpenActivity extends AppCompatActivity {
             public void barcodeResult(BarcodeResult result) {
                 et_text.setText(result.getText());
                 txt = et_text.getText().toString();
+
+                toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER,150);
                 }
         });
     }

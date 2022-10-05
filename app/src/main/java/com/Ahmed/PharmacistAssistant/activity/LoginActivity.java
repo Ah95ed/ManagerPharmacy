@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private Calendar calendar;
     private SimpleDateFormat simple;
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

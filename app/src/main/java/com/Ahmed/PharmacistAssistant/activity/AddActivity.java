@@ -31,12 +31,14 @@ public class AddActivity extends AppCompatActivity {
     public static String ID,name,code,cost,sell,dose,drug,most,mechanism,pregnancy;
     private DBSqlite dataBase;
     private boolean isEditMode = false;
+    private Helper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         actionBar = getSupportActionBar();
+        helper = new Helper();
         actionBar.setTitle("@string/addItem");
         nameEt = findViewById(R.id.nameEt);
         codeEt = findViewById(R.id.barCodeEt);
@@ -122,7 +124,8 @@ public class AddActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.OpenCamera){
-            Helper.openCamera(AddActivity.this,codeEt);
+//            Helper.openCamera(AddActivity.this,codeEt);
+            helper.openCamera(getApplicationContext(),codeEt);
         }
         else if (id == R.id.addItem){
             insertData();

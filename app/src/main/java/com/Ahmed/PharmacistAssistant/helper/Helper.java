@@ -5,9 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import androidx.appcompat.app.AlertDialog;
-
 import com.Ahmed.PharmacistAssistant.R;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -18,12 +16,24 @@ public class Helper {
     public static DecoratedBarcodeView barcodeView;
     public static CameraSettings cameraSettings;
     private static boolean isFlash = false ;
-    public static void openCamera(Context context, EditText codeEt){
+//    private static ToneGenerator toneGen1;
+//    private SurfaceView surfaceView;
+//
+//    private BarcodeDetector barcodeDetector;
+//    private CameraSource cameraSource;
+//    private static final int REQUEST_CAMERA_PERMISSION = 201;
+//    //This class provides methods to play DTMF tones
+//    private String barcodeData;
+    public void openCamera(Context context, EditText codeEt){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View v = LayoutInflater.from(context).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
         dialog.setCanceledOnTouchOutside(false);
+
+
+
+
         barcodeView = v.findViewById(R.id.barcode_scanner);
         cameraSettings =new CameraSettings();
         cameraSettings.setRequestedCameraId(0);
@@ -67,4 +77,5 @@ public class Helper {
         dialog.setView(v);
         dialog.show();
     }
+
 }

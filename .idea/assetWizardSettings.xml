@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/flash_on/baseline_flash_on_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/qr_code_scanner/baseline_qr_code_scanner_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="047b39" />
-                            <entry key="outputName" value="ic_flash_on" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_qr_code_scanner" />
                             <entry key="sourceFile" value="C:\Users\msi\Desktop\ManagerPharmacy" />
                           </map>
                         </option>

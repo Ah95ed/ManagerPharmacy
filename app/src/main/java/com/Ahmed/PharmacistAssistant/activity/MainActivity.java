@@ -24,6 +24,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.CursorWindow;
 import android.icu.util.Calendar;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -35,13 +37,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyJobService;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyReceiver;
-import com.Ahmed.PharmacistAssistant.AdapterAndService.MyService;
 import com.Ahmed.PharmacistAssistant.BuildConfig;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
@@ -84,6 +86,11 @@ public class MainActivity extends AppCompatActivity{
     private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
     private static final byte SPEECH_REQUEST = 101;
     private String[] storagePermissions;
+
+    private static final int REQUEST_CAMERA_PERMISSION = 201;
+    //This class provides methods to play DTMF tones
+    private ToneGenerator toneGen1;
+
     private String[] cameraPermissions;
     private DatabaseReference ref;
     private SharedPreferences preferences;
@@ -96,13 +103,13 @@ public class MainActivity extends AppCompatActivity{
     private int currentVersionCod;
     private Boolean isFlash;
 
-    @SuppressLint("HardwareIds")
+    @SuppressLint({"HardwareIds", "SimpleDateFormat"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         isFlash = false;
-        jobService();
+//        jobService();
         calendar = Calendar.getInstance();
         simple = new SimpleDateFormat("dd-MM-yyyy");
         date = simple.format(calendar.getTime());
@@ -111,6 +118,7 @@ public class MainActivity extends AppCompatActivity{
         deviceId = Settings.Secure.getString(getApplicationContext().
                 getContentResolver(), Settings.Secure.ANDROID_ID);
         try {
+            @SuppressLint("DiscouragedPrivateApi")
             Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
             field.setAccessible(true);
             field.set(null, 100 * 1024 * 1024); //the 100MB is the new size
@@ -125,7 +133,8 @@ public class MainActivity extends AppCompatActivity{
         voice = findViewById(R.id.speech);
         voice.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 speechToText();
             }
         });
@@ -135,7 +144,8 @@ public class MainActivity extends AppCompatActivity{
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                Intent intent = new Intent(
+                        MainActivity.this, AddActivity.class);
                 startActivity(intent);
             }
         });
@@ -156,19 +166,26 @@ public class MainActivity extends AppCompatActivity{
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                Toast.makeText(
+                        MainActivity.this,
+                        e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
     private void speechToText() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.SpeechToText);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
+                Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                R.string.SpeechToText);
         try {
+
             startActivityForResult(intent, SPEECH_REQUEST);
         } catch (Exception e) {
-            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
     @Override
@@ -179,14 +196,18 @@ public class MainActivity extends AppCompatActivity{
                 if (resultCode == RESULT_OK && data != null) {
                     result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     searchRecord(result.get(0));
-             }
+             }else {
+//                    assert data != null;
+                    Log.d("Error Voice","data.getAction()");
+                }
         }
     }
     private void showUpdateDialog() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("New Update Available");
         dialog.setMessage("Update Now ..");
-        dialog.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("Update",
+                new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
@@ -208,6 +229,7 @@ public class MainActivity extends AppCompatActivity{
         } catch (Exception e) {
             Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+        assert packageInfo != null;
         return packageInfo.versionCode;
     }
     private void importCSV() throws IOException, CsvValidationException {
@@ -262,8 +284,6 @@ public class MainActivity extends AppCompatActivity{
         ArrayList<Model> recordArray = new ArrayList<>();
         recordArray.clear();
         recordArray = db.getAllRecords(DBSqlite.C_ID);
-
-
         try {
             FileWriter fw = new FileWriter(filePathAndName);
             Arrays.toString(fw.getEncoding().getBytes(StandardCharsets.UTF_8));
@@ -329,7 +349,6 @@ public class MainActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.Backup) {
-
             if (checkStoragePermission()) {
                 exportCSV();
             } else {
@@ -365,14 +384,6 @@ public class MainActivity extends AppCompatActivity{
                         false == Environment.isExternalStorageManager()) {
                     Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
                     startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                        false == Environment.isExternalStorageManager()) {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
-                        false == Environment.isExternalStorageManager()) {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
                 }
             }
         } else if (id == R.id.listShow) {
@@ -380,7 +391,6 @@ public class MainActivity extends AppCompatActivity{
         } else if (id == R.id.camera) {
             if (!checkCameraPermission()) {
                 requestCameraPermission();
-
             }
             openCamera();
         } else if (id == R.id.update) {
@@ -469,6 +479,7 @@ public class MainActivity extends AppCompatActivity{
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
         dialog.setCanceledOnTouchOutside(false);
+        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         barcodeView = v.findViewById(R.id.barcode_scanner);
         cameraSettings =new CameraSettings();
         cameraSettings.setRequestedCameraId(0);
@@ -483,6 +494,8 @@ public class MainActivity extends AppCompatActivity{
                     searchBar(result.getText());
                     barcodeView.pause();
                     dialog.dismiss();
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT,160);
+                    isFlash = false;
                     barcodeView.setTorchOff();
                 }
             }
@@ -494,8 +507,10 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                barcodeView.pause();
+//                cameraSource.stop();
                 dialog.dismiss();
                 barcodeView.setTorchOff();
+                isFlash = false;
             }
         });
         flash.setOnClickListener(new View.OnClickListener() {
@@ -550,7 +565,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Expired();
+//        Expired();
 
     }
     private void Expired() {
