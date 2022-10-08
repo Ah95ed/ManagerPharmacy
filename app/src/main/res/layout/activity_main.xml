@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,26 +21,16 @@
         tools:listitem="@layout/row_record" />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/ic_add"
-        tools:targetApi="p" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/speech"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/add_item"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="19dp"
-        android:src="@drawable/ic_voice" />
+
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/speech"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_above="@+id/coordinator"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:layout_marginBottom="19dp"-->
+<!--        android:src="@drawable/ic_voice" />-->
 
     <FrameLayout
         android:id="@+id/fragment_all"
@@ -54,4 +44,37 @@
 
     </FrameLayout>
 
-</RelativeLayout>
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/cardview_light_background"
+        app:fabCradleMargin="4dp"
+        app:fabCradleRoundedCornerRadius="20dp"
+        app:hideOnScroll="true"
+        >
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomnavigtionView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/navigationbottom"
+            />
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:maxImageSize="35dp"
+        android:src="@drawable/ic_add"
+        android:backgroundTint="@color/white"
+        app:layout_anchor="@id/bottomApp"
+        />
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

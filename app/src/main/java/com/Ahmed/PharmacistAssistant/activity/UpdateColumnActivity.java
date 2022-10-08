@@ -55,7 +55,7 @@ public class UpdateColumnActivity extends AppCompatActivity {
                 cursor.getInt(3);
                 boolean updateSell= db.updateSellInDatabase(price);
                 if (updateSell)
-                    Toast.makeText(this, "تم تحديث البيع", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "تم تحديث سعر البيع", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(this, "فشل", Toast.LENGTH_SHORT).show();
                 cursor.moveToNext();

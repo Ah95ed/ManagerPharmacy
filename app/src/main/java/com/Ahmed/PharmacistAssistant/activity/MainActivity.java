@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,8 +35,11 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -51,6 +55,8 @@ import com.Ahmed.PharmacistAssistant.model.Model;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -74,7 +80,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity{
-
+    private BottomNavigationView bottomNavigationView;
     private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton,voice;
     private RecyclerView recordRv;
     private DBSqlite db;
@@ -86,8 +92,7 @@ public class MainActivity extends AppCompatActivity{
     private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
     private static final byte SPEECH_REQUEST = 101;
     private String[] storagePermissions;
-
-    private static final int REQUEST_CAMERA_PERMISSION = 201;
+    private ArrayList<Model> array;
     //This class provides methods to play DTMF tones
     private ToneGenerator toneGen1;
 
@@ -102,12 +107,30 @@ public class MainActivity extends AppCompatActivity{
     private FirebaseRemoteConfig remoteConfig;
     private int currentVersionCod;
     private Boolean isFlash;
+    private BottomAppBar appBar;
 
     @SuppressLint({"HardwareIds", "SimpleDateFormat"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bottomNavigationView = findViewById(R.id.bottomnavigtionView);
+        bottomNavigationView.setBackground(null);
+        appBar = findViewById(R.id.bottomApp);
+        appBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.camera:
+                        openCamera();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
         isFlash = false;
 //        jobService();
         calendar = Calendar.getInstance();
@@ -130,14 +153,14 @@ public class MainActivity extends AppCompatActivity{
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
                 , Manifest.permission.READ_EXTERNAL_STORAGE};
         floatingActionButton = findViewById(R.id.add_item);
-        voice = findViewById(R.id.speech);
-        voice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                speechToText();
-            }
-        });
+//        voice = findViewById(R.id.speech);
+//        voice.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                speechToText();
+//            }
+//        });
         recordRv = findViewById(R.id.recordRv);
         actionBar = getSupportActionBar();
         db = new DBSqlite(this);
@@ -316,18 +339,29 @@ public class MainActivity extends AppCompatActivity{
         }
     }
     private void loadRecords() {
-        AdapterRecord adapter = new AdapterRecord(MainActivity.this, db.getAllRecords(DBSqlite.C_ID));
+        array =  db.getAllRecords(DBSqlite.C_ID);
+        AdapterRecord adapter = new AdapterRecord(MainActivity.this,array);
         recordRv.setAdapter(adapter);
-        actionBar.setSubtitle("" + db.getAllCounts());
+//        actionBar.setSubtitle("" + db.getAllCounts());
     }
     private void searchRecord(String name) {
-        AdapterRecord adapterRecord = new AdapterRecord(this, db.Search(name));
+        array = db.getAllRecords(DBSqlite.C_ID);
+        ArrayList<Model> models = new ArrayList<>();
+
+        for (Model m : array) {
+            if (m.getName().toLowerCase().contains(name.toLowerCase()))
+            {
+                models.add(m);
+            }
+        }
+        AdapterRecord adapterRecord = new AdapterRecord(this, models);
         recordRv.setAdapter(adapterRecord);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_actionbar, menu);
         MenuItem item = menu.findItem(R.id.search);
+
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -531,7 +565,16 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void searchBar(String results) {
-        AdapterRecord adapterRecord = new AdapterRecord(MainActivity.this, db.searchCamera(results));
+        array = db.getAllRecords(DBSqlite.C_ID);
+        ArrayList<Model> models = new ArrayList<>();
+
+        for (Model m : array) {
+            if (m.getCode().contains(results))
+            {
+                models.add(m);
+            }
+        }
+        AdapterRecord adapterRecord = new AdapterRecord(this, models);
         recordRv.setAdapter(adapterRecord);
     }
     private void openCalculate() {
@@ -578,6 +621,7 @@ public class MainActivity extends AppCompatActivity{
     public void onStart() {
         super.onStart();
         loadRecords();
+
         getPermission();
         ref.child("Users").child(deviceId).child("TimeStamp").setValue(ServerValue.TIMESTAMP);
     }

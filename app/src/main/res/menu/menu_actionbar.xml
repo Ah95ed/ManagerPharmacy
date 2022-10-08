@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <item android:id="@+id/search"
-        app:showAsAction="always"
-        android:title="@string/search_name"
-        android:icon="@drawable/ic_search"
-
-        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+<!--    <item android:id="@+id/search"-->
+<!--        app:showAsAction="ifRoom"-->
+<!--        android:title="@string/search_name"-->
+<!--        android:icon="@drawable/ic_search"-->
+<!--        app:actionViewClass="androidx.appcompat.widget.SearchView" />-->
     <item
         android:id="@+id/Backup"
-        android:title="@string/export"/>
+        android:title="@string/export"
+        app:showAsAction="ifRoom"
+
+        />
 
     <item android:id="@+id/restore"
+        app:showAsAction="ifRoom"
         android:title="@string/import_Data"/>
     <item
         android:id="@+id/listShow"
+        app:showAsAction="ifRoom"
         android:title="@string/price_calculation"/>
-    <item
-        android:id="@+id/camera"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_qr_code_scanner"
-        android:title="@string/open_camera" />
+
     <item
         app:showAsAction="ifRoom"
         android:title="@string/data_update"
@@ -35,7 +36,7 @@
         android:id="@+id/Calculate"/>
     <item
         app:showAsAction="ifRoom"
-        android:title="Delete All"
+        android:title="@string/delete_all"
         android:icon="@drawable/ic_delete"
         android:id="@+id/deleted"/>
 </menu>

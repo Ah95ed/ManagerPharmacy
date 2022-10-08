@@ -28,7 +28,6 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ffffff" />
                             <entry key="outputName" value="ic_qr_code_scanner" />
                             <entry key="sourceFile" value="C:\Users\msi\Desktop\ManagerPharmacy" />
                           </map>

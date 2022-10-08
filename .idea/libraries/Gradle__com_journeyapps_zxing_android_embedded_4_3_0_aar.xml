@@ -1,12 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.journeyapps:zxing-android-embedded:4.3.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/a49b15e2e75e3f6424a4f2062c538b00/transformed/jetified-zxing-android-embedded-4.3.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/a49b15e2e75e3f6424a4f2062c538b00/transformed/jetified-zxing-android-embedded-4.3.0/res" />
-      <root url="file://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/a49b15e2e75e3f6424a4f2062c538b00/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/94ab03f4618053176465aef22142537a/transformed/jetified-zxing-android-embedded-4.3.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/94ab03f4618053176465aef22142537a/transformed/jetified-zxing-android-embedded-4.3.0/res" />
-      <root url="file://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/94ab03f4618053176465aef22142537a/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/2a832b72ff7ef3fa6c410673381d8637/transformed/jetified-zxing-android-embedded-4.3.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/2a832b72ff7ef3fa6c410673381d8637/transformed/jetified-zxing-android-embedded-4.3.0/res" />
+      <root url="file://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/2a832b72ff7ef3fa6c410673381d8637/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

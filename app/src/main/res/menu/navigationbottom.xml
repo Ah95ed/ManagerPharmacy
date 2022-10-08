@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item
+      app:showAsAction="ifRoom"
+      android:title="بحث"
+      android:id="@+id/search"
+      android:icon="@drawable/ic_search"
+      app:actionViewClass="androidx.appcompat.widget.SearchView"
+      />
+  <item
+  app:showAsAction="ifRoom"
+  android:title="qrCode"
+  android:id="@+id/camera"
+  android:icon="@drawable/ic_qr_code_scanner"
+
+  />
+  <item
+      app:showAsAction="ifRoom"
+      android:title="menu"
+      android:id="@+id/menu"
+      android:icon="@drawable/ic_menu"
+
+      />
+  <item
+      app:showAsAction="ifRoom"
+      android:title="info"
+      android:id="@+id/info"
+      android:icon="@drawable/ic_info"
+      />
+</menu>

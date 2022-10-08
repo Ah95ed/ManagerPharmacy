@@ -30,7 +30,7 @@ public class AddActivity extends AppCompatActivity {
     private EditText nameEt,codeEt,CostPriceEt,sellPriceEt,doseEt,drugEt,mostEt,mechanismEt,pregnancyEt;
     public static DecoratedBarcodeView barcodeView;
     public static CameraSettings cameraSettings;
-    private ActionBar actionBar;
+//    private ActionBar actionBar;
     private static final byte CAMERA_REQUEST_CODE=100;
     private static final byte STORAGE_REQUEST_CODE=102;
     private String[] cameraPermissions;
@@ -45,9 +45,9 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        actionBar = getSupportActionBar();
+//        actionBar = getSupportActionBar();
 
-        actionBar.setTitle("@string/addItem");
+//        actionBar.setTitle("@string/addItem");
         nameEt = findViewById(R.id.nameEt);
         codeEt = findViewById(R.id.barCodeEt);
         doseEt = findViewById(R.id.dose);
@@ -63,7 +63,7 @@ public class AddActivity extends AppCompatActivity {
         Intent intent =getIntent();
         isEditMode = intent.getBooleanExtra("isEditMode",false);
         if (isEditMode){
-        actionBar.setTitle("تحديث المعلومات");
+//        actionBar.setTitle("تحديث المعلومات");
         ID = intent.getStringExtra("ID");
         name = intent.getStringExtra("NAME");
         code = intent.getStringExtra("CODE");
@@ -84,7 +84,7 @@ public class AddActivity extends AppCompatActivity {
         mechanismEt.setText(mechanism);
         pregnancyEt.setText(pregnancy);
         }else {
-            actionBar.setTitle("أضافة علاج");
+//            actionBar.setTitle("أضافة علاج");
         }
     }
     private void insertData() {

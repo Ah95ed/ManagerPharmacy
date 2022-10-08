@@ -26,7 +26,7 @@
     <string name="purchase" translatable="false">الشراء</string>
     <string name="sell" translatable="false">البيع</string>
     <string name="add" translatable="false">أضافة</string>
-    <string name="open_camera" translatable="false">فتح الكاميرا</string>
+    <string name="open_camera" translatable="false">بحث بالكاميرا</string>
     <string name="search_name" translatable="false">بحث بالاسم</string>
     <string name="export" translatable="false">تصدير</string>
     <string name="the_dose" translatable="false">الدوز</string>

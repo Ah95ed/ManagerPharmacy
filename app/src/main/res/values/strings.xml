@@ -53,5 +53,6 @@ But !!! Make sure
     <string name="helping" translatable="false">To get the key:</string>
     <string name="Here" translatable="false">Here</string>
     <string name="SpeechToText" translatable="false">Speech To Text</string>
+    <string name="delete_all">Delete All</string>
 
 </resources>
