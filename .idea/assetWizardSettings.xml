@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/qr_code_scanner/baseline_qr_code_scanner_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/search/baseline_search_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_qr_code_scanner" />
+                            <entry key="outputName" value="ic_searchblack" />
                             <entry key="sourceFile" value="C:\Users\msi\Desktop\ManagerPharmacy" />
                           </map>
                         </option>

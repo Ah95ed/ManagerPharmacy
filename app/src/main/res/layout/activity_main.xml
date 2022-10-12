@@ -7,16 +7,32 @@
     android:layout_height="match_parent"
     app:circularflow_defaultRadius="@dimen/cardview_default_radius"
     android:id="@+id/Relative"
-    android:background="#F5FFFC"
+    android:background="#F5FFFF"
     tools:context=".activity.MainActivity">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search"
+        android:background="@drawable/text"
+        android:textColor="@color/black"
+        android:layout_marginTop="6dp"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:padding="6dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:drawableStart="@drawable/ic_searchblack"
+        android:drawablePadding="8dp"
+
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recordRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
+        android:layout_marginTop="35dp"
         android:nextFocusUp="@android:color/transparent"
-
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/row_record" />
 
@@ -49,22 +65,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="@color/cardview_light_background"
         app:fabCradleMargin="4dp"
         app:fabCradleRoundedCornerRadius="20dp"
         app:hideOnScroll="true"
-        >
+    >
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomnavigtionView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
             app:labelVisibilityMode="labeled"
+            android:outlineSpotShadowColor="@color/black"
+            app:elevation="@dimen/cardview_compat_inset_shadow"
+            app:itemIconSize="26dp"
+            app:itemPaddingTop="10dp"
+            app:itemRippleColor="@color/teal_700"
+            android:background="@android:color/transparent"
             app:menu="@menu/navigationbottom"
+            android:paddingTop="10dp"
+            android:paddingEnd="16dp"
             />
 
+
+
     </com.google.android.material.bottomappbar.BottomAppBar>
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_item"
         android:layout_width="wrap_content"
@@ -74,7 +100,5 @@
         android:backgroundTint="@color/white"
         app:layout_anchor="@id/bottomApp"
         />
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

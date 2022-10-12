@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
-import com.Ahmed.PharmacistAssistant.helper.Helper;
+
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;

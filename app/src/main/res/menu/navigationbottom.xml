@@ -17,15 +17,15 @@
   />
   <item
       app:showAsAction="ifRoom"
-      android:title="menu"
+      android:title="search Voice"
       android:id="@+id/menu"
-      android:icon="@drawable/ic_menu"
+      android:icon="@drawable/ic_voice"
 
       />
   <item
       app:showAsAction="ifRoom"
       android:title="info"
       android:id="@+id/info"
-      android:icon="@drawable/ic_info"
+      android:icon="@drawable/ic_menu"
       />
 </menu>

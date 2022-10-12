@@ -4,11 +4,9 @@ package com.Ahmed.PharmacistAssistant.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,16 +32,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyJobService;
@@ -57,6 +54,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -80,11 +78,11 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity{
-    private BottomNavigationView bottomNavigationView;
+
     private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton,voice;
     private RecyclerView recordRv;
+    private BottomNavigationView navigationView;
     private DBSqlite db;
-    private ActionBar actionBar;
     public static DecoratedBarcodeView barcodeView;
     public static CameraSettings cameraSettings;
     private static final byte CAMERA_REQUEST_CODE = 100;
@@ -107,27 +105,55 @@ public class MainActivity extends AppCompatActivity{
     private FirebaseRemoteConfig remoteConfig;
     private int currentVersionCod;
     private Boolean isFlash;
+//    private ImageButton imageButton;
     private BottomAppBar appBar;
+    private EditText search;
 
-    @SuppressLint({"HardwareIds", "SimpleDateFormat"})
+
+    @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bottomNavigationView = findViewById(R.id.bottomnavigtionView);
-        bottomNavigationView.setBackground(null);
-        appBar = findViewById(R.id.bottomApp);
-        appBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @SuppressLint("NonConstantResourceId")
+        navigationView = findViewById(R.id.bottomnavigtionView);
+        navigationView.setBackground(null);
+        search = findViewById(R.id.search);
+
+        search.setVisibility(View.GONE);
+        navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
                     case R.id.camera:
                         openCamera();
                         return true;
-                    default:
-                        return false;
+                    case R.id.search:
+                        search.setVisibility(View.VISIBLE);
+                        searchBar(search.getText().toString());
+                        search.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                searchRecord(s.toString());
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
+                        return true;
+                    case R.id.menu:
+                        speechToText();
+                        break;
+
+
                 }
+                return false;
             }
         });
 
@@ -162,7 +188,6 @@ public class MainActivity extends AppCompatActivity{
 //            }
 //        });
         recordRv = findViewById(R.id.recordRv);
-        actionBar = getSupportActionBar();
         db = new DBSqlite(this);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,8 +225,7 @@ public class MainActivity extends AppCompatActivity{
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
-                Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,Locale.ENGLISH);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 R.string.SpeechToText);
         try {
@@ -220,8 +244,7 @@ public class MainActivity extends AppCompatActivity{
                     result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     searchRecord(result.get(0));
              }else {
-//                    assert data != null;
-                    Log.d("Error Voice","data.getAction()");
+
                 }
         }
     }
@@ -359,10 +382,12 @@ public class MainActivity extends AppCompatActivity{
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_actionbar, menu);
+         super.onCreateOptionsMenu(menu);
+         getMenuInflater().inflate(R.menu.navigationbottom,menu);
         MenuItem item = menu.findItem(R.id.search);
-
-        SearchView searchView = (SearchView) item.getActionView();
+        SearchView searchView = null;
+        searchView = (SearchView) item.getActionView();
+        assert searchView != null;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -376,7 +401,8 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         });
-        return super.onCreateOptionsMenu(menu);
+        return true;
+
     }
 
     @Override
@@ -567,7 +593,6 @@ public class MainActivity extends AppCompatActivity{
     private void searchBar(String results) {
         array = db.getAllRecords(DBSqlite.C_ID);
         ArrayList<Model> models = new ArrayList<>();
-
         for (Model m : array) {
             if (m.getCode().contains(results))
             {

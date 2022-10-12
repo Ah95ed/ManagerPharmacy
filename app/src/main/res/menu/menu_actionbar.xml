@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-<!--    <item android:id="@+id/search"-->
-<!--        app:showAsAction="ifRoom"-->
-<!--        android:title="@string/search_name"-->
-<!--        android:icon="@drawable/ic_search"-->
-<!--        app:actionViewClass="androidx.appcompat.widget.SearchView" />-->
+    <item android:id="@+id/search"
+        app:showAsAction="ifRoom"
+        android:title="@string/search_name"
+        android:icon="@drawable/ic_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
     <item
         android:id="@+id/Backup"
         android:title="@string/export"
