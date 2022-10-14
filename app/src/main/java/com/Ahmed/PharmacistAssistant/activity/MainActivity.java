@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +42,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyJobService;
@@ -54,6 +56,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -108,8 +112,9 @@ public class MainActivity extends AppCompatActivity{
 //    private ImageButton imageButton;
     private BottomAppBar appBar;
     private EditText search;
-
-
+    private ConstraintLayout mCustomBottomSheet;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private LinearLayout mlayoutheader;
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +124,7 @@ public class MainActivity extends AppCompatActivity{
         navigationView.setBackground(null);
         search = findViewById(R.id.search);
 
+//        mCustomBottomSheet = findViewById(R.id.Relative);
         search.setVisibility(View.GONE);
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -147,10 +153,12 @@ public class MainActivity extends AppCompatActivity{
                             }
                         });
                         return true;
-                    case R.id.menu:
+                    case R.id.voice:
                         speechToText();
                         break;
-
+                    case R.id.menu:
+                        openBottomSheet();
+                        break;
 
                 }
                 return false;
@@ -179,14 +187,7 @@ public class MainActivity extends AppCompatActivity{
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
                 , Manifest.permission.READ_EXTERNAL_STORAGE};
         floatingActionButton = findViewById(R.id.add_item);
-//        voice = findViewById(R.id.speech);
-//        voice.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                speechToText();
-//            }
-//        });
+
         recordRv = findViewById(R.id.recordRv);
         db = new DBSqlite(this);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -220,7 +221,70 @@ public class MainActivity extends AppCompatActivity{
                         Toast.LENGTH_SHORT).show();
             }
         });
+
+
+
     }
+
+    private void openBottomSheet() {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                MainActivity.this);
+        View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                .inflate(R.layout.bottom_sheet,null,false);
+
+//        bottomSheetView.findViewById(R.id.folder).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(ModalActivity.this, “Folder Clicked..”, Toast.LENGTH_SHORT).show();
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+//
+//        bottomSheetView.findViewById(R.id.upload).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(ModalActivity.this, “Upload Clicked..”, Toast.LENGTH_SHORT).show();
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+//
+//        bottomSheetView.findViewById(R.id.scan).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(ModalActivity.this, “Scan Clicked..”, Toast.LENGTH_SHORT).show();
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+//
+//        bottomSheetView.findViewById(R.id.docs).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(ModalActivity.this, “Google Docs Clicked..”, Toast.LENGTH_SHORT).show();
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+//
+//        bottomSheetView.findViewById(R.id.sheets).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(ModalActivity.this, “Google Sheets Clicked..”, Toast.LENGTH_SHORT).show();
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+//
+//        bottomSheetView.findViewById(R.id.slides).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(ModalActivity.this, “Google Slides Clicked..”, Toast.LENGTH_SHORT).show();
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+
+
     private void speechToText() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,

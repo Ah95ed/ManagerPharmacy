@@ -18,14 +18,14 @@
   <item
       app:showAsAction="ifRoom"
       android:title="search Voice"
-      android:id="@+id/menu"
+      android:id="@+id/voice"
       android:icon="@drawable/ic_voice"
 
       />
   <item
       app:showAsAction="ifRoom"
       android:title="info"
-      android:id="@+id/info"
+      android:id="@+id/menu"
       android:icon="@drawable/ic_menu"
       />
 </menu>

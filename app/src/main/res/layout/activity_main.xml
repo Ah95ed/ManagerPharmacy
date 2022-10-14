@@ -75,7 +75,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:labelVisibilityMode="labeled"
-            android:outlineSpotShadowColor="@color/black"
             app:elevation="@dimen/cardview_compat_inset_shadow"
             app:itemIconSize="26dp"
             app:itemPaddingTop="10dp"
@@ -84,11 +83,11 @@
             app:menu="@menu/navigationbottom"
             android:paddingTop="10dp"
             android:paddingEnd="16dp"
-            />
-
-
+             />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
+
+
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
