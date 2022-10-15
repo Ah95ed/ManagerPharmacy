@@ -232,56 +232,104 @@ public class MainActivity extends AppCompatActivity{
         View bottomSheetView = LayoutInflater.from(getApplicationContext())
                 .inflate(R.layout.bottom_sheet,null,false);
 
-//        bottomSheetView.findViewById(R.id.folder).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(ModalActivity.this, “Folder Clicked..”, Toast.LENGTH_SHORT).show();
-//                bottomSheetDialog.dismiss();
-//            }
-//        });
-//
-//        bottomSheetView.findViewById(R.id.upload).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(ModalActivity.this, “Upload Clicked..”, Toast.LENGTH_SHORT).show();
-//                bottomSheetDialog.dismiss();
-//            }
-//        });
-//
-//        bottomSheetView.findViewById(R.id.scan).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(ModalActivity.this, “Scan Clicked..”, Toast.LENGTH_SHORT).show();
-//                bottomSheetDialog.dismiss();
-//            }
-//        });
-//
-//        bottomSheetView.findViewById(R.id.docs).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(ModalActivity.this, “Google Docs Clicked..”, Toast.LENGTH_SHORT).show();
-//                bottomSheetDialog.dismiss();
-//            }
-//        });
-//
-//        bottomSheetView.findViewById(R.id.sheets).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(ModalActivity.this, “Google Sheets Clicked..”, Toast.LENGTH_SHORT).show();
-//                bottomSheetDialog.dismiss();
-//            }
-//        });
-//
-//        bottomSheetView.findViewById(R.id.slides).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(ModalActivity.this, “Google Slides Clicked..”, Toast.LENGTH_SHORT).show();
-//                bottomSheetDialog.dismiss();
-//            }
-//        });
+        bottomSheetView.findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkExport();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetView.findViewById(R.id._import).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkImport();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetView.findViewById(R.id.order).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivity();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetView.findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateAllCostAndSell();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetView.findViewById(R.id.dose).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCalculate();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetView.findViewById(R.id.delet).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.deletedAll();
+                onResume();
+                onStart();
+                bottomSheetDialog.dismiss();
+            }
+        });
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
+    }
+
+    private void checkImport() {
+
+        if (checkStoragePermission()) {
+
+            try {
+                importCSV();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (CsvValidationException e) {
+                e.printStackTrace();
+            }
+        } else {
+            requestStoragePermissionImport();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                    false == Environment.isExternalStorageManager()) {
+                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+            }
+        }
+
+
+    }
+
+    private void checkExport() {
+
+        if (checkStoragePermission()) {
+            exportCSV();
+        } else {
+            requestStoragePermissionExport();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                    false == Environment.isExternalStorageManager()) {
+                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                    false == Environment.isExternalStorageManager()) {
+                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
+                    false == Environment.isExternalStorageManager()) {
+                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+            }
+        }
+
     }
 
 
