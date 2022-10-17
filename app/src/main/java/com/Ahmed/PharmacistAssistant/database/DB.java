@@ -26,7 +26,10 @@ public class DB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL( " create table " + DB_TABLE +
-                "(name TEXT NOT NULL," + "sell TEXT NOT NULL,code TEXT NOT NULL,cost TEXT,id INTEGER PRIMARY KEY,quantity TEXT NOT NULL )");
+                "(name TEXT NOT NULL," +
+                "sell TEXT NOT NULL,code TEXT NOT NULL," +
+                "cost TEXT,id INTEGER PRIMARY KEY,quantity TEXT NOT NULL )");
+
     }
 
     @Override
@@ -48,6 +51,7 @@ public class DB extends SQLiteOpenHelper {
         else
             return true;
     }
+
     public ArrayList<Model> getFav(String Fid)
     {
         ArrayList<Model> reFavArray = new ArrayList<>();

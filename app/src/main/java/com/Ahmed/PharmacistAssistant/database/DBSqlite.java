@@ -4,15 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
-
 import androidx.annotation.Nullable;
-
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
-
 import java.util.ArrayList;
+
+
 
 public class DBSqlite extends SQLiteAssetHelper {
     public static final String DB_NAME = "pharmacy.db";
@@ -23,11 +20,11 @@ public class DBSqlite extends SQLiteAssetHelper {
     public static final String C_CODE = "Barcode";
     public static final String C_COST = "Cost";
     public static final String C_PRICE = "Sell";
-    public static final String C_DOSE = "dose";
-    public static final String C_DRUG = "drugName";
-    public static final String C_MOST_SIDE = "mostSide";
-    public static final String C_MECHANISM = "mechanism";
-    public static final String C_PREGNANCY = "pregnancy";
+//    public static final String C_DOSE = "dose";
+//    public static final String C_DRUG = "drugName";
+//    public static final String C_MOST_SIDE = "mostSide";
+//    public static final String C_MECHANISM = "mechanism";
+//    public static final String C_PREGNANCY = "pregnancy";
     private SQLiteDatabase db;
     public DBSqlite(@Nullable Context context) {
         super(context, DB_NAME, null, VERSION);
@@ -60,42 +57,37 @@ public class DBSqlite extends SQLiteAssetHelper {
         cv.put(C_CODE,model.getCode());
         cv.put(C_COST,model.getCost());
         cv.put(C_PRICE,model.getSell());
-        cv.put(C_DOSE,model.getDose());
-        cv.put(C_DRUG,model.getDrugName());
-        cv.put(C_MOST_SIDE,model.getMostSideEffect());
-        cv.put(C_MECHANISM,model.getMechanismOfAction());
-        cv.put(C_PREGNANCY,model.getPregnancy());
+
         long result = db.insert(DB_TABLE,null,cv);
         db.close();
         return result;
     }
     /*______________ تـحديث  البيانات______________*/
 
-    public void updateData(String name,String code,String cost,String sell,String ID,String dose,String drug,
-                           String mostSideEffect,String mechanismOfAction,String pregnancy){
+    public void updateData(String name,String code,String cost,String sell,String ID){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(C_NAME,name);
         cv.put(C_CODE,code);
         cv.put(C_COST,cost);
         cv.put(C_PRICE,sell);
-        cv.put(C_DOSE,dose);
-        cv.put(C_DRUG,drug);
-        cv.put(C_MOST_SIDE,mostSideEffect);
-        cv.put(C_MECHANISM,mechanismOfAction);
-        cv.put(C_PREGNANCY,pregnancy);
+//        cv.put(C_DOSE,dose);
+//        cv.put(C_DRUG,drug);
+//        cv.put(C_MOST_SIDE,mostSideEffect);
+//        cv.put(C_MECHANISM,mechanismOfAction);
+//        cv.put(C_PREGNANCY,pregnancy);
         db.update(DB_TABLE,cv, C_ID + " =?",new String[]{ID});
         db.close();
     }
     public Cursor getAllNames() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String[] columns = {C_NAME, C_CODE, C_COST, C_PRICE, C_ID,C_DOSE,C_DRUG,C_MOST_SIDE,C_MECHANISM,C_PREGNANCY};
+        String[] columns = {C_NAME, C_CODE, C_COST, C_PRICE, C_ID};
         return db.query(DB_TABLE, columns, null, null, null, null, null);
 
     }
     public boolean updateCostInDatabase (String cost){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + DB_TABLE + " SET " + C_COST + " = " + C_COST + cost);
+        db.execSQL("UPDATE " + DB_TABLE + " SET " + C_COST + " = " +C_COST+ cost);
         db.close();
         return true;
 }
@@ -118,12 +110,7 @@ public class DBSqlite extends SQLiteAssetHelper {
                         ""+cursor.getString(1),
                         ""+cursor.getString(2),
                         ""+cursor.getString(3),
-                        ""+cursor.getString(4),
-                        ""+cursor.getString(5),
-                        ""+cursor.getString(6),
-                        ""+cursor.getString(7),
-                        ""+cursor.getString(8),
-                        ""+cursor.getString(9));
+                        ""+cursor.getString(4));
                 records.add(model);
             }while (cursor.moveToNext());
         }
@@ -189,12 +176,7 @@ public class DBSqlite extends SQLiteAssetHelper {
                         "" + cursor.getString(1),
                         "" + cursor.getString(2),
                         "" + cursor.getString(3),
-                        "" + cursor.getString(4),
-                        "" + cursor.getString(5),
-                        "" + cursor.getString(6),
-                        "" + cursor.getString(7),
-                        "" + cursor.getString(8),
-                        "" + cursor.getString(9));
+                        "" + cursor.getString(4));
                 recordList.add(model);
             }while (cursor.moveToNext());
 

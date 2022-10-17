@@ -11,9 +11,9 @@ import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 
 public class RecordDetailActivity extends AppCompatActivity {
-    private TextView tv_name,tv_code,tv_cost,tv_sell,tv_dose,tv_drug,tv_most,tv_mechanism,tv_pregnancy;
+    private TextView tv_name,tv_code,tv_cost,tv_sell;
     DBSqlite db;
-    private String ID,nameItem,code,cost,sell,dose,drug,most,mechanism,pregnancy;
+    private String ID,nameItem,code,cost,sell;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,11 +25,6 @@ public class RecordDetailActivity extends AppCompatActivity {
         tv_code = findViewById(R.id.code);
         tv_cost = findViewById(R.id.cost);
         tv_sell = findViewById(R.id.sell);
-        tv_dose = findViewById(R.id.dose);
-        tv_drug = findViewById(R.id.drug);
-        tv_most = findViewById(R.id.most);
-        tv_mechanism = findViewById(R.id.mechanism);
-        tv_pregnancy = findViewById(R.id.Pregnancy);
         showRecordDetails();
     }
     private void showRecordDetails() {
@@ -43,20 +38,10 @@ public class RecordDetailActivity extends AppCompatActivity {
                  code = ""+cursor.getString(1);
                  cost =""+cursor.getString(2);
                  sell = ""+cursor.getString(3);
-                 dose = ""+cursor.getString(5);
-                 drug = ""+cursor.getString(6);
-                 most = ""+cursor.getString(7);
-                 mechanism = ""+cursor.getString(8);
-                 pregnancy = ""+cursor.getString(9);
                     tv_name.setText(nameItem);
                     tv_code.setText(code);
                     tv_cost.setText(cost);
                     tv_sell.setText(sell);
-                    tv_dose.setText(dose);
-                    tv_drug.setText(drug);
-                    tv_most.setText(most);
-                    tv_mechanism.setText(mechanism);
-                    tv_pregnancy.setText(pregnancy);
 
             }while (cursor.moveToNext());
         }

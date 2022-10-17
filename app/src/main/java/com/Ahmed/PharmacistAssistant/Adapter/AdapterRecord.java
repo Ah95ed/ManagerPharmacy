@@ -49,11 +49,11 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
         String cost = model.getCost();
         String sell = model.getSell();
         String code = model.getCode();
-        String dose = model.getDose();
-        String drug = model.getDrugName();
-        String most = model.getMostSideEffect();
-        String mechanism = model.getMechanismOfAction();
-        String pregnancy = model.getPregnancy();
+//        String dose = model.getDose();
+//        String drug = model.getDrugName();
+//        String most = model.getMostSideEffect();
+//        String mechanism = model.getMechanismOfAction();
+//        String pregnancy = model.getPregnancy();
         holder.tv_name.setText(name);
         holder.tv_cost.setText(cost);
         holder.tv_sell.setText(sell); /*dose,drugName,mostSideEffect,mechanismOfAction,pregnancy*/
@@ -76,20 +76,14 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
                         "" + name,
                         "" + code,
                         "" + cost,
-                        "" + sell,
-                        "" + dose,
-                        "" + drug,
-                        "" + most,
-                        "" + mechanism,
-                        "" + pregnancy);
+                        "" + sell);
 
             }
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void showMoreDialog(int position, String id, String name, String code, String cost, String sell, String dose, String drug, String mostSide,
-                                String mechanism, String pregnancy) {
+    private void showMoreDialog(int position, String id, String name, String code, String cost, String sell) {
         String[] option = {"حذف","تعديل"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setItems(option, new DialogInterface.OnClickListener() {
@@ -109,11 +103,7 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
                    intent.putExtra("CODE",code);
                    intent.putExtra("COST",cost);
                    intent.putExtra("SELL",sell);
-                   intent.putExtra("dose",dose);
-                   intent.putExtra("drug",drug);
-                   intent.putExtra("mostSide",mostSide);
-                   intent.putExtra("mechanism",mechanism);
-                   intent.putExtra("pregnancy",pregnancy);/*dose,drugName,mostSideEffect,mechanismOfAction,pregnancy*/
+                 /*dose,drugName,mostSideEffect,mechanismOfAction,pregnancy*/
                    intent.putExtra("isEditMode",true);
                    context.startActivity(intent);
                }

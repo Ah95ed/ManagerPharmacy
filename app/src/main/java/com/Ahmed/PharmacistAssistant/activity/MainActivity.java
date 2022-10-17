@@ -435,7 +435,6 @@ public class MainActivity extends AppCompatActivity{
         if (!folder.exists()) {
             isFolderCreate = folder.mkdir();
         }
-        Log.d("CSV", "exportCSV" + isFolderCreate);
         String csvFileName = "SQLite_Backup.csv";
         String filePathAndName = folder.toString() + "/" + csvFileName;
         db = new DBSqlite(this);
@@ -454,15 +453,6 @@ public class MainActivity extends AppCompatActivity{
                 fw.append(",");
                 fw.append(recordArray.get(i).getSell());
                 fw.append(",");
-                fw.append( recordArray.get(i).getDose());
-                fw.append(",");
-                fw.append( recordArray.get(i).getDrugName());
-                fw.append(",");
-                fw.append(recordArray.get(i).getMostSideEffect());
-                fw.append(",");
-                fw.append(recordArray.get(i).getMechanismOfAction());
-                fw.append(",");
-                fw.append(recordArray.get(i).getPregnancy());
                 fw.append("\n");
             }
             fw.flush();

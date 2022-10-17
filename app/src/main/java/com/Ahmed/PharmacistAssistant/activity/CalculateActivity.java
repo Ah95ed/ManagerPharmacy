@@ -28,11 +28,10 @@ public class CalculateActivity extends AppCompatActivity {
         et_per = findViewById(R.id.per_volume);
         resultF = findViewById(R.id.resultFinal);
         re_dosage = findViewById(R.id.re_Dosage);
-        Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        Button.setOnClickListener( v -> {
+
                Calculate();
-            }
+
         });
     }
     private void Calculate() {

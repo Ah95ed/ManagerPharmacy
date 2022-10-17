@@ -1,22 +1,23 @@
 package com.Ahmed.PharmacistAssistant.model;
 
 public class Model {
-    String id,name,code,cost,sell,quantity,dose,drugName,mostSideEffect,mechanismOfAction,pregnancy;
+    String id,name,code,cost,sell,quantity;
 
 
-    public Model(String name, String code, String cost, String sell,String id,String dose,String drugName,
-    String mostSideEffect,String mechanismOfAction ,String pregnancy) {
+    public Model(String name, String code, String cost, String sell,String id) {
 
         this.name = name;
         this.code = code;
         this.cost = cost;
         this.sell = sell;
         this.id = id;
-        this.dose =dose;
-        this.drugName = drugName;
-        this.mostSideEffect = mostSideEffect;
-        this.mechanismOfAction = mechanismOfAction;
-        this.pregnancy= pregnancy;
+    }
+    public Model(String name, String code, String cost, String sell) {
+
+        this.name = name;
+        this.code = code;
+        this.cost = cost;
+        this.sell = sell;
     }
     public Model(String name, String code, String cost, String sell,String dose,String drugName,
                  String mostSideEffect,String mechanismOfAction ,String pregnancy) {
@@ -25,11 +26,7 @@ public class Model {
         this.code = code;
         this.cost = cost;
         this.sell = sell;
-        this.dose =dose;
-        this.drugName = drugName;
-        this.mostSideEffect = mostSideEffect;
-        this.mechanismOfAction = mechanismOfAction;
-        this.pregnancy= pregnancy;
+
     }
     public Model (String sell){
         this.sell = sell;
@@ -51,46 +48,6 @@ public class Model {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public String getDose() {
-        return dose;
-    }
-
-    public void setDose(String dose) {
-        this.dose = dose;
-    }
-
-    public String getDrugName() {
-        return drugName;
-    }
-
-    public void setDrugName(String drugName) {
-        this.drugName = drugName;
-    }
-
-    public String getMostSideEffect() {
-        return mostSideEffect;
-    }
-
-    public void setMostSideEffect(String mostSideEffect) {
-        this.mostSideEffect = mostSideEffect;
-    }
-
-    public String getMechanismOfAction() {
-        return mechanismOfAction;
-    }
-
-    public void setMechanismOfAction(String mechanismOfAction) {
-        this.mechanismOfAction = mechanismOfAction;
-    }
-
-    public String getPregnancy() {
-        return pregnancy;
-    }
-
-    public void setPregnancy(String pregnancy) {
-        this.pregnancy = pregnancy;
     }
 
     public String getName() {

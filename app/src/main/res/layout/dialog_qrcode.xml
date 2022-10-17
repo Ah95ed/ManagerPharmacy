@@ -8,7 +8,7 @@
         <com.journeyapps.barcodescanner.DecoratedBarcodeView
             android:id="@+id/barcode_scanner"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="380dp"
             android:layout_gravity="center"
             app:zxing_preview_scaling_strategy="centerCrop"
             app:zxing_use_texture_view="true">
@@ -20,12 +20,12 @@
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="10dp"
                     android:background="@android:color/transparent"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text="Close"
-                    android:textColor="@color/teal_700"
                     android:src="@drawable/ic_close"
+                    android:text="Close"
                     android:textAlignment="center"
+                    android:textColor="@color/teal_700"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
 
                     />
 
@@ -37,11 +37,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="55dp"
                     android:background="@android:color/transparent"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:src="@drawable/ic_flash_on"
                     android:text="Flash"
                     android:textColor="@color/teal_700"
-                    android:src="@drawable/ic_flash_on" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
         </com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
 </FrameLayout>

@@ -1,13 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.AddActivity">
 
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="35dp"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:id="@+id/appBar"-->
+<!--        android:background="@color/teal_700"-->
+<!--        >-->
+<!--        -->
+<!--    </RelativeLayout>-->
+
     <RelativeLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:id="@+id/appBar"
+        android:background="@color/teal_700"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+
+        >
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            android:layout_marginStart="20dp"
+            android:id="@+id/add"
+            android:background="@android:color/transparent"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_qr_code_scanner"
+            android:id="@+id/camera"
+            android:maxWidth="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/add"
+            android:background="@android:color/transparent"/>
+    </RelativeLayout>
 
         <EditText
             android:id="@+id/nameEt"
@@ -17,6 +54,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:hint="@string/name"
+            android:layout_below="@+id/appBar"
             android:textColor="@color/black"
             android:textColorHint="@color/black" />
 
@@ -57,75 +95,75 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/black" />
 
-                <EditText
-                    android:id="@+id/dose"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/sellPrice"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:hint="@string/dose"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"/>
+<!--                <EditText-->
+<!--                    android:id="@+id/dose"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/sellPrice"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:hint="@string/dose"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textColorHint="@color/black"/>-->
 
-                <EditText
-                    android:id="@+id/drug"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/dose"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:hint="@string/drug_name"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"/>
+<!--                <EditText-->
+<!--                    android:id="@+id/drug"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/dose"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:hint="@string/drug_name"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textColorHint="@color/black"/>-->
 
-        <EditText
-            android:id="@+id/mostSide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/drug"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:hint="@string/most_side_effect"
-            android:minHeight="48dp"
-            android:padding="5dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black" />
-                <EditText
-                    android:id="@+id/mechanism"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/mostSide"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:hint="@string/mechanism_of_action"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"/>
+<!--        <EditText-->
+<!--            android:id="@+id/mostSide"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/drug"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:hint="@string/most_side_effect"-->
+<!--            android:minHeight="48dp"-->
+<!--            android:padding="5dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textColorHint="@color/black" />-->
+<!--                <EditText-->
+<!--                    android:id="@+id/mechanism"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/mostSide"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:hint="@string/mechanism_of_action"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textColorHint="@color/black"/>-->
 
-        <EditText
-            android:id="@+id/pregnancy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mechanism"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:hint="@string/pregnancy"
-            android:padding="5dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black" />
+<!--        <EditText-->
+<!--            android:id="@+id/pregnancy"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/mechanism"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:hint="@string/pregnancy"-->
+<!--            android:padding="5dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textColorHint="@color/black" />-->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="180dp"
             android:id="@+id/fragment_all"/>
-           </RelativeLayout>
 
-    </ScrollView>
+
+    </RelativeLayout>

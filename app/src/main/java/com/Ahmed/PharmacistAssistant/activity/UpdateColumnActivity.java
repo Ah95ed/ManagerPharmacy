@@ -18,13 +18,13 @@ public class UpdateColumnActivity extends AppCompatActivity {
     private EditText textUpdate ,Et_update;
     private DBSqlite db;
     private String text,price;
-    private ActionBar actionBar;
+//    private ActionBar actionBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_column);
-        actionBar = getSupportActionBar();
-        actionBar.setTitle("تحديث اسعار البيع والشراء");
+//        actionBar = getSupportActionBar();
+//        actionBar.setTitle("تحديث اسعار البيع والشراء");
         db = new DBSqlite(this);
         upBtn = findViewById(R.id.updateBtn);
         Et_update = findViewById(R.id.Et_update1);

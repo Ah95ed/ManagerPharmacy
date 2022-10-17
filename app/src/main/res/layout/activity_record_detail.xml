@@ -27,6 +27,7 @@
                     android:padding="10dp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
+                    android:background="@color/mat"
                     android:textSize="20sp"
                     />
 
@@ -49,6 +50,7 @@
                     android:padding="10dp"
                     android:layout_weight="1"
                     android:textStyle="bold"
+                    android:background="@color/mat"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     />
@@ -71,6 +73,7 @@
                     android:text="@string/purchase"
                     android:layout_weight="1"
                     android:textStyle="bold"
+                    android:background="@color/mat"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     />
@@ -80,7 +83,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -95,6 +98,7 @@
                     android:padding="10dp"
                     android:layout_weight="1"
                     android:textStyle="bold"
+                    android:background="@color/mat"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     />
@@ -110,123 +114,6 @@
                     android:textStyle="bold" />
 
             </TableRow>
-
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dose"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    />
-
-                <TextView
-                    android:id="@+id/dose"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:layout_weight="3"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/drug"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    />
-
-                <TextView
-                    android:id="@+id/drug"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:layout_weight="3"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="mostSideEffect"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    />
-<!--                *//dose,drugName,mostSideEffect,mechanismOfAction,pregnancy*/-->
-                <TextView
-                    android:id="@+id/most"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:layout_weight="3"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="mechanism of action"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    />
-
-                <TextView
-                    android:id="@+id/mechanism"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:layout_weight="3"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pregnancy"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    />
-
-                <TextView
-                    android:id="@+id/Pregnancy"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:layout_weight="3"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-
         </TableLayout>
     </LinearLayout>
 

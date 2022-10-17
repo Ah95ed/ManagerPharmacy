@@ -1,22 +1,15 @@
 package com.Ahmed.PharmacistAssistant.activity;
 
 import androidx.annotation.NonNull;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-;
 import android.net.Uri;
-
 import android.os.Bundle;
-
 import android.provider.Settings;
-
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -43,7 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getSupportActionBar().hide();
         binding.toHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

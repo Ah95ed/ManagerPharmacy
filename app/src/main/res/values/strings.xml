@@ -26,7 +26,7 @@ But !!! Make sure
     <string name="update" translatable="false">Update</string>
     <string name="purchase_price_update" translatable="false">Purchase price update</string>
     <string name="sell_price_update" translatable="false">Sell Price Update</string>
-    <string name="purchase" translatable="false">purchase</string>
+    <string name="purchase" translatable="false">Cost</string>
     <string name="sell" translatable="false">Sell</string>
     <string name="add" translatable="false">Add</string>
     <string name="open_camera" translatable="false">Open Camera</string>
@@ -53,6 +53,6 @@ But !!! Make sure
     <string name="helping" translatable="false">To get the key:</string>
     <string name="Here" translatable="false">Here</string>
     <string name="SpeechToText" translatable="false">Speech To Text</string>
-    <string name="delete_all">Delete All</string>
+    <string name="delete_all" translatable="false">Delete All</string>
 
 </resources>
