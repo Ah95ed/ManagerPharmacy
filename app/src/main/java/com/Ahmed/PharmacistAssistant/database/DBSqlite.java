@@ -1,5 +1,6 @@
 package com.Ahmed.PharmacistAssistant.database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,8 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.Nullable;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
-import java.util.ArrayList;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 
 public class DBSqlite extends SQLiteAssetHelper {
@@ -20,6 +23,7 @@ public class DBSqlite extends SQLiteAssetHelper {
     public static final String C_CODE = "Barcode";
     public static final String C_COST = "Cost";
     public static final String C_PRICE = "Sell";
+    public static final String C_Date = "Date";
 //    public static final String C_DOSE = "dose";
 //    public static final String C_DRUG = "drugName";
 //    public static final String C_MOST_SIDE = "mostSide";
@@ -51,12 +55,15 @@ public class DBSqlite extends SQLiteAssetHelper {
     }
     /*______________أدخال البيانات الى الداتا بيز______________*/
     public long insertData(Model model){
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(C_NAME,model.getName());
         cv.put(C_CODE,model.getCode());
         cv.put(C_COST,model.getCost());
         cv.put(C_PRICE,model.getSell());
+        cv.put(C_Date,);
 
         long result = db.insert(DB_TABLE,null,cv);
         db.close();

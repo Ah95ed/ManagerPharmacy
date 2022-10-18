@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -89,7 +90,7 @@ public class MyJobService extends JobService {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(MyJobService.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         return true;

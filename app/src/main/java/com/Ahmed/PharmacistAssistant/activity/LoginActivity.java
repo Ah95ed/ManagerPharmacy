@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             @SuppressLint("HardwareIds")
             @Override
             public void onClick(View view) {
+
                 keyUser = binding.key.getText().toString();
                 deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                         Settings.Secure.ANDROID_ID);
@@ -155,4 +156,4 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    }
+  }

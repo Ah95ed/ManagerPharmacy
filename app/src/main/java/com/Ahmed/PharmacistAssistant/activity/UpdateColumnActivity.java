@@ -1,6 +1,6 @@
 package com.Ahmed.PharmacistAssistant.activity;
 
-import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.database.Cursor;
 import android.os.Bundle;

@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.Ahmed.PharmacistAssistant.activity.CameraOpenActivity;
 import com.Ahmed.PharmacistAssistant.database.DB;
-import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.Ahmed.PharmacistAssistant.R;
 

@@ -1,16 +1,19 @@
 package com.Ahmed.PharmacistAssistant.model;
 
+
+import java.util.Date;
+
 public class Model {
-    String id,name,code,cost,sell,quantity;
+    private String id,name,code,cost,sell,quantity;
 
-
-    public Model(String name, String code, String cost, String sell,String id) {
+    public Model(String name, String code, String cost, String sell, String id) {
 
         this.name = name;
         this.code = code;
         this.cost = cost;
         this.sell = sell;
         this.id = id;
+
     }
     public Model(String name, String code, String cost, String sell) {
 
@@ -18,15 +21,6 @@ public class Model {
         this.code = code;
         this.cost = cost;
         this.sell = sell;
-    }
-    public Model(String name, String code, String cost, String sell,String dose,String drugName,
-                 String mostSideEffect,String mechanismOfAction ,String pregnancy) {
-
-        this.name = name;
-        this.code = code;
-        this.cost = cost;
-        this.sell = sell;
-
     }
     public Model (String sell){
         this.sell = sell;

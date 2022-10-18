@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,21 +41,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import com.Ahmed.PharmacistAssistant.BuildConfig;
 import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyJobService;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyReceiver;
-import com.Ahmed.PharmacistAssistant.BuildConfig;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DatabaseReference;
@@ -110,11 +106,11 @@ public class MainActivity extends AppCompatActivity{
     private int currentVersionCod;
     private Boolean isFlash;
 //    private ImageButton imageButton;
-    private BottomAppBar appBar;
+//    private BottomAppBar appBar;
     private EditText search;
-    private ConstraintLayout mCustomBottomSheet;
-    private BottomSheetBehavior bottomSheetBehavior;
-    private LinearLayout mlayoutheader;
+//    private ConstraintLayout mCustomBottomSheet;
+//    private BottomSheetBehavior bottomSheetBehavior;
+//    private LinearLayout mlayoutheader;
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +134,10 @@ public class MainActivity extends AppCompatActivity{
                         searchBar(search.getText().toString());
                         search.addTextChangedListener(new TextWatcher() {
                             @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            public void beforeTextChanged(CharSequence s,
+                                                          int start,
+                                                          int count,
+                                                          int after) {
 
                             }
 
@@ -324,7 +323,7 @@ public class MainActivity extends AppCompatActivity{
                 Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
                 startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
-                    false == Environment.isExternalStorageManager()) {
+                    !Environment.isExternalStorageManager()) {
                 Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
                 startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
             }
