@@ -4,6 +4,7 @@ package com.Ahmed.PharmacistAssistant.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView recordRv;
     private BottomNavigationView navigationView;
     private DBSqlite db;
+    private ActionBar actionBar;
     public static DecoratedBarcodeView barcodeView;
     public static CameraSettings cameraSettings;
     private static final byte CAMERA_REQUEST_CODE = 100;
@@ -115,6 +117,8 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        actionBar = getSupportActionBar();
+        actionBar.hide();
         setContentView(R.layout.activity_main);
         navigationView = findViewById(R.id.bottomnavigtionView);
         navigationView.setBackground(null);

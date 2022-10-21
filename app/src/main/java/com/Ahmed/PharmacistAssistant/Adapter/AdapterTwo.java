@@ -97,7 +97,7 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
                     textView = ((CameraOpenActivity)context).result;
                     if (textView.getText().toString().equals("المجموع")){
                          db.deleteList(Integer.parseInt(id));
-                         deleteShared();
+//                         deleteShared();
 
                         ((CameraOpenActivity) context).onStart();
                         return;

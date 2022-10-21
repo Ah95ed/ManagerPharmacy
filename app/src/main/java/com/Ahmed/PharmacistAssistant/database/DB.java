@@ -18,6 +18,8 @@ public class DB extends SQLiteOpenHelper {
     public static final String id="id";
     public static final String quantity="quantity";
     public static final String DB_TABLE = "Favorite";
+    public static final String TB_DEBT = "DEBT";
+    public static final String DB_DEBT = "DEBT.db";
     public DB(Context context) {
         super(context, Dbname,null, 2);
         SQLiteDatabase db =this.getWritableDatabase();
@@ -29,6 +31,10 @@ public class DB extends SQLiteOpenHelper {
                 "(name TEXT NOT NULL," +
                 "sell TEXT NOT NULL,code TEXT NOT NULL," +
                 "cost TEXT,id INTEGER PRIMARY KEY,quantity TEXT NOT NULL )");
+
+
+        sqLiteDatabase.execSQL( " create table " + TB_DEBT +
+                "( id INTEGER PRIMARY KEY, name TEXT ,number TEXT,BEBTTIME TEXT,desicribtion)" );
 
     }
 

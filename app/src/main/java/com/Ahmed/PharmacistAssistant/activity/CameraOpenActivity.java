@@ -3,15 +3,14 @@ package com.Ahmed.PharmacistAssistant.activity;
 
 import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_CODE;
 import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_NAME;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -39,17 +38,25 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.Ahmed.PharmacistAssistant.Adapter.AdapterSearchDialog;
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo;
 import com.Ahmed.PharmacistAssistant.Adapter.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DB;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
+import com.google.android.material.internal.TextWatcherAdapter;
 import com.google.firebase.installations.BuildConfig;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -86,7 +93,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     private ImageButton Flash;
     private boolean isFlash;
     private ToneGenerator toneGen1;
-    private ImageButton printPdf, D_All;
+//    private ImageButton printPdf, D_All;
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -111,36 +118,36 @@ public class CameraOpenActivity extends AppCompatActivity {
         builders.detectFileUriExposure();
         result = findViewById(R.id.tv_total);
         et_text = findViewById(R.id.et_result);
-        et_text.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                getData(charSequence.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        printPdf = findViewById(R.id.print);
-        D_All = findViewById(R.id.de_all);
-        printPdf.setOnClickListener(v -> {
-            try {
-                if (checkStoragePermission()) {
-                    createPdf();
-                    printPDF();
-                } else
-                    getReadStoragePermission();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+//        et_text.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                getData(charSequence.toString());
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//        });
+//        printPdf = findViewById(R.id.print);
+//        D_All = findViewById(R.id.de_all);
+//        printPdf.setOnClickListener(v -> {
+//            try {
+//                if (checkStoragePermission()) {
+//                    createPdf();
+//                    printPDF();
+//                } else
+//                    getReadStoragePermission();
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
 
         cameraSettings = new CameraSettings();
         cameraSettings.setRequestedCameraId(0);
@@ -158,20 +165,54 @@ public class CameraOpenActivity extends AppCompatActivity {
                 isFlash = false;
             }
         });
-        D_All.setOnClickListener(v -> {
-            d.deletedList();
-            @SuppressLint("CommitPrefEdits")
-            SharedPreferences.Editor editor2 = preferences.edit();
-            editor2.clear();
-            editor2.commit();
-//            editor2.apply();
-//            editor.apply();
-            result.setText("المجموع");
-            et_text.clearComposingText();
-            results = 0.0;
-            barcodeView.resume();
-            onStart();
-        });
+//        D_All.setOnClickListener(v -> {
+//            d.deletedList();
+//            @SuppressLint("CommitPrefEdits")
+//            SharedPreferences.Editor editor2 = preferences.edit();
+//            editor2.clear();
+//            editor2.commit();
+////            editor2.apply();
+////            editor.apply();
+//            result.setText("المجموع");
+//            et_text.clearComposingText();
+//            results = 0.0;
+//            barcodeView.resume();
+//            onStart();
+//        });
+//        et_search = findViewById(R.id.search);
+//        et_search.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                dialogSearch(String.valueOf(s));
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+
+    }
+
+    private void dialogSearch(String s) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View v = LayoutInflater.from(this).inflate(R.layout.dialog_result_search,null,false);
+        AlertDialog dialog=builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        AdapterSearchDialog adapterSearchDialog = new AdapterSearchDialog(getDataName(s),CameraOpenActivity.this);
+        RecyclerView recycler = findViewById(R.id.record);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setHasFixedSize(true);
+        recycler.setAdapter(adapterSearchDialog);
+        builder.setView(v);
+        builder.create().show();
     }
 
 
@@ -192,9 +233,10 @@ public class CameraOpenActivity extends AppCompatActivity {
         });
     }
 
-    private void getDataName(String N) {
+    private ArrayList<Model> getDataName(String N) {
         String selectQuery = "SELECT * FROM " + DBSqlite.DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + N + "%'";
         SQLiteDatabase database = db.getWritableDatabase();
+        ArrayList<Model> models = new ArrayList<>();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
@@ -203,7 +245,9 @@ public class CameraOpenActivity extends AppCompatActivity {
                 cost = "" + cursor.getString(2);
                 selles = "" + cursor.getString(3);
                 id = "" + cursor.getString(4);
+                models.add(new Model(named,code,cost,selles,id));
             } while (cursor.moveToNext());
+
             Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
             dialogNum();
         } else {
@@ -211,9 +255,9 @@ public class CameraOpenActivity extends AppCompatActivity {
         }
         database.close();
 //        openCam();
+        return models;
+
     }
-
-
     private void getData(String C) {
         String selectQuery = "SELECT * FROM " + DBSqlite.DB_TABLE + " WHERE " + C_CODE + " LIKE '%" + C + "%'";
         SQLiteDatabase database = db.getWritableDatabase();
@@ -239,11 +283,13 @@ public class CameraOpenActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("الكمية");
         EditText edit = new EditText(this);
+        edit.setText("1");
         edit.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(edit);
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 calc = Double.parseDouble(edit.getText().toString());
                 res = calc * Double.parseDouble(selles);
                 addData();
@@ -286,54 +332,60 @@ public class CameraOpenActivity extends AppCompatActivity {
     }
 
 
-    //
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.search_name,menu);
-//        MenuItem item = menu.findItem(R.id.searchName);
-//        SearchView searchView = (SearchView)item.getActionView();
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                getDataName(query);
-//                return true;
-//            }
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
-//        return super.onCreateOptionsMenu(menu);
-//    }
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        int ide = item.getItemId();
-//        if (ide == R.id.delete)
-//        {
-//            d.deletedList();
-//            editor = preferences.edit();
-//            editor.remove(All);
-//            editor.commit();
-//            result.setText("المجموع");
-//            onStart();
-//        }
-//
-//        else if (ide == R.id.print)
-//        {
-//
-//            try {
-//                if (checkStoragePermission()) {
-//                    createPdf();
-//                    printPDF();
-//                }else
-//                    getReadStoragePermission();
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_name,menu);
+        MenuItem item = menu.findItem(R.id.searchName);
+        SearchView searchView = (SearchView)item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                getDataName(query);
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int ide = item.getItemId();
+        if (ide == R.id.delete)
+        {
+            d.deletedList();
+            @SuppressLint("CommitPrefEdits")
+            SharedPreferences.Editor editor2 = preferences.edit();
+            editor2.clear();
+            editor2.commit();
+//            editor2.apply();
+//            editor.apply();
+            result.setText("المجموع");
+            et_text.clearComposingText();
+            results = 0.0;
+            barcodeView.resume();
+            onStart();
+        }
+
+        else if (ide == R.id.print)
+        {
+
+            try {
+                if (checkStoragePermission()) {
+                    createPdf();
+                    printPDF();
+                }else
+                    getReadStoragePermission();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private void requestStoragePermissionImport() {
         ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE_IMPORT);
     }
@@ -422,18 +474,20 @@ public class CameraOpenActivity extends AppCompatActivity {
                 "/First.pdf"
         );
         paint.setTextSize(12);
-        canvas.drawText("By Developer AhMeD ", 140, 12, paint);
-        canvas.drawText(DB.name, 20, 30, paint);
-        canvas.drawText("الكمية", 235, 30, paint);
-        canvas.drawText(DB.sell, pageInfo.getPageWidth() - 60, 30, paint);
-        int StartY = 60;
+        int yHi = 60;
+        canvas.drawText("مع تمنياتنا لكم بالشفاء العاجل", 140, 16, paint);
+        canvas.drawText("اسم العلاج", 20, yHi, paint);
+        canvas.drawText("الكمية", 235, yHi, paint);
+        canvas.drawText("السعر", pageInfo.getPageWidth() - 60, yHi, paint);
+        int StartY = 80;
         byte numberItem = 1;
         for (int i = 0; i < arrayList.size(); i++) {
             canvas.drawText(String.valueOf(numberItem), 5, StartY, paint);
             canvas.drawText(arrayList.get(i).getName(), 22, StartY, paint);
             canvas.drawText(arrayList.get(i).getQuantity(), 235, StartY, paint);
             canvas.drawText(arrayList.get(i).getSell(), pageInfo.getPageWidth() - 75, StartY, paint);
-            canvas.drawLine(10, StartY + 4, pageInfo.getPageWidth() - 10, StartY + 4, paint);
+            canvas.drawLine(10, StartY + 4,
+                    pageInfo.getPageWidth() - 10, StartY + 4, paint);
             StartY += 20;
             numberItem++;
             if (numberItem == 30) {
@@ -443,7 +497,8 @@ public class CameraOpenActivity extends AppCompatActivity {
         }
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(16f);
-        canvas.drawText("Total Price: " + results, 180, pageInfo.getPageHeight() - 12, paint);
+//        assert  preferences !=null;
+        canvas.drawText(result.getText().toString()+" "+"دينار عراقي ", 180, pageInfo.getPageHeight() - 12, paint);
         pdfDocument.finishPage(page);
         try {
             pdfDocument.writeTo(new FileOutputStream(file));

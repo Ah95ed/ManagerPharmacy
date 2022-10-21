@@ -63,7 +63,7 @@ public class DBSqlite extends SQLiteAssetHelper {
         cv.put(C_CODE,model.getCode());
         cv.put(C_COST,model.getCost());
         cv.put(C_PRICE,model.getSell());
-        cv.put(C_Date,);
+//        cv.put(C_Date,);
 
         long result = db.insert(DB_TABLE,null,cv);
         db.close();
