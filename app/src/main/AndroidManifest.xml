@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND"
+
+    <uses-permission
+        android:name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +18,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -36,12 +37,18 @@
         android:theme="@style/Theme.ManagerPharmacy"
         tools:ignore="DataExtractionRules"
         tools:targetApi="s">
+        <activity
+            android:name=".DebtsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <service
             android:name=".AdapterAndService.MyService"
             android:enabled="true"
-            android:exported="true">
-
-        </service>
+            android:exported="true"></service>
 
         <receiver
             android:name=".AdapterAndService.MyReceiver"
@@ -57,7 +64,7 @@
 
         <activity
             android:name=".activity.RegisterActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true" />
@@ -79,14 +86,12 @@
             android:exported="true" />
         <activity
             android:name=".activity.MainActivity"
-
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".AdapterAndService.Capture"
@@ -97,6 +102,7 @@
         <service
             android:name=".AdapterAndService.MyJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.Ahmed.PharmacistAssistant.fileprovider"
@@ -106,6 +112,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/providerpaths" />
         </provider>
+
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />

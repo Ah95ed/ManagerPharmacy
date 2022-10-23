@@ -9,6 +9,7 @@
     android:id="@+id/Relative"
     android:background="#F5FFFF"
     tools:context=".activity.MainActivity">
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

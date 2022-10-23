@@ -12,11 +12,12 @@ android:layout_height="match_parent">
     android:background="?android:attr/selectableItemBackground"
     android:padding="8dp">
 
-<!--    <ImageView-->
-<!--        android:layout_width="24dp"-->
-<!--        android:layout_height="24dp"-->
-<!--        android:src=""-->
-<!--        android:layout_margin="8dp"/>-->
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_export"
+        android:maxWidth="45dp"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,7 +29,12 @@ android:layout_height="match_parent">
         android:layout_gravity="center_vertical"
         android:padding="8dp"/>
 </LinearLayout>
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/teal_200"
 
+    />
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -37,11 +43,11 @@ android:layout_height="match_parent">
     android:background="?android:attr/selectableItemBackground"
     android:padding="8dp">
 
-<!--    <ImageView-->
-<!--        android:layout_width="24dp"-->
-<!--        android:layout_height="24dp"-->
-<!--        android:src=""-->
-<!--        android:layout_margin="8dp"/>-->
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_export"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,6 +61,13 @@ android:layout_height="match_parent">
 
 </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/teal_200"
+
+        />
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -63,16 +76,16 @@ android:layout_height="match_parent">
     android:background="?android:attr/selectableItemBackground"
     android:padding="8dp">
 
-<!--    <ImageView-->
-<!--        android:layout_width="24dp"-->
-<!--        android:layout_height="24dp"-->
-<!--        android:src=""-->
-<!--        android:layout_margin="8dp"/>-->
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_calculat"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/price_calculation"
+        android:text="@string/recipe_account"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -80,7 +93,12 @@ android:layout_height="match_parent">
         android:padding="8dp"/>
 
 </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/teal_200"
 
+        />
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -89,23 +107,28 @@ android:layout_height="match_parent">
     android:background="?android:attr/selectableItemBackground"
     android:padding="8dp">
 
-<!--    <ImageView-->
-<!--        android:layout_width="24dp"-->
-<!--        android:layout_height="24dp"-->
-<!--        android:src=""-->
-<!--        android:layout_margin="8dp"/>-->
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_baseline_update"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/update"
+        android:text="@string/prices_update"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_gravity="center_vertical"
         android:padding="8dp"/>
 </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/teal_200"
 
+        />
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -114,11 +137,11 @@ android:layout_height="match_parent">
     android:background="?android:attr/selectableItemBackground"
     android:padding="8dp">
 
-<!--    <ImageView-->
-<!--        android:layout_width="24dp"-->
-<!--        android:layout_height="24dp"-->
-<!--        android:src=""-->
-<!--        android:layout_margin="8dp"/>-->
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_calculat"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -130,6 +153,13 @@ android:layout_height="match_parent">
         android:layout_gravity="center_vertical"
         android:padding="8dp"/>
 </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/teal_200"
+
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -138,11 +168,11 @@ android:layout_height="match_parent">
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
-        <!--    <ImageView-->
-        <!--        android:layout_width="24dp"-->
-        <!--        android:layout_height="24dp"-->
-        <!--        android:src=""-->
-        <!--        android:layout_margin="8dp"/>-->
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/delete_outline"
+                android:layout_margin="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -154,4 +184,41 @@ android:layout_height="match_parent">
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/teal_200"
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/Debts"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_deblur"
+            android:layout_margin="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/debts"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/teal_200"
+
+        />
+
 </LinearLayout>

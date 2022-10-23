@@ -54,5 +54,10 @@ But !!! Make sure
     <string name="Here" translatable="false">Here</string>
     <string name="SpeechToText" translatable="false">Speech To Text</string>
     <string name="delete_all" translatable="false">Delete All</string>
+    <string name="expire_item">Expire Item</string>
+    <string name="date">date</string>
+    <string name="recipe_account">Recipe account</string>
+    <string name="prices_update">Prices update</string>
+    <string name="debts">Debts</string>
 
 </resources>

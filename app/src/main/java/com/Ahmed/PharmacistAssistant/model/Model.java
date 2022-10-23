@@ -1,39 +1,44 @@
 package com.Ahmed.PharmacistAssistant.model;
 
-
-import java.util.Date;
+import kotlin.OverloadResolutionByLambdaReturnType;
 
 public class Model {
-    private String id,name,code,cost,sell,quantity;
+    private String id,name,code,cost,sell,quantity,date;
 
-    public Model(String name, String code, String cost, String sell, String id) {
 
+//    public Model(String id, String name, String code, String cost, String sell, String quantity, String date) {
+//        this.id = id;
+//        this.name = name;
+//        this.code = code;
+//        this.cost = cost;
+//        this.sell = sell;
+//        this.quantity = quantity;
+//        this.date = date;
+//    }
+
+    public Model(String name, String code, String cost, String sell, String date) {
+        this.name = name;
+        this.code = code;
+        this.cost = cost;
+        this.sell = sell;
+        this.date = date;
+    }
+
+    public Model(String name, String code, String cost, String sell,String id , String date) {
         this.name = name;
         this.code = code;
         this.cost = cost;
         this.sell = sell;
         this.id = id;
-
-    }
-    public Model(String name, String code, String cost, String sell) {
-
-        this.name = name;
-        this.code = code;
-        this.cost = cost;
-        this.sell = sell;
-    }
-    public Model (String sell){
-        this.sell = sell;
+        this.date = date;
     }
 
-    public Model( String name, String code, String cost, String sell,String id,String quantity) {
+    public String getDate() {
+        return date;
+    }
 
-        this.name = name;
-        this.code = code;
-        this.cost = cost;
-        this.sell= sell;
-        this.id = id;
-        this.quantity=quantity;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getQuantity() {

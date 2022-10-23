@@ -107,12 +107,8 @@ public class MainActivity extends AppCompatActivity{
     private FirebaseRemoteConfig remoteConfig;
     private int currentVersionCod;
     private Boolean isFlash;
-//    private ImageButton imageButton;
-//    private BottomAppBar appBar;
     private EditText search;
-//    private ConstraintLayout mCustomBottomSheet;
-//    private BottomSheetBehavior bottomSheetBehavior;
-//    private LinearLayout mlayoutheader;
+
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,13 +274,20 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id.delet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.deletedAll();
-                onResume();
-                onStart();
+//                db.deletedAll();
+//                onResume();
+//                onStart();
                 bottomSheetDialog.dismiss();
             }
         });
+        bottomSheetView.findViewById(R.id.Debts).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "In the next update ... be patient", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
 
+            }
+        });
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
@@ -295,9 +298,7 @@ public class MainActivity extends AppCompatActivity{
 
             try {
                 importCSV();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (CsvValidationException e) {
+            } catch (IOException | CsvValidationException e) {
                 e.printStackTrace();
             }
         } else {

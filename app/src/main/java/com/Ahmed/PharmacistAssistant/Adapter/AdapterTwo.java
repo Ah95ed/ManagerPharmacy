@@ -25,13 +25,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.Ahmed.PharmacistAssistant.activity.CameraOpenActivity;
 import com.Ahmed.PharmacistAssistant.database.DB;
+import com.Ahmed.PharmacistAssistant.model.Favorite;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.Ahmed.PharmacistAssistant.R;
 
 import java.util.ArrayList;
 
 public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
-    private ArrayList<Model> array;
+    private ArrayList<Favorite> array;
     private Context context;
     private DB db;
     @SuppressLint("StaticFieldLeak")
@@ -39,7 +40,7 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
     public  String result;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    public AdapterTwo(ArrayList<Model> array, Context context) {
+    public AdapterTwo(ArrayList<Favorite> array, Context context) {
         this.array = array;
         this.context = context;
         db = new DB(context);
@@ -56,7 +57,7 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
      * the method updateItem to refresh recyclerView
      */
     @SuppressLint("NotifyDataSetChanged")
-    public void updateItems(ArrayList<Model> newList) {
+    public void updateItems(ArrayList<Favorite> newList) {
         array = newList;
         notifyDataSetChanged();
         this.notifyDataSetChanged();
@@ -69,7 +70,7 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
     }
     @Override
     public void onBindViewHolder(@NonNull HolderTwo holder, @SuppressLint("RecyclerView") int position) {
-        Model model = array.get(position);
+        Favorite model = array.get(position);
         String name = model.getName();
         String sell = model.getSell();
         String cost = model.getCost();
@@ -146,7 +147,7 @@ public class AdapterTwo extends RecyclerView.Adapter<AdapterTwo.HolderTwo> {
                             String costE = costtext.getText().toString();
                             String sellE = sellText.getText().toString();
                             String quantityE = quantities.getText().toString();
-                            Model model = new Model(nameE, costE, sellE, id, code, quantityE);
+                            Favorite model = new Favorite(nameE, costE, sellE, id, code, quantityE);
                             result = theResult.getText().toString();
                             boolean result = db.updateData(model, id);
                             if (result) {

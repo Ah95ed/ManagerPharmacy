@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,6 +56,7 @@ import com.Ahmed.PharmacistAssistant.Adapter.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DB;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
+import com.Ahmed.PharmacistAssistant.model.Favorite;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.google.android.material.internal.TextWatcherAdapter;
 import com.google.firebase.installations.BuildConfig;
@@ -90,13 +92,13 @@ public class CameraOpenActivity extends AppCompatActivity {
     private byte numberPage = 1;
     private AdapterTwo adapterRecord;
     private String[] storagePermissions;
-    private ImageButton Flash;
+    private ImageButton Flash,reFresh;
     private boolean isFlash;
     private ToneGenerator toneGen1;
 //    private ImageButton printPdf, D_All;
 
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +107,13 @@ public class CameraOpenActivity extends AppCompatActivity {
         editor = preferences.edit();
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 150);
         isFlash = false;
+        reFresh = findViewById(R.id.refresh);
+        reFresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCam();
+            }
+        });
         d = new DB(this);
         Flash = findViewById(R.id.flash);
         cameraPermissions = new String[]{Manifest.permission.CAMERA};
@@ -117,43 +126,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         StrictMode.setVmPolicy(builders.build());
         builders.detectFileUriExposure();
         result = findViewById(R.id.tv_total);
-        et_text = findViewById(R.id.et_result);
-//        et_text.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//                getData(charSequence.toString());
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//            }
-//        });
-//        printPdf = findViewById(R.id.print);
-//        D_All = findViewById(R.id.de_all);
-//        printPdf.setOnClickListener(v -> {
-//            try {
-//                if (checkStoragePermission()) {
-//                    createPdf();
-//                    printPDF();
-//                } else
-//                    getReadStoragePermission();
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        });
 
-        cameraSettings = new CameraSettings();
-        cameraSettings.setRequestedCameraId(0);
-        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-        barcodeView.resume();
-        barcodeView.pause();
         openCam();
         db = new DBSqlite(this);
         Flash.setOnClickListener(view -> {
@@ -165,59 +138,11 @@ public class CameraOpenActivity extends AppCompatActivity {
                 isFlash = false;
             }
         });
-//        D_All.setOnClickListener(v -> {
-//            d.deletedList();
-//            @SuppressLint("CommitPrefEdits")
-//            SharedPreferences.Editor editor2 = preferences.edit();
-//            editor2.clear();
-//            editor2.commit();
-////            editor2.apply();
-////            editor.apply();
-//            result.setText("المجموع");
-//            et_text.clearComposingText();
-//            results = 0.0;
-//            barcodeView.resume();
-//            onStart();
-//        });
-//        et_search = findViewById(R.id.search);
-//        et_search.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                dialogSearch(String.valueOf(s));
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-
-    }
-
-    private void dialogSearch(String s) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View v = LayoutInflater.from(this).inflate(R.layout.dialog_result_search,null,false);
-        AlertDialog dialog=builder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        AdapterSearchDialog adapterSearchDialog = new AdapterSearchDialog(getDataName(s),CameraOpenActivity.this);
-        RecyclerView recycler = findViewById(R.id.record);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-        recycler.setHasFixedSize(true);
-        recycler.setAdapter(adapterSearchDialog);
-        builder.setView(v);
-        builder.create().show();
     }
 
 
     private void openCam() {
-
+        cameraSettings = new CameraSettings();
         cameraSettings.setRequestedCameraId(0);
         cameraSettings.setAutoFocusEnabled(true);
         barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
@@ -225,10 +150,9 @@ public class CameraOpenActivity extends AppCompatActivity {
         barcodeView.decodeSingle(new BarcodeCallback() {
             @Override
             public void barcodeResult(BarcodeResult result) {
-                et_text.setText(result.getText());
-                txt = et_text.getText().toString();
-
                 toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
+                getData(result.getText());
+
             }
         });
     }
@@ -252,9 +176,10 @@ public class CameraOpenActivity extends AppCompatActivity {
             dialogNum();
         } else {
             Toast.makeText(this, "Not Found !!", Toast.LENGTH_SHORT).show();
+            openCam();
         }
         database.close();
-//        openCam();
+        openCam();
         return models;
 
     }
@@ -270,13 +195,16 @@ public class CameraOpenActivity extends AppCompatActivity {
                 selles = "" + cursor.getString(3);
                 id = "" + cursor.getString(4);
             } while (cursor.moveToNext());
-//            Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
             dialogNum();
-        } else {
-            Toast.makeText(this, "Not Found !!", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this,
+                    "Not Found !!",
+                    Toast.LENGTH_SHORT).show();
+            barcodeView.pause();
+            onRestart();
         }
         database.close();
-        openCam();
+
     }
 
     public void dialogNum() {
@@ -298,6 +226,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                openCam();
                 dialogInterface.dismiss();
             }
         });
@@ -305,10 +234,10 @@ public class CameraOpenActivity extends AppCompatActivity {
     }
 
     private void addData() {
-        Model m = new Model(named, cost, String.valueOf(res), code, id, String.valueOf(calc));
+        Favorite m = new Favorite(named, cost, String.valueOf(res), code, id, String.valueOf(calc));
         boolean add = d.add(m);
         if (add) {
-            adapterRecord = new AdapterTwo(new ArrayList<Model>(), CameraOpenActivity.this);
+            adapterRecord = new AdapterTwo(new ArrayList<Favorite>(), CameraOpenActivity.this);
             adapterRecord.updateItems(d.getFav(id));
             recyclerview.setAdapter(adapterRecord);
 
@@ -361,10 +290,8 @@ public class CameraOpenActivity extends AppCompatActivity {
             SharedPreferences.Editor editor2 = preferences.edit();
             editor2.clear();
             editor2.commit();
-//            editor2.apply();
-//            editor.apply();
             result.setText("المجموع");
-            et_text.clearComposingText();
+
             results = 0.0;
             barcodeView.resume();
             onStart();
@@ -457,10 +384,9 @@ public class CameraOpenActivity extends AppCompatActivity {
         return result;
     }
 
-
     @SuppressLint("ResourceAsColor")
     private void createPdf() throws IOException {
-        ArrayList<Model> arrayList = d.getFav(DB.code);
+        ArrayList<Favorite> arrayList = d.getFav(DB.code);
 
         PdfDocument pdfDocument = new PdfDocument();
         Paint paint = new Paint();
@@ -490,7 +416,7 @@ public class CameraOpenActivity extends AppCompatActivity {
                     pageInfo.getPageWidth() - 10, StartY + 4, paint);
             StartY += 20;
             numberItem++;
-            if (numberItem == 30) {
+            if (numberItem == 24) {
                 numberPage += 1;
                 numberItem = 0;
             }
@@ -601,6 +527,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         super.onRestart();
         barcodeView.resume();
         getShared();
+//        openCam();
 
     }
 
@@ -608,7 +535,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        openCam();
+//        openCam();
         adapterRecord = new AdapterTwo(d.getFav(DB.id), CameraOpenActivity.this);
         adapterRecord.updateItems(d.getFav(DB.id));
         recyclerview.setLayoutManager(new LinearLayoutManager(CameraOpenActivity.this));

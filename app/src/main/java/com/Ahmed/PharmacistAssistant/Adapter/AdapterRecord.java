@@ -49,14 +49,10 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
         String cost = model.getCost();
         String sell = model.getSell();
         String code = model.getCode();
-//        String dose = model.getDose();
-//        String drug = model.getDrugName();
-//        String most = model.getMostSideEffect();
-//        String mechanism = model.getMechanismOfAction();
-//        String pregnancy = model.getPregnancy();
+        String date = model.getDate();
         holder.tv_name.setText(name);
         holder.tv_cost.setText(cost);
-        holder.tv_sell.setText(sell); /*dose,drugName,mostSideEffect,mechanismOfAction,pregnancy*/
+        holder.tv_sell.setText(sell);
         holder.getAdapterPosition();
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -76,14 +72,15 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
                         "" + name,
                         "" + code,
                         "" + cost,
-                        "" + sell);
+                        "" + sell,
+                        ""+date);
 
             }
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void showMoreDialog(int position, String id, String name, String code, String cost, String sell) {
+    private void showMoreDialog(int position, String id, String name, String code, String cost, String sell,String date) {
         String[] option = {"حذف","تعديل"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setItems(option, new DialogInterface.OnClickListener() {
@@ -103,7 +100,9 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
                    intent.putExtra("CODE",code);
                    intent.putExtra("COST",cost);
                    intent.putExtra("SELL",sell);
-                 /*dose,drugName,mostSideEffect,mechanismOfAction,pregnancy*/
+                   intent.putExtra("DATE",date);
+                   System.out.println(date);
+
                    intent.putExtra("isEditMode",true);
                    context.startActivity(intent);
                }

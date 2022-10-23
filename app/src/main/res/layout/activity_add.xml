@@ -6,46 +6,6 @@
     tools:context=".activity.AddActivity">
 
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="35dp"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_alignParentStart="true"-->
-<!--        android:id="@+id/appBar"-->
-<!--        android:background="@color/teal_700"-->
-<!--        >-->
-<!--        -->
-<!--    </RelativeLayout>-->
-
-    <RelativeLayout
-        android:layout_height="40dp"
-        android:layout_width="match_parent"
-        android:id="@+id/appBar"
-        android:background="@color/teal_700"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-
-        >
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add"
-            android:layout_marginStart="20dp"
-            android:id="@+id/add"
-            android:background="@android:color/transparent"/>
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_qr_code_scanner"
-            android:id="@+id/camera"
-            android:maxWidth="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/add"
-            android:background="@android:color/transparent"/>
-    </RelativeLayout>
-
         <EditText
             android:id="@+id/nameEt"
             android:layout_width="match_parent"
@@ -54,7 +14,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:hint="@string/name"
-            android:layout_below="@+id/appBar"
             android:textColor="@color/black"
             android:textColorHint="@color/black" />
 
@@ -95,18 +54,18 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/black" />
 
-<!--                <EditText-->
-<!--                    android:id="@+id/dose"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/sellPrice"-->
-<!--                    android:layout_marginStart="20dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="20dp"-->
-<!--                    android:hint="@string/dose"-->
-<!--                    android:padding="5dp"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textColorHint="@color/black"/>-->
+                <EditText
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/sellPrice"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/expire_item"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"/>
 
 <!--                <EditText-->
 <!--                    android:id="@+id/drug"-->

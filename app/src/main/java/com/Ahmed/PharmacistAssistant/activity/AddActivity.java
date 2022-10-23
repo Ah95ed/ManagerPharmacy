@@ -7,13 +7,19 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
@@ -24,7 +30,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 public class AddActivity extends AppCompatActivity {
-    private EditText nameEt,codeEt,CostPriceEt,sellPriceEt;
+    private EditText nameEt,codeEt,CostPriceEt,sellPriceEt ,dateEt;
     public static DecoratedBarcodeView barcodeView;
     public static CameraSettings cameraSettings;
 
@@ -32,13 +38,13 @@ public class AddActivity extends AppCompatActivity {
     private static final byte STORAGE_REQUEST_CODE=102;
     private String[] cameraPermissions;
     private String[] storagePermissions;
-    public static String ID,name,code,cost,sell;
+    public static String ID,name,code,cost,sell,date;
     private DBSqlite dataBase;
     private boolean isEditMode = false;
     private boolean isFlash = false ;
-    private ImageButton save,openCamera;
+    private int C_day,C_month,C_year;
 
-
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,20 +52,34 @@ public class AddActivity extends AppCompatActivity {
 
         nameEt = findViewById(R.id.nameEt);
         codeEt = findViewById(R.id.barCodeEt);
-        save = findViewById(R.id.add);
-        openCamera = findViewById(R.id.camera);
-        save.setOnClickListener(v ->{
-            insertData();
-                });
-
-        openCamera.setOnClickListener(v -> {
-            openCamera();
-        });
-
         cameraPermissions = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         CostPriceEt = findViewById(R.id.CostPrice);
         sellPriceEt = findViewById(R.id.sellPrice);
+        dateEt = findViewById(R.id.date);
+
+        dateEt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Calendar calendar = Calendar.getInstance();
+                 C_year = calendar.get(Calendar.YEAR);
+                 C_month = calendar.get(Calendar.MONTH);
+                 C_day = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dialog  =
+                        new DatePickerDialog(
+                                AddActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        dateEt.setText(year+"-"+month+"-"+dayOfMonth);
+                    }
+                },C_year,C_month,C_day);
+                dialog.show();
+
+
+                return false;
+            }
+        });
+
         dataBase = new DBSqlite(this);
         Intent intent =getIntent();
         isEditMode = intent.getBooleanExtra("isEditMode",false);
@@ -70,12 +90,16 @@ public class AddActivity extends AppCompatActivity {
         code = intent.getStringExtra("CODE");
         cost = intent.getStringExtra("COST");
         sell = intent.getStringExtra("SELL");
+        date = intent.getStringExtra("DATE");
 
 
         nameEt.setText(name);
         codeEt.setText(code);
         CostPriceEt.setText(cost);
         sellPriceEt.setText(sell);
+        dateEt.setText(date);
+            System.out.println(date);
+
 
         }
     }
@@ -84,18 +108,21 @@ public class AddActivity extends AppCompatActivity {
         code = codeEt.getText().toString();
         cost = CostPriceEt.getText().toString();
         sell = sellPriceEt.getText().toString();
+        date = dateEt.getText().toString();
 
-        if (name == "" ){
-            Toast.makeText(AddActivity.this, "حقل الاسم فارغ", Toast.LENGTH_SHORT).show();
+        if (name == "" || date.isEmpty()){
+            Toast.makeText(AddActivity.this, "isEmpty", Toast.LENGTH_SHORT).show();
         }
         if (isEditMode) {
-            dataBase.updateData( name, code, cost, sell,ID);
+//            name, code, cost, sell,ID
+            dataBase.updateData(
+                    new Model(name, code, cost, sell,ID,date));
             Toast.makeText(AddActivity.this, "تم تحديث المعلومات", Toast.LENGTH_SHORT).show();
             onResume();
 
         } else{
             long result = dataBase.insertData(
-                    new Model(name,code,cost,sell));
+                    new Model(name,code,cost,sell,date));
             if (result != -1) {
                 Toast.makeText(AddActivity.this, "تمت الاضافة", Toast.LENGTH_SHORT).show();
                 onResume();
@@ -118,7 +145,6 @@ public class AddActivity extends AppCompatActivity {
         barcodeView = v.findViewById(R.id.barcode_scanner);
         cameraSettings =new CameraSettings();
         cameraSettings.setRequestedCameraId(0);
-        cameraSettings.setAutoFocusEnabled(true);
         cameraSettings.setAutoFocusEnabled(true);
         barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
         barcodeView.resume();
@@ -156,6 +182,24 @@ public class AddActivity extends AppCompatActivity {
         });
         dialog.setView(v);
         dialog.show();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int ide = item.getItemId();
+        if (ide == R.id.OpenCamera)
+        {
+            openCamera();
+        }
+        else if (ide == R.id.addItem)
+        {
+            insertData();
+        }
+        return super.onOptionsItemSelected(item);
     }
     private boolean checkStoragePermission(){
         boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
