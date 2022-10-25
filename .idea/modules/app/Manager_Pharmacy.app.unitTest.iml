@@ -110,6 +110,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-installations:17.0.2@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.firebase:firebase-installations-interop:17.0.2@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.journeyapps:zxing-android-embedded:4.3.0@aar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.github.yuriy-budiyev:code-scanner:2.3.2@aar" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="Manager_Pharmacy.app.main" />
 </module>

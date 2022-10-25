@@ -22,6 +22,7 @@ public class DBSqlite extends SQLiteAssetHelper {
     public static final String C_COST = "Cost";
     public static final String C_PRICE = "Sell";
     public static final String C_Date = "date";
+    public static final String C_Quantity = "Quantity";
 
     private SQLiteDatabase db;
     public DBSqlite(@Nullable Context context) {
@@ -35,14 +36,17 @@ public class DBSqlite extends SQLiteAssetHelper {
     }
 
     /*______________أستعادة الداتا من ملف csv______________*/
-    public long importData(String name, String code, String cost, String price){
+    public long importData(Model model){
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(C_NAME,name);
-        cv.put(C_CODE,code);
-        cv.put(C_COST,cost);
-        cv.put(C_PRICE,price);
+        cv.put(C_NAME,model.getName());
+        cv.put(C_CODE,model.getCost());
+        cv.put(C_COST,model.getCost());
+        cv.put(C_PRICE,model.getSell());
+//        cv.put(C_ID,model.getId());
+        cv.put(C_Date,model.getDate());
+        cv.put(C_Quantity,model.getQuantity());
         long result = db.insert(DB_TABLE,null,cv);
         db.close();
         return result;
@@ -58,6 +62,7 @@ public class DBSqlite extends SQLiteAssetHelper {
         cv.put(C_COST,model.getCost());
         cv.put(C_PRICE,model.getSell());
         cv.put(C_Date,model.getDate());
+        cv.put(C_Quantity,model.getQuantity());
         long result = db.insert(DB_TABLE,null,cv);
         db.close();
         return result;
@@ -72,12 +77,13 @@ public class DBSqlite extends SQLiteAssetHelper {
         cv.put(C_COST,model.getCost());
         cv.put(C_PRICE,model.getSell());
         cv.put(C_Date,model.getDate());
+        cv.put(C_Quantity,model.getQuantity());
         db.update(DB_TABLE,cv, C_ID + " =?",new String[]{model.getId()});
         db.close();
     }
     public Cursor getAllNames() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String[] columns = {C_NAME, C_CODE, C_COST, C_PRICE, C_ID,C_Date};
+        String[] columns = {C_NAME, C_CODE, C_COST, C_PRICE, C_ID,C_Date,C_Quantity};
         return db.query(DB_TABLE, columns, null, null, null, null, null);
 
     }
@@ -107,7 +113,8 @@ public class DBSqlite extends SQLiteAssetHelper {
                         ""+cursor.getString(2),
                         ""+cursor.getString(3),
                         ""+cursor.getString(4),
-                        ""+cursor.getString(5));
+                        ""+cursor.getString(5),
+                        ""+cursor.getString(6));
                 records.add(model);
             }while (cursor.moveToNext());
         }

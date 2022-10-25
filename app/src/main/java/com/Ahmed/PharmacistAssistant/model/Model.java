@@ -1,20 +1,23 @@
 package com.Ahmed.PharmacistAssistant.model;
 
-import kotlin.OverloadResolutionByLambdaReturnType;
-
 public class Model {
-    private String id,name,code,cost,sell,quantity,date;
+    private String id,name,code,cost,sell,date,quantity;
 
 
-//    public Model(String id, String name, String code, String cost, String sell, String quantity, String date) {
-//        this.id = id;
-//        this.name = name;
-//        this.code = code;
-//        this.cost = cost;
-//        this.sell = sell;
-//        this.quantity = quantity;
-//        this.date = date;
-//    }
+    public Model( String name,
+                 String code, String cost,
+                 String sell,String id, String date,
+                 String quantity) {
+
+        this.name = name;
+        this.code = code;
+        this.cost = cost;
+        this.sell = sell;
+        this.id = id;
+        this.date = date;
+        this.quantity = quantity;
+
+    }
 
     public Model(String name, String code, String cost, String sell, String date) {
         this.name = name;

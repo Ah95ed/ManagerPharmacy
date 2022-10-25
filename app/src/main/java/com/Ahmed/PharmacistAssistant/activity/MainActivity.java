@@ -410,7 +410,10 @@ public class MainActivity extends AppCompatActivity{
                             String code = nextLine[1];
                             String cost = nextLine[2];
                             String sell = nextLine[3];
-                            long getData = db.importData(name, code, cost, sell);
+//                            String id = nextLine[4];
+                            String date = nextLine[5];
+                            String quantity = nextLine[6];
+                            long getData = db.importData(new Model(name, code, cost, sell,date,quantity));
                         }
                         runOnUiThread(new Runnable() {
                             @Override

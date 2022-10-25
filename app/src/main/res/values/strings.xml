@@ -59,5 +59,7 @@ But !!! Make sure
     <string name="recipe_account">Recipe account</string>
     <string name="prices_update">Prices update</string>
     <string name="debts">Debts</string>
+    <string name="quantity_item">quantity item</string>
+    <string name="quantity">Quantity</string>
 
 </resources>

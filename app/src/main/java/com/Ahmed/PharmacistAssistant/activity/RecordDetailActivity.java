@@ -14,9 +14,9 @@ import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 
 public class RecordDetailActivity extends AppCompatActivity {
-    private TextView tv_name,tv_code,tv_cost,tv_sell,tv_date;
+    private TextView tv_name,tv_code,tv_cost,tv_sell,tv_date,tv_quantity;
     DBSqlite db;
-    private String ID,nameItem,code,cost,sell,date;
+    private String ID,nameItem,code,cost,sell,date,quantity;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,7 @@ public class RecordDetailActivity extends AppCompatActivity {
         tv_cost = findViewById(R.id.cost);
         tv_sell = findViewById(R.id.sell);
         tv_date = findViewById(R.id.date);
+        tv_quantity = findViewById(R.id.quantity);
         showRecordDetails();
     }
     private void showRecordDetails() {
@@ -39,20 +40,23 @@ public class RecordDetailActivity extends AppCompatActivity {
         Cursor cursor = database.rawQuery(selectQuery,null);
         if (cursor.moveToFirst()){
             do {
-                 nameItem = ""+cursor.getString(0);
-                 code = ""+cursor.getString(1);
-                 cost =""+cursor.getString(2);
-                 sell = ""+cursor.getString(3);
-                 String id = ""+cursor.getString(4);
-                 date = ""+cursor.getString(5);
+                 nameItem = cursor.getString(0);
+                 code = cursor.getString(1);
+                 cost =cursor.getString(2);
+                 sell = cursor.getString(3);
+                 String id = cursor.getString(4);
+                 date = cursor.getString(5);
+                quantity = cursor.getString(6);
                 Log.d("TAGDATE",date);
-                    tv_name.setText(nameItem);
-                    tv_code.setText(code);
-                    tv_cost.setText(cost);
-                    tv_sell.setText(sell);
-                    tv_date.setText(date);
+
 
             }while (cursor.moveToNext());
+            tv_name.setText(nameItem);
+            tv_code.setText(code);
+            tv_cost.setText(cost);
+            tv_sell.setText(sell);
+            tv_date.setText(date);
+            tv_quantity.setText(quantity);
         }
         database.close();
     }

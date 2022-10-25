@@ -30,7 +30,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 public class AddActivity extends AppCompatActivity {
-    private EditText nameEt,codeEt,CostPriceEt,sellPriceEt ,dateEt;
+    private EditText nameEt,codeEt,CostPriceEt,sellPriceEt ,dateEt,quantityEt;
     public static DecoratedBarcodeView barcodeView;
     public static CameraSettings cameraSettings;
 
@@ -38,7 +38,7 @@ public class AddActivity extends AppCompatActivity {
     private static final byte STORAGE_REQUEST_CODE=102;
     private String[] cameraPermissions;
     private String[] storagePermissions;
-    public static String ID,name,code,cost,sell,date;
+    public static String ID,name,code,cost,sell,date,quantity;
     private DBSqlite dataBase;
     private boolean isEditMode = false;
     private boolean isFlash = false ;
@@ -57,7 +57,7 @@ public class AddActivity extends AppCompatActivity {
         CostPriceEt = findViewById(R.id.CostPrice);
         sellPriceEt = findViewById(R.id.sellPrice);
         dateEt = findViewById(R.id.date);
-
+        quantityEt = findViewById(R.id.quantity);
         dateEt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -109,20 +109,20 @@ public class AddActivity extends AppCompatActivity {
         cost = CostPriceEt.getText().toString();
         sell = sellPriceEt.getText().toString();
         date = dateEt.getText().toString();
+        quantity= quantityEt.getText().toString();
 
         if (name == "" || date.isEmpty()){
             Toast.makeText(AddActivity.this, "isEmpty", Toast.LENGTH_SHORT).show();
         }
         if (isEditMode) {
-//            name, code, cost, sell,ID
             dataBase.updateData(
-                    new Model(name, code, cost, sell,ID,date));
+                    new Model(name, code, cost, sell,ID,date,quantity));
             Toast.makeText(AddActivity.this, "تم تحديث المعلومات", Toast.LENGTH_SHORT).show();
             onResume();
 
         } else{
             long result = dataBase.insertData(
-                    new Model(name,code,cost,sell,date));
+                    new Model(name,code,cost,sell,date,quantity));
             if (result != -1) {
                 Toast.makeText(AddActivity.this, "تمت الاضافة", Toast.LENGTH_SHORT).show();
                 onResume();

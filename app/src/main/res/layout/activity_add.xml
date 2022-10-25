@@ -64,9 +64,22 @@
                     android:layout_marginEnd="20dp"
                     android:hint="@string/expire_item"
                     android:padding="5dp"
+                    android:inputType="date"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"/>
-
+        <EditText
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/quantity_item"
+            android:padding="5dp"
+            android:inputType="number"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"/>
 <!--                <EditText-->
 <!--                    android:id="@+id/drug"-->
 <!--                    android:layout_width="match_parent"-->

@@ -23,11 +23,11 @@ public class DB extends SQLiteOpenHelper {
     public static final String TB_DEBT = "DEBTS";
     public static final String C_ID = "DEBTS";
     public static final String C = "DEBTS";
-    public static final String TB_DEBT = "DEBTS";
-    public static final String TB_DEBT = "DEBTS";
-    public static final String TB_DEBT = "DEBTS";
-    public static final String TB_DEBT = "DEBTS";
-    public static final String TB_DEBT = "DEBTS";
+//    public static final String TB_DEBT = "DEBTS";
+//    public static final String TB_DEBT = "DEBTS";
+//    public static final String TB_DEBT = "DEBTS";
+//    public static final String TB_DEBT = "DEBTS";
+//    public static final String TB_DEBT = "DEBTS";
     public DB(Context context) {
         super(context, Dbname,null, 2);
         SQLiteDatabase db =this.getWritableDatabase();

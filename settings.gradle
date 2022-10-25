@@ -3,7 +3,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenCentral() // Warning: this repository is going to shut down soon
+        mavenCentral()
+        maven { url 'https://jitpack.io' }// Warning: this repository is going to shut down soon
     }
 }
 rootProject.name = "Manager Pharmacy"

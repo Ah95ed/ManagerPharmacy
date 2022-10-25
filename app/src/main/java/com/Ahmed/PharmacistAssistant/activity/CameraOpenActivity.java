@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Dialog;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,11 +39,14 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -58,10 +61,14 @@ import com.Ahmed.PharmacistAssistant.database.DB;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Favorite;
 import com.Ahmed.PharmacistAssistant.model.Model;
-import com.google.android.material.internal.TextWatcherAdapter;
+
+import com.budiyev.android.codescanner.AutoFocusMode;
+import com.budiyev.android.codescanner.CodeScanner;
+import com.budiyev.android.codescanner.CodeScannerView;
+import com.budiyev.android.codescanner.DecodeCallback;
+import com.budiyev.android.codescanner.ScanMode;
 import com.google.firebase.installations.BuildConfig;
-import com.journeyapps.barcodescanner.BarcodeCallback;
-import com.journeyapps.barcodescanner.BarcodeResult;
+import com.google.zxing.Result;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
@@ -76,8 +83,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     private final String All = "AllPrice";
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    private DecoratedBarcodeView barcodeView;
-    private CameraSettings cameraSettings;
+    CodeScanner codeScanner ;
     private DBSqlite db;
     public TextView result;
     private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
@@ -85,6 +91,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     private String txt, id, named, selles, cost, code;
     private RecyclerView recyclerview;
     public double results;
+    private static final int REQUEST_CAMERA_PERMISSION = 201;
     private String[] cameraPermissions;
     private static final byte CAMERA_REQUEST_CODE = 100;
     private DB d;
@@ -95,8 +102,11 @@ public class CameraOpenActivity extends AppCompatActivity {
     private ImageButton Flash,reFresh;
     private boolean isFlash;
     private ToneGenerator toneGen1;
+    private CodeScannerView scannerView;
 //    private ImageButton printPdf, D_All;
-
+//    private SurfaceView surfaceView;
+//    private BarcodeDetector barcodeDetector;
+//    private CameraSource cameraSource;
 
     @SuppressLint({"NotifyDataSetChanged", "MissingInflatedId"})
     @Override
@@ -105,57 +115,74 @@ public class CameraOpenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera_open);
         preferences = getSharedPreferences(savePrice, MODE_PRIVATE);
         editor = preferences.edit();
+        scannerView =findViewById(R.id.scanner_view);
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 150);
         isFlash = false;
-        reFresh = findViewById(R.id.refresh);
-        reFresh.setOnClickListener(new View.OnClickListener() {
+        codeScanner = new CodeScanner(this,scannerView);
+
+        scannerView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                openCam();
+            public void onClick(View view) {
+                codeScanner.startPreview();
             }
         });
         d = new DB(this);
-        Flash = findViewById(R.id.flash);
+//        Flash = findViewById(R.id.flash);
         cameraPermissions = new String[]{Manifest.permission.CAMERA};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
                 , Manifest.permission.READ_EXTERNAL_STORAGE};
         recyclerview = findViewById(R.id.recordR);
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        barcodeView = findViewById(R.id.barcode_scanner);
+//        barcodeView = findViewById(R.id.barcode_scanner);
         StrictMode.VmPolicy.Builder builders = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builders.build());
         builders.detectFileUriExposure();
         result = findViewById(R.id.tv_total);
-
-        openCam();
+//        initialiseDetectorsAndSources();
+//        openCam();
+        opeeen();
         db = new DBSqlite(this);
-        Flash.setOnClickListener(view -> {
-            if (!isFlash) {
-                barcodeView.setTorchOn();
-                isFlash = true;
-            } else {
-                barcodeView.setTorchOff();
-                isFlash = false;
-            }
-        });
+//        Flash.setOnClickListener(view -> {
+//            if (!isFlash) {
+//                barcodeView.setTorchOn();
+//                isFlash = true;
+//            } else {
+//                barcodeView.setTorchOff();
+//                isFlash = false;
+//            }
+//        });
     }
 
+     private void opeeen(){
+    codeScanner.setDecodeCallback(new DecodeCallback() {
+        @Override
+        public void onDecoded(@NonNull final Result result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getData(result.getText());
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
 
-    private void openCam() {
-        cameraSettings = new CameraSettings();
-        cameraSettings.setRequestedCameraId(0);
-        cameraSettings.setAutoFocusEnabled(true);
-        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-        barcodeView.resume();
-        barcodeView.decodeSingle(new BarcodeCallback() {
-            @Override
-            public void barcodeResult(BarcodeResult result) {
-                toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
-                getData(result.getText());
-
-            }
-        });
-    }
+                }
+            });
+        }
+    });
+}
+//    private void openCam() {
+//        cameraSettings = new CameraSettings();
+//        cameraSettings.setRequestedCameraId(0);
+//        cameraSettings.setAutoFocusEnabled(true);
+//        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
+//        barcodeView.resume();
+//        barcodeView.decodeSingle(new BarcodeCallback() {
+//            @Override
+//            public void barcodeResult(BarcodeResult result) {
+//                toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
+//                getData(result.getText());
+//
+//            }
+//        });
+//    }
 
     private ArrayList<Model> getDataName(String N) {
         String selectQuery = "SELECT * FROM " + DBSqlite.DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + N + "%'";
@@ -176,10 +203,10 @@ public class CameraOpenActivity extends AppCompatActivity {
             dialogNum();
         } else {
             Toast.makeText(this, "Not Found !!", Toast.LENGTH_SHORT).show();
-            openCam();
+//            codeScanner.startPreview();
         }
         database.close();
-        openCam();
+//        openCam();
         return models;
 
     }
@@ -200,8 +227,11 @@ public class CameraOpenActivity extends AppCompatActivity {
             Toast.makeText(this,
                     "Not Found !!",
                     Toast.LENGTH_SHORT).show();
-            barcodeView.pause();
-            onRestart();
+            opeeen();
+            codeScanner.startPreview();
+//            initialiseDetectorsAndSources();
+//            barcodeView.pause();
+//            onRestart();
         }
         database.close();
 
@@ -226,7 +256,9 @@ public class CameraOpenActivity extends AppCompatActivity {
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                openCam();
+//                openCam();
+//                initialiseDetectorsAndSources();
+                opeeen();
                 dialogInterface.dismiss();
             }
         });
@@ -245,6 +277,7 @@ public class CameraOpenActivity extends AppCompatActivity {
                 results = Double.parseDouble(result.getText().toString());
                 results += res;
                 result.setText(String.valueOf(results));
+
                 onStart();
             }else {
                 results += res;
@@ -257,7 +290,8 @@ public class CameraOpenActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Field", Toast.LENGTH_SHORT).show();
         }
-        openCam();
+//        codeScanner.startPreview();
+//        openCam();
     }
 
 
@@ -293,7 +327,7 @@ public class CameraOpenActivity extends AppCompatActivity {
             result.setText("المجموع");
 
             results = 0.0;
-            barcodeView.resume();
+//            barcodeView.resume();
             onStart();
         }
 
@@ -465,7 +499,8 @@ public class CameraOpenActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        barcodeView.pause();
+        codeScanner.stopPreview();
+//        barcodeView.pause();
 
     }
 
@@ -473,14 +508,14 @@ public class CameraOpenActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         sharedPreference();
-        barcodeView.pause();
-        isFlash = false;
+        codeScanner.stopPreview();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        barcodeView.resume();
+//        barcodeView.resume();
+        codeScanner.releaseResources();
         getShared();
     }
 
@@ -499,7 +534,8 @@ public class CameraOpenActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        barcodeView.pause();
+        codeScanner.stopPreview();
+//        barcodeView.pause();
         sharedPreference();
     }
 
@@ -518,15 +554,17 @@ public class CameraOpenActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        codeScanner.stopPreview();
         sharedPreference();
-        barcodeView.pause();
+//        barcodeView.pause();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        barcodeView.resume();
+//        barcodeView.resume();
         getShared();
+        codeScanner.startPreview();
 //        openCam();
 
     }
@@ -536,6 +574,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 //        openCam();
+        codeScanner.startPreview();
         adapterRecord = new AdapterTwo(d.getFav(DB.id), CameraOpenActivity.this);
         adapterRecord.updateItems(d.getFav(DB.id));
         recyclerview.setLayoutManager(new LinearLayoutManager(CameraOpenActivity.this));

@@ -14,6 +14,8 @@
             android:layout_marginTop="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:padding="6dp"
             android:stretchColumns="2">
             <TableRow>
                 <TextView
@@ -128,6 +130,30 @@
 
                 <TextView
                     android:id="@+id/date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_weight="3"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quantity"
+                    android:padding="10dp"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:background="@color/mat"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    />
+
+                <TextView
+                    android:id="@+id/quantity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
