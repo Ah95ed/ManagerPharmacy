@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +51,9 @@ import com.Ahmed.PharmacistAssistant.AdapterAndService.MyReceiver;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
+import com.budiyev.android.codescanner.CodeScanner;
+import com.budiyev.android.codescanner.CodeScannerView;
+import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -61,6 +65,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.google.zxing.Result;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity{
     private ArrayList<Model> array;
     //This class provides methods to play DTMF tones
     private ToneGenerator toneGen1;
-
+    private CodeScanner codeScanner;
     private String[] cameraPermissions;
     private DatabaseReference ref;
     private SharedPreferences preferences;
@@ -108,7 +113,8 @@ public class MainActivity extends AppCompatActivity{
     private int currentVersionCod;
     private Boolean isFlash;
     private EditText search;
-
+    private CoordinatorLayout layout;
+    private CodeScannerView scannerView;
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +122,14 @@ public class MainActivity extends AppCompatActivity{
         actionBar = getSupportActionBar();
         actionBar.hide();
         setContentView(R.layout.activity_main);
+        layout = findViewById(R.id.Relative);
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                onStart();
+            loadRecords();
+            }
+        });
         navigationView = findViewById(R.id.bottomnavigtionView);
         navigationView.setBackground(null);
         search = findViewById(R.id.search);
@@ -188,6 +202,7 @@ public class MainActivity extends AppCompatActivity{
         floatingActionButton = findViewById(R.id.add_item);
 
         recordRv = findViewById(R.id.recordRv);
+
         db = new DBSqlite(this);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,8 +235,6 @@ public class MainActivity extends AppCompatActivity{
                         Toast.LENGTH_SHORT).show();
             }
         });
-
-
 
     }
 
@@ -643,58 +656,85 @@ public class MainActivity extends AppCompatActivity{
                 break;
         }
     }
+    @SuppressLint("MissingInflatedId")
     private void openCamera() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
         dialog.setCanceledOnTouchOutside(false);
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-        barcodeView = v.findViewById(R.id.barcode_scanner);
-        cameraSettings =new CameraSettings();
-        cameraSettings.setRequestedCameraId(0);
-        cameraSettings.setAutoFocusEnabled(true);
-        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-        barcodeView.resume();
+        scannerView = v.findViewById(R.id.scanner_view);
+        codeScanner = new CodeScanner(this,scannerView);
+//        codeScanner.getAutoFocusMode();
+        codeScanner.startPreview();
 
-        barcodeView.decodeSingle(new BarcodeCallback() {
+        codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
-            public void barcodeResult(BarcodeResult result) {
-                if (result.getText() != null) {
-                    searchBar(result.getText());
-                    barcodeView.pause();
-                    dialog.dismiss();
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT,160);
-                    isFlash = false;
-                    barcodeView.setTorchOff();
-                }
-            }
-        });
-        Button Close = v.findViewById(R.id.close);
-        Button flash = v.findViewById(R.id.flash);
+            public void onDecoded(@NonNull final Result result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        searchBar(result.getText());
+                        toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
+                        codeScanner.stopPreview();
+                        dialog.dismiss();
 
-        Close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               barcodeView.pause();
-//                cameraSource.stop();
-                dialog.dismiss();
-                barcodeView.setTorchOff();
-                isFlash = false;
+                    }
+                });
             }
         });
-        flash.setOnClickListener(new View.OnClickListener() {
+        scannerView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-               if (!isFlash) {
-                   barcodeView.setTorchOn();
-                   isFlash = true;
-               }
-               else {
-                   barcodeView.setTorchOff();
-                   isFlash = false;
-               }
+            public void onClick(View v) {
+                codeScanner.startPreview();
             }
         });
+//        barcodeView = v.findViewById(R.id.barcode_scanner);
+//        cameraSettings =new CameraSettings();
+//        cameraSettings.setRequestedCameraId(0);
+//        cameraSettings.setAutoFocusEnabled(true);
+//        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
+//        barcodeView.resume();
+//
+//        barcodeView.decodeSingle(new BarcodeCallback() {
+//            @Override
+//            public void barcodeResult(BarcodeResult result) {
+//                if (result.getText() != null) {
+//                    searchBar(result.getText());
+//                    barcodeView.pause();
+//                    dialog.dismiss();
+//                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT,160);
+//                    isFlash = false;
+//                    barcodeView.setTorchOff();
+//                }
+//            }
+//        });
+//        Button Close = v.findViewById(R.id.close);
+//        Button flash = v.findViewById(R.id.flash);
+//
+//        Close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//               barcodeView.pause();
+////                cameraSource.stop();
+//                dialog.dismiss();
+//                barcodeView.setTorchOff();
+//                isFlash = false;
+//            }
+//        });
+//        flash.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//               if (!isFlash) {
+//                   barcodeView.setTorchOn();
+//                   isFlash = true;
+//               }
+//               else {
+//                   barcodeView.setTorchOff();
+//                   isFlash = false;
+//               }
+//            }
+//        });
         dialog.setView(v);
         dialog.show();
     }
@@ -743,7 +783,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
 //        Expired();
-
     }
     private void Expired() {
         preferences = getSharedPreferences("My preferences", MODE_PRIVATE);

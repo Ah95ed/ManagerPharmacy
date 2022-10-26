@@ -91,6 +91,7 @@ public class AddActivity extends AppCompatActivity {
         cost = intent.getStringExtra("COST");
         sell = intent.getStringExtra("SELL");
         date = intent.getStringExtra("DATE");
+//        date = intent.getStringExtra("DATE");
 
 
         nameEt.setText(name);
@@ -115,6 +116,7 @@ public class AddActivity extends AppCompatActivity {
             Toast.makeText(AddActivity.this, "isEmpty", Toast.LENGTH_SHORT).show();
         }
         if (isEditMode) {
+//            name, code, cost, sell,ID
             dataBase.updateData(
                     new Model(name, code, cost, sell,ID,date,quantity));
             Toast.makeText(AddActivity.this, "تم تحديث المعلومات", Toast.LENGTH_SHORT).show();
@@ -142,44 +144,44 @@ public class AddActivity extends AppCompatActivity {
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
         dialog.setCanceledOnTouchOutside(false);
-        barcodeView = v.findViewById(R.id.barcode_scanner);
-        cameraSettings =new CameraSettings();
-        cameraSettings.setRequestedCameraId(0);
-        cameraSettings.setAutoFocusEnabled(true);
-        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-        barcodeView.resume();
-        barcodeView.decodeSingle(new BarcodeCallback() {
-            @Override
-            public void barcodeResult(BarcodeResult result) {
-                if (result.getText() != null) {
-                    codeEt.setText(result.getText());
-                    barcodeView.pause();
-                    dialog.dismiss();
-                    isFlash =false;
-                }
-            }
-        });
-        AppCompatButton flash = v.findViewById(R.id.flash);
-        AppCompatButton Close = v.findViewById(R.id.close);
-        Close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                barcodeView.pause();
-                dialog.dismiss();
-            }
-        });
-        flash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isFlash){
-                    barcodeView.setTorchOn();
-                    isFlash = true;
-                }else{
-                    barcodeView.setTorchOff();
-                    isFlash = false;
-                }
-            }
-        });
+//        barcodeView = v.findViewById(R.id.barcode_scanner);
+//        cameraSettings =new CameraSettings();
+//        cameraSettings.setRequestedCameraId(0);
+//        cameraSettings.setAutoFocusEnabled(true);
+//        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
+//        barcodeView.resume();
+//        barcodeView.decodeSingle(new BarcodeCallback() {
+//            @Override
+//            public void barcodeResult(BarcodeResult result) {
+//                if (result.getText() != null) {
+//                    codeEt.setText(result.getText());
+//                    barcodeView.pause();
+//                    dialog.dismiss();
+//                    isFlash =false;
+//                }
+//            }
+//        });
+//        AppCompatButton flash = v.findViewById(R.id.flash);
+//        AppCompatButton Close = v.findViewById(R.id.close);
+//        Close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                barcodeView.pause();
+//                dialog.dismiss();
+//            }
+//        });
+//        flash.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!isFlash){
+//                    barcodeView.setTorchOn();
+//                    isFlash = true;
+//                }else{
+//                    barcodeView.setTorchOff();
+//                    isFlash = false;
+//                }
+//            }
+//        });
         dialog.setView(v);
         dialog.show();
     }

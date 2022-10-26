@@ -49,17 +49,17 @@
 <!--        android:layout_marginBottom="19dp"-->
 <!--        android:src="@drawable/ic_voice" />-->
 
-    <FrameLayout
-        android:id="@+id/fragment_all"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="124dp"
-        android:layout_marginBottom="201dp">
+<!--    <FrameLayout-->
+<!--        android:id="@+id/fragment_all"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="350dp"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginTop="124dp"-->
+<!--        android:layout_marginBottom="201dp">-->
 
-    </FrameLayout>
+<!--    </FrameLayout>-->
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomApp"

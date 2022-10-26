@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
-
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 
@@ -47,7 +45,7 @@ public class RecordDetailActivity extends AppCompatActivity {
                  String id = cursor.getString(4);
                  date = cursor.getString(5);
                 quantity = cursor.getString(6);
-                Log.d("TAGDATE",date);
+//                Log.d("TAGDATE",date);
 
 
             }while (cursor.moveToNext());
