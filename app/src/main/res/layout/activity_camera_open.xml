@@ -50,48 +50,54 @@
 <!--    </RelativeLayout>-->
     <FrameLayout
         android:id="@+id/frame"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:keepScreenOn="true"
-        android:forceHasOverlappingRendering="true"
+        android:layout_height="343dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        >
+        android:layout_centerHorizontal="true"
+        android:forceHasOverlappingRendering="true"
+        android:keepScreenOn="true">
 
-<!--        <com.journeyapps.barcodescanner.DecoratedBarcodeView-->
-<!--            android:id="@+id/barcode_scanner"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="330dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintVertical_bias="0.0"-->
-<!--            app:zxing_preview_scaling_strategy="centerCrop"-->
-<!--            app:zxing_use_texture_view="false">-->
+        <!--        <com.journeyapps.barcodescanner.DecoratedBarcodeView-->
+        <!--            android:id="@+id/barcode_scanner"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="330dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_bias="0.0"-->
+        <!--            app:zxing_preview_scaling_strategy="centerCrop"-->
+        <!--            app:zxing_use_texture_view="false">-->
         <com.budiyev.android.codescanner.CodeScannerView
             android:id="@+id/scanner_view"
 
             android:layout_width="match_parent"
-            android:layout_height="400dp"/>
-<!--            <ImageButton-->
-<!--                android:id="@+id/flash"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="6dp"-->
-<!--                android:src="@drawable/ic_flash_on" />-->
+            android:layout_height="350dp"
+            android:forceHasOverlappingRendering="true"
+            app:autoFocusButtonColor="@color/teal_200"
+            app:autoFocusButtonPaddingHorizontal="100dp"
+            app:flashButtonColor="@color/teal_200"
+            app:flashButtonPaddingHorizontal="100dp"
+            app:frameColor="@color/teal_200"
+            app:frameCornersSize="100dp" />
+        <!--            <ImageButton-->
+        <!--                android:id="@+id/flash"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_margin="6dp"-->
+        <!--                android:src="@drawable/ic_flash_on" />-->
 
-<!--            <ImageButton-->
-<!--                android:id="@+id/refresh"-->
-<!--                android:layout_width="58dp"-->
-<!--                android:layout_height="54dp"-->
-<!--                android:layout_gravity="start"-->
-<!--                android:layout_marginTop="265dp"-->
-<!--                android:src="@drawable/ic_refresh" />-->
-<!--        </SurfaceView>-->
+        <!--            <ImageButton-->
+        <!--                android:id="@+id/refresh"-->
+        <!--                android:layout_width="58dp"-->
+        <!--                android:layout_height="54dp"-->
+        <!--                android:layout_gravity="start"-->
+        <!--                android:layout_marginTop="265dp"-->
+        <!--                android:src="@drawable/ic_refresh" />-->
+        <!--        </SurfaceView>-->
 
-<!--        </com.journeyapps.barcodescanner.DecoratedBarcodeView>-->
+        <!--        </com.journeyapps.barcodescanner.DecoratedBarcodeView>-->
 
     </FrameLayout>
 

@@ -678,7 +678,6 @@ public class MainActivity extends AppCompatActivity{
                         toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
                         codeScanner.stopPreview();
                         dialog.dismiss();
-
                     }
                 });
             }

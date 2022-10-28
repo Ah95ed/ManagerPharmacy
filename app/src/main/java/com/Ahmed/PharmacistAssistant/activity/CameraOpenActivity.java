@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,16 +34,11 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import android.provider.Settings;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -52,8 +46,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.Ahmed.PharmacistAssistant.Adapter.AdapterSearchDialog;
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo;
 import com.Ahmed.PharmacistAssistant.Adapter.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.R;
@@ -61,16 +53,15 @@ import com.Ahmed.PharmacistAssistant.database.DB;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Favorite;
 import com.Ahmed.PharmacistAssistant.model.Model;
-
-import com.budiyev.android.codescanner.AutoFocusMode;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-import com.budiyev.android.codescanner.ScanMode;
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.installations.BuildConfig;
 import com.google.zxing.Result;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -103,10 +94,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     private boolean isFlash;
     private ToneGenerator toneGen1;
     private CodeScannerView scannerView;
-//    private ImageButton printPdf, D_All;
-//    private SurfaceView surfaceView;
-//    private BarcodeDetector barcodeDetector;
-//    private CameraSource cameraSource;
+
 
     @SuppressLint({"NotifyDataSetChanged", "MissingInflatedId"})
     @Override
@@ -127,33 +115,22 @@ public class CameraOpenActivity extends AppCompatActivity {
             }
         });
         d = new DB(this);
-//        Flash = findViewById(R.id.flash);
         cameraPermissions = new String[]{Manifest.permission.CAMERA};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
                 , Manifest.permission.READ_EXTERNAL_STORAGE};
         recyclerview = findViewById(R.id.recordR);
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//        barcodeView = findViewById(R.id.barcode_scanner);
         StrictMode.VmPolicy.Builder builders = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builders.build());
         builders.detectFileUriExposure();
         result = findViewById(R.id.tv_total);
-//        initialiseDetectorsAndSources();
-//        openCam();
         opeeen();
         db = new DBSqlite(this);
-//        Flash.setOnClickListener(view -> {
-//            if (!isFlash) {
-//                barcodeView.setTorchOn();
-//                isFlash = true;
-//            } else {
-//                barcodeView.setTorchOff();
-//                isFlash = false;
-//            }
-//        });
     }
 
      private void opeeen(){
+
+
     codeScanner.setDecodeCallback(new DecodeCallback() {
         @Override
         public void onDecoded(@NonNull final Result result) {
@@ -168,21 +145,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         }
     });
 }
-//    private void openCam() {
-//        cameraSettings = new CameraSettings();
-//        cameraSettings.setRequestedCameraId(0);
-//        cameraSettings.setAutoFocusEnabled(true);
-//        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-//        barcodeView.resume();
-//        barcodeView.decodeSingle(new BarcodeCallback() {
-//            @Override
-//            public void barcodeResult(BarcodeResult result) {
-//                toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
-//                getData(result.getText());
-//
-//            }
-//        });
-//    }
+
 
     private ArrayList<Model> getDataName(String N) {
         String selectQuery = "SELECT * FROM " + DBSqlite.DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + N + "%'";
@@ -203,7 +166,7 @@ public class CameraOpenActivity extends AppCompatActivity {
             dialogNum();
         } else {
             Toast.makeText(this, "Not Found !!", Toast.LENGTH_SHORT).show();
-//            codeScanner.startPreview();
+            codeScanner.startPreview();
         }
         database.close();
 //        openCam();
@@ -229,9 +192,6 @@ public class CameraOpenActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             opeeen();
             codeScanner.startPreview();
-//            initialiseDetectorsAndSources();
-//            barcodeView.pause();
-//            onRestart();
         }
         database.close();
 
@@ -289,6 +249,7 @@ public class CameraOpenActivity extends AppCompatActivity {
 
         } else {
             Toast.makeText(this, "Field", Toast.LENGTH_SHORT).show();
+            opeeen();
         }
 //        codeScanner.startPreview();
 //        openCam();
@@ -515,7 +476,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 //        barcodeView.resume();
-        codeScanner.releaseResources();
+        codeScanner.startPreview();
         getShared();
     }
 
