@@ -3,6 +3,7 @@ package com.Ahmed.PharmacistAssistant.activity;
 
 import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_CODE;
 import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_NAME;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -23,6 +25,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
+import android.graphics.pdf.PdfRenderer;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.net.Uri;
@@ -46,6 +49,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo;
 import com.Ahmed.PharmacistAssistant.Adapter.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.R;
@@ -63,6 +67,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.installations.BuildConfig;
 import com.google.zxing.Result;
 
+import org.w3c.dom.Document;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -74,7 +80,7 @@ public class CameraOpenActivity extends AppCompatActivity {
     private final String All = "AllPrice";
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    CodeScanner codeScanner ;
+    CodeScanner codeScanner;
     private DBSqlite db;
     public TextView result;
     private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
@@ -87,10 +93,10 @@ public class CameraOpenActivity extends AppCompatActivity {
     private static final byte CAMERA_REQUEST_CODE = 100;
     private DB d;
     private double res, calc;
-    private byte numberPage = 1;
+    private int numberPage = 1;
     private AdapterTwo adapterRecord;
     private String[] storagePermissions;
-    private ImageButton Flash,reFresh;
+    private ImageButton Flash, reFresh;
     private boolean isFlash;
     private ToneGenerator toneGen1;
     private CodeScannerView scannerView;
@@ -103,10 +109,10 @@ public class CameraOpenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera_open);
         preferences = getSharedPreferences(savePrice, MODE_PRIVATE);
         editor = preferences.edit();
-        scannerView =findViewById(R.id.scanner_view);
+        scannerView = findViewById(R.id.scanner_view);
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 150);
         isFlash = false;
-        codeScanner = new CodeScanner(this,scannerView);
+        codeScanner = new CodeScanner(this, scannerView);
 
         scannerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,23 +134,23 @@ public class CameraOpenActivity extends AppCompatActivity {
         db = new DBSqlite(this);
     }
 
-     private void opeeen(){
+    private void opeeen() {
 
 
-    codeScanner.setDecodeCallback(new DecodeCallback() {
-        @Override
-        public void onDecoded(@NonNull final Result result) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    getData(result.getText());
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
+        codeScanner.setDecodeCallback(new DecodeCallback() {
+            @Override
+            public void onDecoded(@NonNull final Result result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getData(result.getText());
+                        toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
 
-                }
-            });
-        }
-    });
-}
+                    }
+                });
+            }
+        });
+    }
 
 
     private ArrayList<Model> getDataName(String N) {
@@ -159,7 +165,7 @@ public class CameraOpenActivity extends AppCompatActivity {
                 cost = "" + cursor.getString(2);
                 selles = "" + cursor.getString(3);
                 id = "" + cursor.getString(4);
-                models.add(new Model(named,code,cost,selles,id));
+                models.add(new Model(named, code, cost, selles, id));
             } while (cursor.moveToNext());
 
             Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
@@ -173,6 +179,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         return models;
 
     }
+
     private void getData(String C) {
         String selectQuery = "SELECT * FROM " + DBSqlite.DB_TABLE + " WHERE " + C_CODE + " LIKE '%" + C + "%'";
         SQLiteDatabase database = db.getWritableDatabase();
@@ -186,7 +193,7 @@ public class CameraOpenActivity extends AppCompatActivity {
                 id = "" + cursor.getString(4);
             } while (cursor.moveToNext());
             dialogNum();
-        }else {
+        } else {
             Toast.makeText(this,
                     "Not Found !!",
                     Toast.LENGTH_SHORT).show();
@@ -216,8 +223,6 @@ public class CameraOpenActivity extends AppCompatActivity {
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-//                openCam();
-//                initialiseDetectorsAndSources();
                 opeeen();
                 dialogInterface.dismiss();
             }
@@ -239,35 +244,32 @@ public class CameraOpenActivity extends AppCompatActivity {
                 result.setText(String.valueOf(results));
 
                 onStart();
-            }else {
+            } else {
                 results += res;
                 result.setText(String.valueOf(results));
                 onStart();
             }
 
-//            Toast.makeText(this, " Done ", Toast.LENGTH_SHORT).show();
-
         } else {
             Toast.makeText(this, "Field", Toast.LENGTH_SHORT).show();
             opeeen();
         }
-//        codeScanner.startPreview();
-//        openCam();
-    }
 
+    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_name,menu);
+        getMenuInflater().inflate(R.menu.search_name, menu);
         MenuItem item = menu.findItem(R.id.searchName);
-        SearchView searchView = (SearchView)item.getActionView();
+        SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 getDataName(query);
                 return true;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
@@ -275,11 +277,11 @@ public class CameraOpenActivity extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int ide = item.getItemId();
-        if (ide == R.id.delete)
-        {
+        if (ide == R.id.delete) {
             d.deletedList();
             @SuppressLint("CommitPrefEdits")
             SharedPreferences.Editor editor2 = preferences.edit();
@@ -290,16 +292,13 @@ public class CameraOpenActivity extends AppCompatActivity {
             results = 0.0;
 //            barcodeView.resume();
             onStart();
-        }
-
-        else if (ide == R.id.print)
-        {
+        } else if (ide == R.id.print) {
 
             try {
                 if (checkStoragePermission()) {
                     createPdf();
                     printPDF();
-                }else
+                } else
                     getReadStoragePermission();
 
             } catch (Exception e) {
@@ -308,6 +307,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void requestStoragePermissionImport() {
         ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE_IMPORT);
     }
@@ -380,7 +380,8 @@ public class CameraOpenActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ResourceAsColor")
-    private void createPdf() throws IOException {
+    private synchronized void createPdf() throws IOException {
+        int numberItem = 1;
         ArrayList<Favorite> arrayList = d.getFav(DB.code);
 
         PdfDocument pdfDocument = new PdfDocument();
@@ -390,10 +391,12 @@ public class CameraOpenActivity extends AppCompatActivity {
                 .create();
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
+
         File file = new File(
                 Environment.getExternalStorageDirectory(),
                 "/First.pdf"
         );
+
         paint.setTextSize(12);
         int yHi = 60;
         canvas.drawText("مع تمنياتنا لكم بالشفاء العاجل", 140, 16, paint);
@@ -401,26 +404,33 @@ public class CameraOpenActivity extends AppCompatActivity {
         canvas.drawText("الكمية", 235, yHi, paint);
         canvas.drawText("السعر", pageInfo.getPageWidth() - 60, yHi, paint);
         int StartY = 80;
-        byte numberItem = 1;
+
         for (int i = 0; i < arrayList.size(); i++) {
             canvas.drawText(String.valueOf(numberItem), 5, StartY, paint);
             canvas.drawText(arrayList.get(i).getName(), 22, StartY, paint);
             canvas.drawText(arrayList.get(i).getQuantity(), 235, StartY, paint);
-            canvas.drawText(arrayList.get(i).getSell(), pageInfo.getPageWidth() - 75, StartY, paint);
-            canvas.drawLine(10, StartY + 4,
-                    pageInfo.getPageWidth() - 10, StartY + 4, paint);
+            canvas.drawText(arrayList.get(i).getSell(),
+                    pageInfo.getPageWidth() - 75,
+                    StartY, paint);
+            canvas.drawLine(10,
+                    StartY + 4,
+                    pageInfo.getPageWidth() - 10,
+                    StartY + 4, paint);
+
             StartY += 20;
             numberItem++;
             if (numberItem == 24) {
                 numberPage += 1;
-                numberItem = 0;
+                pdfDocument.finishPage(page);
             }
         }
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(16f);
-//        assert  preferences !=null;
-        canvas.drawText(result.getText().toString()+" "+"دينار عراقي ", 180, pageInfo.getPageHeight() - 12, paint);
+        canvas.drawText(result.getText().toString() + " " + "دينار عراقي ",
+                180,
+                pageInfo.getPageHeight() - 12, paint);
         pdfDocument.finishPage(page);
+
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
         } catch (IOException e) {

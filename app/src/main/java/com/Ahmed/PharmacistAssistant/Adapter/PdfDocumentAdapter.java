@@ -68,7 +68,10 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
                 writeResultCallback.onWriteCancelled();
             }
             else {
-                writeResultCallback.onWriteFinished(new PageRange[] { PageRange.ALL_PAGES });
+                writeResultCallback.onWriteFinished(new PageRange[] {
+                        PageRange.ALL_PAGES
+                }
+                );
             }
         }
         catch (Exception e) {

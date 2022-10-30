@@ -12,6 +12,8 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +26,10 @@ import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
+import com.budiyev.android.codescanner.CodeScanner;
+import com.budiyev.android.codescanner.CodeScannerView;
+import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.zxing.Result;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -43,7 +49,9 @@ public class AddActivity extends AppCompatActivity {
     private boolean isEditMode = false;
     private boolean isFlash = false ;
     private int C_day,C_month,C_year;
-
+    private ToneGenerator toneGen1;
+    private CodeScanner codeScanner;
+    private CodeScannerView scannerView;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +152,33 @@ public class AddActivity extends AppCompatActivity {
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_qrcode,null,false);
         AlertDialog dialog=builder.create();
         dialog.setCanceledOnTouchOutside(false);
+
+        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+        scannerView = v.findViewById(R.id.scanner_view);
+        codeScanner = new CodeScanner(this,scannerView);
+//        codeScanner.getAutoFocusMode();
+        codeScanner.startPreview();
+
+        codeScanner.setDecodeCallback(new DecodeCallback() {
+            @Override
+            public void onDecoded(@NonNull final Result result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        codeEt.setText(result.getText());
+                        toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
+                        codeScanner.stopPreview();
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        scannerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                codeScanner.startPreview();
+            }
+        });
 //        barcodeView = v.findViewById(R.id.barcode_scanner);
 //        cameraSettings =new CameraSettings();
 //        cameraSettings.setRequestedCameraId(0);

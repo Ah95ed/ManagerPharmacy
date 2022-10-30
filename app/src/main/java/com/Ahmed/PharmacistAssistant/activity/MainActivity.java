@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity{
     //This class provides methods to play DTMF tones
     private ToneGenerator toneGen1;
     private CodeScanner codeScanner;
+    private CodeScannerView scannerView;
     private String[] cameraPermissions;
     private DatabaseReference ref;
     private SharedPreferences preferences;
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity{
     private Boolean isFlash;
     private EditText search;
     private CoordinatorLayout layout;
-    private CodeScannerView scannerView;
+
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
