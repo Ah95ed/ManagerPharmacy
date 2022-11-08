@@ -5,14 +5,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.model.Debts;
 import com.google.android.material.textview.MaterialTextView;
-
 import java.util.ArrayList;
 
 public class DebtsAdapter extends RecyclerView.Adapter<DebtsAdapter.Holders> {
@@ -28,7 +25,8 @@ public class DebtsAdapter extends RecyclerView.Adapter<DebtsAdapter.Holders> {
     @NonNull
     @Override
     public Holders onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.card_debts,parent,false);
+        View v = LayoutInflater.from(context)
+                .inflate(R.layout.card_debts,parent,false);
         return new Holders(v);
     }
 
@@ -36,8 +34,11 @@ public class DebtsAdapter extends RecyclerView.Adapter<DebtsAdapter.Holders> {
     public void onBindViewHolder(@NonNull Holders holder, int position) {
 
         Debts debt = debts.get(position);
-
-
+        String name  = debt.getName();
+        String debtsCoin = debt.getAmount();
+        holder.tv_name.setText(name);
+        holder.tv_debts.setText(debtsCoin);
+        holder.getAdapterPosition();
     }
 
     @Override

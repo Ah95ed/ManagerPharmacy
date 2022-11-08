@@ -21,12 +21,13 @@ public class DB extends SQLiteOpenHelper {
     public static final String quantity="quantity";
     public static final String DB_TABLE = "Favorite";
     public static final String TB_DEBT = "DEBTS";
-    public static final String C_ID = "DEBTS";
-    public static final String C = "DEBTS";
-//    public static final String TB_DEBT = "DEBTS";
-//    public static final String TB_DEBT = "DEBTS";
-//    public static final String TB_DEBT = "DEBTS";
-//    public static final String TB_DEBT = "DEBTS";
+    public static final String C_ID = "id";
+    public static final String C_NAME = "name";
+//      private String id,name,amount,time,description;
+    public static final String C_AMOUNT = "amount";
+    public static final String C_TIME = "time";
+    public static final String C_DESCRiPTION = "description";
+    public static final String C_NUMBER = "number";
 //    public static final String TB_DEBT = "DEBTS";
     public DB(Context context) {
         super(context, Dbname,null, 2);
@@ -35,14 +36,12 @@ public class DB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL( " create table " + DB_TABLE +
-                "(name TEXT NOT NULL," +
+        sqLiteDatabase.execSQL( " create table " + DB_TABLE + "(name TEXT NOT NULL," +
                 "sell TEXT NOT NULL,code TEXT NOT NULL," +
                 "cost TEXT,id INTEGER PRIMARY KEY,quantity TEXT NOT NULL )");
 
 
-        sqLiteDatabase.execSQL( " create table " + TB_DEBT +
-                "( id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT ,number TEXT,amount TEXT ,BEBTTIME TEXT,desicribtion)" );
+        sqLiteDatabase.execSQL( " create table " + TB_DEBT + "(" +C_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT ,number TEXT,amount TEXT ,time TEXT,description TEXT)" );
 
     }
 
@@ -66,7 +65,19 @@ public class DB extends SQLiteOpenHelper {
         else
             return true;
     }
-
+    public boolean insertDebt(Debts debts) {
+        ContentValues cv = new ContentValues();
+        cv.put(C_NAME , debts.getName());
+        cv.put(C_NUMBER , debts.get);
+        cv.put(C_NAME , debts.getName());
+        cv.put(C_NAME , debts.getName());
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.insert(DB_TABLE, null, cv);
+        if (result == -1)
+            return false;
+        else
+            return true;
+    }
     public ArrayList<Favorite> getFav(String Fid)
     {
         ArrayList<Favorite> reFavArray = new ArrayList<>();
