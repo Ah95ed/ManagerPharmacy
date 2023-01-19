@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/shape_left"
-
-    >
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="25dp"
+    android:background="#18ada6"
+    app:cardUseCompatPadding="true">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
-
+        android:padding="2dp"
         >
 
-
+        <ImageButton
+            android:id="@+id/more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="20dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_more" />
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/name"
+            android:layout_toEndOf="@+id/more"
             android:padding="6dp"
-            android:layout_marginBottom="6dp"
-            android:background="@drawable/shape_left"
-
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             />
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/debt"
+            android:layout_toEndOf="@+id/more"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
             android:padding="6dp"
-            android:background="@drawable/shape_left"
             android:layout_below="@+id/name"
-
             />
 
-
-
-
-
     </RelativeLayout>
-
-
-
 
 </com.google.android.material.card.MaterialCardView>

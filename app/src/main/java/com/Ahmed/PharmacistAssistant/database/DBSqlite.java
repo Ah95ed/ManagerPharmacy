@@ -27,7 +27,7 @@ public class DBSqlite extends SQLiteAssetHelper {
     private SQLiteDatabase db;
     public DBSqlite(@Nullable Context context) {
         super(context, DB_NAME, null, VERSION);
-        db = this.getWritableDatabase();
+        this.db = this.getWritableDatabase();
     }
 
     @Override

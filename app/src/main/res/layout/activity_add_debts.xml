@@ -1,9 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.Add_Debts_Activity">
+    tools:context=".Ui.Add_Debts_Activity">
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="@string/fullName"
+        app:hintTextColor="@color/black"
+        android:id="@+id/labelTest"
+        android:layout_marginTop="55dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:startIconDrawable="@drawable/ic_person"
+        >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fullName"
+            android:shadowColor="@color/black"
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="Amount"
+        app:hintTextColor="@color/black"
+        android:id="@+id/labelTest1"
+        android:layout_marginTop="8dp"
+
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:startIconDrawable="@drawable/ic_money"
+        android:layout_below="@+id/labelTest">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/amounts"
+            android:shadowColor="@color/black"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="time"
+        app:hintTextColor="@color/black"
+        android:id="@+id/labelTest2"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:startIconDrawable="@drawable/ic_date"
+        android:layout_below="@+id/labelTest1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/time"
+            android:shadowColor="@color/black"
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="Description"
+        app:hintTextColor="@color/black"
+        android:id="@+id/labelTest3"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:startIconDrawable="@drawable/ic_description"
+        android:layout_below="@+id/labelTest2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/description"
+            android:shadowColor="@color/black"
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <androidx.constraintlayout.utils.widget.MotionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelTest3"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/shape_left"
+        android:focusable="true"
+        android:id="@+id/save"
+        android:padding="4dp"
+        android:text="Add Debt person"
+        android:textSize="18sp" />
+
+
+</RelativeLayout>

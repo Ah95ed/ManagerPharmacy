@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.Ahmed.PharmacistAssistant.activity.RegisterActivity;
+import com.Ahmed.PharmacistAssistant.Ui.RegisterActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

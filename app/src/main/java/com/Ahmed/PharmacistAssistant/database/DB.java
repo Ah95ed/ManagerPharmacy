@@ -24,7 +24,7 @@ public class DB extends SQLiteOpenHelper {
     public static final String C_ID = "id";
     public static final String C_NAME = "name";
 //      private String id,name,amount,time,description;
-    public static final String C_AMOUNT = "amount";
+
     public static final String C_TIME = "time";
     public static final String C_DESCRiPTION = "description";
     public static final String C_NUMBER = "number";
@@ -41,7 +41,8 @@ public class DB extends SQLiteOpenHelper {
                 "cost TEXT,id INTEGER PRIMARY KEY,quantity TEXT NOT NULL )");
 
 
-        sqLiteDatabase.execSQL( " create table " + TB_DEBT + "(" +C_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT ,number TEXT,amount TEXT ,time TEXT,description TEXT)" );
+        sqLiteDatabase.execSQL( " create table " + TB_DEBT +
+                "(" +C_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT ,number TEXT,time TEXT,description TEXT)" );
 
     }
 
@@ -67,16 +68,45 @@ public class DB extends SQLiteOpenHelper {
     }
     public boolean insertDebt(Debts debts) {
         ContentValues cv = new ContentValues();
+//        cv.put(C_NAME , debts.getName());
+//        cv.put(C_NUMBER , debts.get);
         cv.put(C_NAME , debts.getName());
-        cv.put(C_NUMBER , debts.get);
-        cv.put(C_NAME , debts.getName());
-        cv.put(C_NAME , debts.getName());
+        cv.put(C_NUMBER , debts.getAmount());
+        cv.put(C_TIME , debts.getTime());
+        cv.put(C_DESCRiPTION , debts.getDescription());
         SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.insert(DB_TABLE, null, cv);
+        long result = db.insert(TB_DEBT, null, cv);
         if (result == -1)
             return false;
         else
             return true;
+    }
+    public ArrayList<Debts> getDebts(String id){
+        ArrayList<Debts> debts = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TB_DEBT + " WHERE " + id;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if (cursor.moveToFirst()){
+            do {
+                Debts debt = new Debts(
+                        cursor.getString(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4)
+                        );
+                debts.add(debt);
+
+            }while (cursor.moveToNext());
+        }
+        db.close();
+        return debts;
+    }
+
+    public void deletedItem(String id){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.delete(TB_DEBT,C_ID + " =?",new String[]{id});
+        db.close();
     }
     public ArrayList<Favorite> getFav(String Fid)
     {

@@ -42,10 +42,10 @@ But !!! Make sure
     <string name="pregnancy" translatable="false">Pregnancy</string>
     <string name="drug" translatable="false">Drug</string>
     <string name="search_in_barcode" translatable="false">Search in BarCode</string>
-    <string name="login" translatable="false">Login</string>
+    <string name="login" translatable="false">Register</string>
     <string name="fullName" translatable="false">Full Name</string>
     <string name="phone" translatable="false">Phone</string>
-    <string name="loginbutton" translatable="false">Login</string>
+    <string name="loginbutton" translatable="false">Register</string>
     <string name="clickhere" translatable="false">Click Here</string>
     <string name="Doyouhaveakey" translatable="false">Do you have a Key</string>
     <string name="help" translatable="false">Help</string>
