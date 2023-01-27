@@ -7,15 +7,15 @@
 
         <com.budiyev.android.codescanner.CodeScannerView
             android:id="@+id/scanner_view"
-            android:layout_width="500dp"
-            android:layout_height="400dp"
+            android:layout_width="483dp"
+            android:layout_height="404dp"
             android:layout_gravity="center"
+            android:forceHasOverlappingRendering="true"
             app:autoFocusButtonColor="@color/teal_200"
-            app:frameColor="@color/teal_200"
+            app:autoFocusButtonPaddingHorizontal="100dp"
             app:flashButtonColor="@color/teal_200"
             app:flashButtonPaddingHorizontal="100dp"
-            app:autoFocusButtonPaddingHorizontal="100dp"
-            android:forceHasOverlappingRendering="true"
+            app:frameColor="@color/teal_200"
             app:frameCornersSize="100dp" />
 <!--        <com.journeyapps.barcodescanner.DecoratedBarcodeView-->
 <!--            android:id="@+id/barcode_scanner"-->

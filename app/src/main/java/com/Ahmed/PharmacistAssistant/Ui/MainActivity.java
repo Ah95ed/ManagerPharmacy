@@ -2,6 +2,9 @@
 package com.Ahmed.PharmacistAssistant.Ui;
 
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -23,7 +26,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.database.CursorWindow;
 import android.icu.util.Calendar;
 import android.media.AudioManager;
@@ -43,8 +45,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
-import com.Ahmed.PharmacistAssistant.AdapterAndService.BackGround;
 import com.Ahmed.PharmacistAssistant.BuildConfig;
 import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
@@ -65,8 +65,6 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.zxing.Result;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import java.io.File;
@@ -78,15 +76,19 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
-
+    ActivityResultLauncher<String []> mResultLauncher;
+    ActivityResultLauncher<Intent> mResultFile;
     private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton,voice;
     private RecyclerView recordRv;
     private BottomNavigationView navigationView;
     private DBSqlite db;
     private ActionBar actionBar;
+
 //    public static DecoratedBarcodeView barcodeView;
 //    public static CameraSettings cameraSettings;
     private static final byte CAMERA_REQUEST_CODE = 100;
@@ -112,7 +114,8 @@ public class MainActivity extends AppCompatActivity{
     private Boolean isFlash;
     private EditText search;
     private CoordinatorLayout layout;
-
+    private Boolean isReadPermissionGranted= false;
+    private Boolean isWritePermissionGranted= false;
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +135,22 @@ public class MainActivity extends AppCompatActivity{
 //                break;
 //        }
         setContentView(R.layout.activity_main);
+
+        mResultLauncher= registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> result) {
+           if (result.get(Manifest.permission.READ_EXTERNAL_STORAGE) != null){
+               isReadPermissionGranted = result.get(Manifest.permission.READ_EXTERNAL_STORAGE);
+           }
+           if (result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) != null){
+                    isWritePermissionGranted = result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+           }
+            }
+        });
+        requestPermission();
+
+
         layout = findViewById(R.id.Relative);
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,8 +276,9 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                checkExport();
                 try {
-                    checkExport();
+                    exportCSV();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -352,6 +372,24 @@ public class MainActivity extends AppCompatActivity{
 //
 //    }
 
+
+
+
+    private static boolean isExternalStorageReadOnly() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isExternalStorageAvailable() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
     private void importCSV() throws IOException, CsvValidationException {
         String filePathAndName = Environment
                 .getExternalStorageDirectory() + "/" + "SQLiteBackup/" + "SQLite_Backup.csv";
@@ -393,30 +431,57 @@ public class MainActivity extends AppCompatActivity{
             Toast.makeText(this, "الفايل غير موجود", Toast.LENGTH_SHORT).show();
         }
     }
+    private void requestPermission(){
+        boolean minSDK= Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        isReadPermissionGranted = ContextCompat.checkSelfPermission(this,
 
-    private void checkExport() throws IOException {
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
-        if (checkStoragePermission()) {
-            exportCSV();
+        isWritePermissionGranted = ContextCompat.checkSelfPermission(this,
+
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        isWritePermissionGranted = isWritePermissionGranted ||minSDK;
+        List<String> permissionRequest = new ArrayList<>();
+        if (!isReadPermissionGranted){
+            permissionRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
-        else {
-            requestStoragePermissionExport();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                    false == Environment.isExternalStorageManager()) {
-                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                    false == Environment.isExternalStorageManager()) {
-                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
-                    !Environment.isExternalStorageManager()) {
-                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-            }
+        if (!isWritePermissionGranted){
+            permissionRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        if (!permissionRequest.isEmpty()){
+            mResultLauncher.launch(permissionRequest.toArray(new String[0]));
         }
 
     }
+    private void checkExport(){
+
+
+
+    }
+//    private void checkExport() throws IOException {
+//
+//        if (checkStoragePermission()) {
+//            exportCSV();
+//        }
+//        else {
+//            requestStoragePermissionExport();
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+//                    false == Environment.isExternalStorageManager()) {
+//                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+//                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+//            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+//                    false == Environment.isExternalStorageManager()) {
+//                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+//                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+//            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
+//                    !Environment.isExternalStorageManager()) {
+//                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+//                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+//            }
+//        }
+//
+//    }
 
 
     private void speechToText() {
@@ -446,6 +511,8 @@ public class MainActivity extends AppCompatActivity{
                 }
         }
     }
+
+
     private void showUpdateDialog() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("New Update Available");
@@ -477,7 +544,8 @@ public class MainActivity extends AppCompatActivity{
         return packageInfo.versionCode;
     }
 
-    private void exportCSV() throws IOException {
+    private boolean exportCSV() throws IOException {
+
         File folder = new File(Environment.getExternalStorageDirectory()
                 + "/" + "SQLiteBackup");
         boolean isFolderCreate = false;
@@ -504,13 +572,16 @@ public class MainActivity extends AppCompatActivity{
                 fw.append(",");
                 fw.append("\n");
             }
+
             fw.flush();
             fw.close();
-            Toast.makeText(MainActivity.this, "تم الاستخراج بنجاح" + filePathAndName, Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "تم الاستخراج بنجاح" , Toast.LENGTH_LONG).show();
 
         } catch (Exception e) {
             Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.d("EXPORT",e.getMessage());
         }
+        return false;
     }
     private void loadRecords() {
         array =  db.getAllRecords(DBSqlite.C_ID);
@@ -698,6 +769,7 @@ public class MainActivity extends AppCompatActivity{
         dialog.setCanceledOnTouchOutside(false);
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         scannerView = v.findViewById(R.id.scanner_view);
+//        scannerView = findViewById(R.id.scanner_view);
         codeScanner = new CodeScanner(this,scannerView);
         codeScanner.getAutoFocusMode();
         codeScanner.startPreview();
