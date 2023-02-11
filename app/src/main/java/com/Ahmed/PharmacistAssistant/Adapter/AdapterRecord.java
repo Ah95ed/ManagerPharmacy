@@ -27,9 +27,11 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
     private Context context;
     private ArrayList<Model> arrayList;
     DBSqlite dbSqlite;
+    @SuppressLint("NotifyDataSetChanged")
     public AdapterRecord(Context context, ArrayList<Model> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
+        notifyDataSetChanged();
         dbSqlite =new DBSqlite(context);
     }
 
@@ -112,7 +114,7 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
     }
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return arrayList.isEmpty() ? 0 : arrayList.size();
     }
 
     class HolderRecord extends RecyclerView.ViewHolder{
@@ -126,5 +128,6 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
             tv_sell = itemView.findViewById(R.id.tv_sell);
             moreBtn = itemView.findViewById(R.id.moreBtn);
         }
+
     }
 }

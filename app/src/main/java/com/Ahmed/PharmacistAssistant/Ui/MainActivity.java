@@ -11,9 +11,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -45,6 +45,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.Ahmed.PharmacistAssistant.Adapter.EndlessScrollListener;
 import com.Ahmed.PharmacistAssistant.BuildConfig;
 import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
@@ -75,6 +77,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -88,9 +91,6 @@ public class MainActivity extends AppCompatActivity{
     private BottomNavigationView navigationView;
     private DBSqlite db;
     private ActionBar actionBar;
-
-//    public static DecoratedBarcodeView barcodeView;
-//    public static CameraSettings cameraSettings;
     private static final byte CAMERA_REQUEST_CODE = 100;
     private static final byte STORAGE_REQUEST_CODE_EXPORT = 1;
     private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
@@ -111,30 +111,29 @@ public class MainActivity extends AppCompatActivity{
     private ArrayList<String> result;
     private FirebaseRemoteConfig remoteConfig;
     private int currentVersionCod;
-    private Boolean isFlash;
+     int limit = 50;
+     int skip = 0;
+
     private EditText search;
-    private CoordinatorLayout layout;
+
     private Boolean isReadPermissionGranted= false;
     private Boolean isWritePermissionGranted= false;
+
+    // var pagination
+    private boolean loading = true;
+    private int pastVisibleItems,visibleItemCount,totalItemCount;
+    private LinearLayoutManager layoutManager;
+
+
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
         actionBar.hide();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            startForegroundService(new Intent(MainActivity.this, BackGround.class));
-//        }
-//        int currentNightMode = this.getResources().getConfiguration().uiMode& Configuration.UI_MODE_NIGHT_MASK;
-//        switch (currentNightMode){
-//            case Configuration.UI_MODE_NIGHT_NO:
-//                setTheme(R.style.Widget_AppCompat_ActionBar);
-//                break;
-//            case Configuration.UI_MODE_NIGHT_YES:
-//                setTheme(R.style.Theme_Material3_Dark);
-//                break;
-//        }
         setContentView(R.layout.activity_main);
+        db = new DBSqlite(this);
+        array = new ArrayList<>();
 
         mResultLauncher= registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
             @Override
@@ -148,23 +147,15 @@ public class MainActivity extends AppCompatActivity{
            }
             }
         });
-        requestPermission();
+//        requestPermission();
 
-
-        layout = findViewById(R.id.Relative);
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                onStart();
-            loadRecords();
-            }
-        });
         navigationView = findViewById(R.id.bottomnavigtionView);
         navigationView.setBackground(null);
         search = findViewById(R.id.search);
 
 //        mCustomBottomSheet = findViewById(R.id.Relative);
         search.setVisibility(View.GONE);
+//        loadRecords();
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -207,7 +198,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        isFlash = false;
+
 //        jobService();
         calendar = Calendar.getInstance();
         simple = new SimpleDateFormat("dd-MM-yyyy");
@@ -231,8 +222,8 @@ public class MainActivity extends AppCompatActivity{
         floatingActionButton = findViewById(R.id.add_item);
 
         recordRv = findViewById(R.id.recordRv);
+        layoutManager = new LinearLayoutManager(this);
 
-        db = new DBSqlite(this);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -247,26 +238,49 @@ public class MainActivity extends AppCompatActivity{
                 .setMinimumFetchIntervalInSeconds(5)
                 .build();
         remoteConfig.setConfigSettingsAsync(configSettings);
-//        remoteConfig.fetchAndActivate().addOnCompleteListener(new OnCompleteListener<Boolean>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Boolean> task) {
-//                final String newVersion = remoteConfig.getString("newVersion");
-//                if (Integer.parseInt(newVersion) > getCurrentVersionCode()) {
-//                    showUpdateDialog();
-//                }
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(
-//                        MainActivity.this,
-//                        e.getMessage(),
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        recordRv.setLayoutManager(layoutManager);
+
+        recordRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visibleItemCount =layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                if (dy>0){
+                    if (loading){
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount){
+                            loading = false;
+                            skip = skip +limit;
+                            getData();
+                            loading = true;
+                        }
+                    }
+                }
+            }
+        });
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private void getData(){
+
+        ArrayList<Model> arrayList = db.getRecords(limit,skip);
+        array.addAll(arrayList);
+        AdapterRecord adapterRecord = new AdapterRecord(this,array);
+        recordRv.setAdapter(adapterRecord);
+        adapterRecord.notifyDataSetChanged();
+    }
+    private void loadRecords() {
+
+        array =db.getAllRecords();
+        array.addAll(db.getAllRecords());
+        AdapterRecord adapter = new AdapterRecord(MainActivity.this,array);
+        recordRv.setAdapter(adapter);
+//        Log.d("DATABVASE_" ,array.get(0).getName()+"_____________");
+//        actionBar.setSubtitle("" + db.getAllCounts());
+    }
     private void openBottomSheet() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 MainActivity.this);
@@ -276,13 +290,18 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                checkExport();
+//                try {
+//                    checkExport();
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                loadRecords();
                 try {
                     exportCSV();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                bottomSheetDialog.dismiss();
+////                bottomSheetDialog.dismiss();
             }
         });
 
@@ -382,7 +401,20 @@ public class MainActivity extends AppCompatActivity{
         }
         return false;
     }
-
+//    private void observeEndlessScrolling() {
+//        scrollListener = new EndlessScrollListener(linearLayoutManager) {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+//                getData(limit,skip);
+//                skip = skip +limit;
+////                    viewModel.fetchMoreImages(binding.svImageKey.getQuery().toString(), page);
+//
+////                    showToast(MainActivity.this, getString(R.string.internet_error));
+//
+//            }
+//        };
+//        recordRv.addOnScrollListener(scrollListener);
+//    }
     private static boolean isExternalStorageAvailable() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
@@ -454,34 +486,30 @@ public class MainActivity extends AppCompatActivity{
         }
 
     }
-    private void checkExport(){
 
+    private void checkExport() throws IOException {
 
+        if (checkStoragePermission()) {
+            exportCSV();
+        }
+        else {
+            requestStoragePermissionExport();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                    false == Environment.isExternalStorageManager()) {
+                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                    false == Environment.isExternalStorageManager()) {
+                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
+                    !Environment.isExternalStorageManager()) {
+                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+            }
+        }
 
     }
-//    private void checkExport() throws IOException {
-//
-//        if (checkStoragePermission()) {
-//            exportCSV();
-//        }
-//        else {
-//            requestStoragePermissionExport();
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-//                    false == Environment.isExternalStorageManager()) {
-//                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-//                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-//            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-//                    false == Environment.isExternalStorageManager()) {
-//                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-//                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-//            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
-//                    !Environment.isExternalStorageManager()) {
-//                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-//                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-//            }
-//        }
-//
-//    }
 
 
     private void speechToText() {
@@ -557,7 +585,7 @@ public class MainActivity extends AppCompatActivity{
         db = new DBSqlite(this);
         ArrayList<Model> recordArray = new ArrayList<>();
         recordArray.clear();
-        recordArray = db.getAllRecords(DBSqlite.C_ID);
+        recordArray = db.getAllRecords();
         try {
             FileWriter fw = new FileWriter(filePathAndName);
             Arrays.toString(fw.getEncoding().getBytes(StandardCharsets.UTF_8));
@@ -583,14 +611,9 @@ public class MainActivity extends AppCompatActivity{
         }
         return false;
     }
-    private void loadRecords() {
-        array =  db.getAllRecords(DBSqlite.C_ID);
-        AdapterRecord adapter = new AdapterRecord(MainActivity.this,array);
-        recordRv.setAdapter(adapter);
-//        actionBar.setSubtitle("" + db.getAllCounts());
-    }
+
     private void searchRecord(String name) {
-        array = db.getAllRecords(DBSqlite.C_ID);
+        array = db.getAllRecords();
         ArrayList<Model> models = new ArrayList<>();
 
         for (Model m : array) {
@@ -845,7 +868,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void searchBar(String results) {
-        array = db.getAllRecords(DBSqlite.C_ID);
+        array = db.getAllRecords();
         ArrayList<Model> models = new ArrayList<>();
         for (Model m : array) {
             if (m.getCode().contains(results))
@@ -882,7 +905,6 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         dialogCancel();
-        isFlash = false;
     }
     @Override
     protected void onResume() {
@@ -898,7 +920,8 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onStart() {
         super.onStart();
-        loadRecords();
+//        loadRecords();
+        getData();
         jobService();
         getPermission();
         ref.child("Users").child(deviceId).child("TimeStamp").setValue(ServerValue.TIMESTAMP);

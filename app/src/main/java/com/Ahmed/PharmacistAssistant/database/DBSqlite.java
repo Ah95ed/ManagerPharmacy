@@ -100,10 +100,35 @@ public class DBSqlite extends SQLiteAssetHelper {
         return true;
     }
     /*___________ جلب كل البيانات______________*/
-    public ArrayList<Model> getAllRecords(String orderBy){
+    public ArrayList<Model> getAllRecords(){
         ArrayList<Model> records = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE " + orderBy;
+        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE ID" ;
+//                ="SELECT * FROM "+DB_TABLE+ " LIMIT "+limit+"OFFSET "+offset;
+
         SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if (cursor.moveToFirst()){
+            do{
+                Model model = new Model(
+                        ""+cursor.getString(0),
+                        ""+cursor.getString(1),
+                        ""+cursor.getString(2),
+                        ""+cursor.getString(3),
+                        ""+cursor.getString(4),
+                        ""+cursor.getString(5),
+                        ""+cursor.getString(6));
+                records.add(model);
+            }while (cursor.moveToNext());
+        }
+        db.close();
+        return records;
+    }
+    public ArrayList<Model> getRecords(int limit ,int offset){
+        ArrayList<Model> records = new ArrayList<>();
+        String selectQuery =" SELECT * FROM " + DB_TABLE + " LIMIT " + limit + " OFFSET " + offset;
+//                = "SELECT * FROM " + DB_TABLE + " WHERE " + orderBy;
+        SQLiteDatabase db = this.getWritableDatabase();
+
         Cursor cursor = db.rawQuery(selectQuery,null);
         if (cursor.moveToFirst()){
             do{

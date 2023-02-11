@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-installations:17.0.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/4de391896d493bbfcd1cc7183ae587b2/transformed/jetified-firebase-installations-17.0.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/transforms-3/4de391896d493bbfcd1cc7183ae587b2/transformed/jetified-firebase-installations-17.0.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/wrapper/dists/gradle-7.5-all/caches/transforms-3/d68d531cd33bce7f8d7ed8f12c07bec7/transformed/jetified-firebase-installations-17.0.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.5-all/caches/transforms-3/d68d531cd33bce7f8d7ed8f12c07bec7/transformed/jetified-firebase-installations-17.0.2/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.0.2-all/caches/modules-2/files-2.1/com.google.firebase/firebase-installations/17.0.2/4824c5730ddc9dd74050559d9663cc0363bb9ad5/firebase-installations-17.0.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.5-all/caches/modules-2/files-2.1/com.google.firebase/firebase-installations/17.0.2/4824c5730ddc9dd74050559d9663cc0363bb9ad5/firebase-installations-17.0.2-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES />
   </library>
