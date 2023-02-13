@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.database;
+package com.Ahmed.PharmacistAssistant.Controler.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

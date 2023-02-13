@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.AdapterAndService;
+package com.Ahmed.PharmacistAssistant.Controler.Service;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 import static android.content.Context.JOB_SCHEDULER_SERVICE;

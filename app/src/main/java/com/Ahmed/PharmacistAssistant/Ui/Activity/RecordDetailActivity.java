@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.TextView;
 import com.Ahmed.PharmacistAssistant.R;
-import com.Ahmed.PharmacistAssistant.database.DBSqlite;
+import com.Ahmed.PharmacistAssistant.Controler.database.DBSqlite;
 
 public class RecordDetailActivity extends AppCompatActivity {
     private TextView tv_name,tv_code,tv_cost,tv_sell,tv_date,tv_quantity;

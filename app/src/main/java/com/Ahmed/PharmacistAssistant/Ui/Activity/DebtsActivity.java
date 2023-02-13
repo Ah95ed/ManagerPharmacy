@@ -1,6 +1,6 @@
 package com.Ahmed.PharmacistAssistant.Ui.Activity;
 
-import static com.Ahmed.PharmacistAssistant.database.DB.C_ID;
+import static com.Ahmed.PharmacistAssistant.Controler.database.DB.C_ID;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.Ahmed.PharmacistAssistant.Ui.Adapter.DebtsAdapter;
 import com.Ahmed.PharmacistAssistant.R;
-import com.Ahmed.PharmacistAssistant.database.DB;
+import com.Ahmed.PharmacistAssistant.Controler.database.DB;
 import com.Ahmed.PharmacistAssistant.model.Debts;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

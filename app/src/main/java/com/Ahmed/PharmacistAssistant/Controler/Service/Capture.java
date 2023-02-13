@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.AdapterAndService;
+package com.Ahmed.PharmacistAssistant.Controler.Service;
 
 
 import com.journeyapps.barcodescanner.CaptureActivity;

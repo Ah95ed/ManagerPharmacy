@@ -24,7 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.Ahmed.PharmacistAssistant.Ui.Activity.CameraOpenActivity;
-import com.Ahmed.PharmacistAssistant.database.DB;
+import com.Ahmed.PharmacistAssistant.Controler.database.DB;
 import com.Ahmed.PharmacistAssistant.model.Favorite;
 import com.Ahmed.PharmacistAssistant.R;
 

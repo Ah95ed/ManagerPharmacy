@@ -54,12 +54,12 @@
         </activity>
 
         <service
-            android:name=".AdapterAndService.MyService"
+            android:name=".Controler.Service.MyService"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
-            android:name=".AdapterAndService.MyReceiver"
+            android:name=".Controler.Service.MyReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -104,13 +104,13 @@
             android:name=".Ui.Activity.MainActivity"
             android:exported="true"/>
         <activity
-            android:name=".AdapterAndService.Capture"
+            android:name=".Controler.Service.Capture"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />
 
         <service
-            android:name=".AdapterAndService.MyJobService"
+            android:name=".Controler.Service.MyJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider

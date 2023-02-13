@@ -1,8 +1,8 @@
 package com.Ahmed.PharmacistAssistant.Ui.Activity;
 
 
-import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_CODE;
-import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_NAME;
+import static com.Ahmed.PharmacistAssistant.Controler.database.DBSqlite.C_CODE;
+import static com.Ahmed.PharmacistAssistant.Controler.database.DBSqlite.C_NAME;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -49,8 +49,8 @@ import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.Ui.Adapter.AdapterTwo;
 import com.Ahmed.PharmacistAssistant.Ui.Adapter.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.R;
-import com.Ahmed.PharmacistAssistant.database.DB;
-import com.Ahmed.PharmacistAssistant.database.DBSqlite;
+import com.Ahmed.PharmacistAssistant.Controler.database.DB;
+import com.Ahmed.PharmacistAssistant.Controler.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Favorite;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.budiyev.android.codescanner.CodeScanner;

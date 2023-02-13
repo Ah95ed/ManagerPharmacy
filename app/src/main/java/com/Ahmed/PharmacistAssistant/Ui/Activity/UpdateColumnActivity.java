@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.Ahmed.PharmacistAssistant.R;
-import com.Ahmed.PharmacistAssistant.database.DBSqlite;
+import com.Ahmed.PharmacistAssistant.Controler.database.DBSqlite;
 
 
 public class UpdateColumnActivity extends AppCompatActivity {

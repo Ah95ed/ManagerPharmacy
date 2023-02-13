@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import com.Ahmed.PharmacistAssistant.Ui.Activity.AddActivity;
-import com.Ahmed.PharmacistAssistant.database.DBSqlite;
+import com.Ahmed.PharmacistAssistant.Controler.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.Ui.Activity.MainActivity;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.Ahmed.PharmacistAssistant.R;
