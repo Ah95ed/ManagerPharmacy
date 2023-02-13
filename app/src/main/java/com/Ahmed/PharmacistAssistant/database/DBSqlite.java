@@ -125,7 +125,7 @@ public class DBSqlite extends SQLiteAssetHelper {
     }
     public ArrayList<Model> getRecords(int limit ,int offset){
         ArrayList<Model> records = new ArrayList<>();
-        String selectQuery =" SELECT * FROM " + DB_TABLE + " LIMIT " + limit + " OFFSET " + offset;
+        String selectQuery =" SELECT * FROM " + DB_TABLE + " ORDER BY ID LIMIT " + limit + " OFFSET " + offset;
 //                = "SELECT * FROM " + DB_TABLE + " WHERE " + orderBy;
         SQLiteDatabase db = this.getWritableDatabase();
 

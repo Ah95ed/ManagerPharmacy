@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.Ui;
+package com.Ahmed.PharmacistAssistant.Ui.Activity;
 
 
 import static com.Ahmed.PharmacistAssistant.database.DBSqlite.C_CODE;
@@ -46,8 +46,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.Ahmed.PharmacistAssistant.Adapter.AdapterTwo;
-import com.Ahmed.PharmacistAssistant.Adapter.PdfDocumentAdapter;
+import com.Ahmed.PharmacistAssistant.Ui.Adapter.AdapterTwo;
+import com.Ahmed.PharmacistAssistant.Ui.Adapter.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DB;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;

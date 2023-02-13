@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.Adapter;
+package com.Ahmed.PharmacistAssistant.Ui.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,30 +9,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.Ahmed.PharmacistAssistant.Ui.AddActivity;
+import com.Ahmed.PharmacistAssistant.Ui.Activity.AddActivity;
 import com.Ahmed.PharmacistAssistant.database.DBSqlite;
-import com.Ahmed.PharmacistAssistant.Ui.MainActivity;
+import com.Ahmed.PharmacistAssistant.Ui.Activity.MainActivity;
 import com.Ahmed.PharmacistAssistant.model.Model;
 import com.Ahmed.PharmacistAssistant.R;
-import com.Ahmed.PharmacistAssistant.Ui.RecordDetailActivity;
-
+import com.Ahmed.PharmacistAssistant.Ui.Activity.RecordDetailActivity;
 import java.util.ArrayList;
 
 public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderRecord> {
     private Context context;
     private ArrayList<Model> arrayList;
-    DBSqlite dbSqlite;
+    private DBSqlite dbSqlite;
     @SuppressLint("NotifyDataSetChanged")
     public AdapterRecord(Context context, ArrayList<Model> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
+        dbSqlite = new DBSqlite(context);
         notifyDataSetChanged();
-        dbSqlite =new DBSqlite(context);
+
     }
 
     @NonNull
@@ -130,4 +128,5 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
         }
 
     }
+
 }

@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.Ui;
+package com.Ahmed.PharmacistAssistant.Ui.Activity;
 
 import static com.Ahmed.PharmacistAssistant.database.DB.C_ID;
 
@@ -10,9 +10,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
-import com.Ahmed.PharmacistAssistant.Adapter.DebtsAdapter;
+import com.Ahmed.PharmacistAssistant.Ui.Adapter.DebtsAdapter;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.database.DB;
 import com.Ahmed.PharmacistAssistant.model.Debts;

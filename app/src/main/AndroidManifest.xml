@@ -39,14 +39,14 @@
         tools:ignore="DataExtractionRules"
         tools:targetApi="s">
         <activity
-            android:name=".Ui.Add_Debts_Activity"
+            android:name=".Ui.Activity.Add_Debts_Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Ui.DebtsActivity"
+            android:name=".Ui.Activity.DebtsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -71,7 +71,7 @@
         </receiver>
 
         <activity
-            android:name=".Ui.RegisterActivity"
+            android:name=".Ui.Activity.RegisterActivity"
             android:exported="true" >
 
             <intent-filter>
@@ -82,26 +82,26 @@
 
         </activity>
         <activity
-            android:name=".Ui.LoginActivity"
+            android:name=".Ui.Activity.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.CalculateActivity"
+            android:name=".Ui.Activity.CalculateActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".Ui.CameraOpenActivity"
+            android:name=".Ui.Activity.CameraOpenActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.UpdateColumnActivity"
+            android:name=".Ui.Activity.UpdateColumnActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.RecordDetailActivity"
+            android:name=".Ui.Activity.RecordDetailActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.AddActivity"
+            android:name=".Ui.Activity.AddActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.MainActivity"
+            android:name=".Ui.Activity.MainActivity"
             android:exported="true"/>
         <activity
             android:name=".AdapterAndService.Capture"

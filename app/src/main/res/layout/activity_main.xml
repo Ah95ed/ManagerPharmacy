@@ -8,7 +8,7 @@
     app:circularflow_defaultRadius="@dimen/cardview_default_radius"
     android:id="@+id/Relative"
     android:background="#F5FFFF"
-    tools:context=".Ui.MainActivity">
+    tools:context=".Ui.Activity.MainActivity">
 
     <EditText
         android:layout_width="match_parent"

@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.Ahmed.PharmacistAssistant.R;
-import com.Ahmed.PharmacistAssistant.Ui.MainActivity;
+import com.Ahmed.PharmacistAssistant.Ui.Activity.MainActivity;
 
 public class BackGround extends Service {
 @Nullable

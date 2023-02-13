@@ -7,7 +7,7 @@
     android:background="@drawable/shape_left"
     android:id="@+id/bar"
     app:circularflow_defaultRadius="@dimen/cardview_compat_inset_shadow"
-    tools:context=".Ui.RegisterActivity">
+    tools:context=".Ui.Activity.RegisterActivity">
 
 
     <ImageView

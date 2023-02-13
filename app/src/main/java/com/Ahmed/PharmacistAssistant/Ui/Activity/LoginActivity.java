@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.Ui;
+package com.Ahmed.PharmacistAssistant.Ui.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

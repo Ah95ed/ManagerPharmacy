@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.Adapter;
+package com.Ahmed.PharmacistAssistant.Ui.Adapter;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;

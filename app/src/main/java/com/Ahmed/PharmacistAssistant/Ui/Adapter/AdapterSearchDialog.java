@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.Adapter;
+package com.Ahmed.PharmacistAssistant.Ui.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

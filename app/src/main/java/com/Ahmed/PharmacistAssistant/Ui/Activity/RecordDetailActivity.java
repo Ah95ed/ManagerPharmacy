@@ -1,4 +1,4 @@
-package com.Ahmed.PharmacistAssistant.Ui;
+package com.Ahmed.PharmacistAssistant.Ui.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

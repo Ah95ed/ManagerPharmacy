@@ -1,5 +1,5 @@
 
-package com.Ahmed.PharmacistAssistant.Ui;
+package com.Ahmed.PharmacistAssistant.Ui.Activity;
 
 
 import androidx.activity.result.ActivityResultCallback;
@@ -46,10 +46,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.Ahmed.PharmacistAssistant.Adapter.EndlessScrollListener;
 import com.Ahmed.PharmacistAssistant.BuildConfig;
 import android.widget.Toast;
-import com.Ahmed.PharmacistAssistant.Adapter.AdapterRecord;
+import com.Ahmed.PharmacistAssistant.Ui.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyJobService;
 import com.Ahmed.PharmacistAssistant.AdapterAndService.MyReceiver;
 import com.Ahmed.PharmacistAssistant.R;
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity{
     private ArrayList<String> result;
     private FirebaseRemoteConfig remoteConfig;
     private int currentVersionCod;
-     int limit = 50;
+     int limit = 30;
      int skip = 0;
 
     private EditText search;
@@ -252,7 +251,7 @@ public class MainActivity extends AppCompatActivity{
                     if (loading){
                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount){
                             loading = false;
-                            skip = skip +limit;
+                            skip = skip + limit;
                             getData();
                             loading = true;
                         }
@@ -263,6 +262,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+
     @SuppressLint("NotifyDataSetChanged")
     private void getData(){
 
@@ -270,7 +270,9 @@ public class MainActivity extends AppCompatActivity{
         array.addAll(arrayList);
         AdapterRecord adapterRecord = new AdapterRecord(this,array);
         recordRv.setAdapter(adapterRecord);
-        adapterRecord.notifyDataSetChanged();
+
+        System.out.println(array.size());
+
     }
     private void loadRecords() {
 
