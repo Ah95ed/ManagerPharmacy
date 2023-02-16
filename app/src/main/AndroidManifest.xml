@@ -13,7 +13,8 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32"/>
+        android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
 
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -21,10 +22,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
     <application
         android:allowBackup="true"
         android:installLocation="preferExternal"
@@ -39,14 +36,14 @@
         tools:ignore="DataExtractionRules"
         tools:targetApi="s">
         <activity
-            android:name=".Ui.Activity.Add_Debts_Activity"
+            android:name=".View.Activity.Add_Debts_Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Ui.Activity.DebtsActivity"
+            android:name=".View.Activity.DebtsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -71,7 +68,7 @@
         </receiver>
 
         <activity
-            android:name=".Ui.Activity.RegisterActivity"
+            android:name=".View.Activity.RegisterActivity"
             android:exported="true" >
 
             <intent-filter>
@@ -82,26 +79,26 @@
 
         </activity>
         <activity
-            android:name=".Ui.Activity.LoginActivity"
+            android:name=".View.Activity.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.Activity.CalculateActivity"
+            android:name=".View.Activity.CalculateActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".Ui.Activity.CameraOpenActivity"
+            android:name=".View.Activity.CameraOpenActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.Activity.UpdateColumnActivity"
+            android:name=".View.Activity.UpdateColumnActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.Activity.RecordDetailActivity"
+            android:name=".View.Activity.RecordDetailActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.Activity.AddActivity"
+            android:name=".View.Activity.AddActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.Activity.MainActivity"
+            android:name=".View.Activity.MainActivity"
             android:exported="true"/>
         <activity
             android:name=".Controler.Service.Capture"

@@ -147,31 +147,27 @@ public class DBSqlite extends SQLiteAssetHelper {
         return records;
     }
     /*______________البحث عن طريق الاسم______________*/
-//    public ArrayList<Model> Search(String query){
-//        ArrayList<Model> records = new ArrayList<>();
-//        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + query + "%'";
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery(selectQuery,null);
-//        if (cursor.moveToFirst()){
-//            do{
-//                Model model = new Model(
-//                        ""+cursor.getString(0),
-//                        ""+cursor.getString(1),
-//                        ""+cursor.getString(2),
-//                        ""+cursor.getString(3),
-//                        ""+cursor.getString(4),
-//                        ""+cursor.getString(5),
-//                        ""+cursor.getString(6),
-//                        ""+cursor.getString(7),
-//                        ""+cursor.getString(8),
-//                        ""+cursor.getString(9)
-//                );
-//                records.add(model);
-//            }while (cursor.moveToNext());
-//        }
-//        db.close();
-//        return records;
-//    }
+    public ArrayList<Model> Search(String query){
+        ArrayList<Model> records = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + query + "%'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if (cursor.moveToFirst()){
+            do{
+                Model model = new Model(
+                        ""+cursor.getString(0),
+                        ""+cursor.getString(1),
+                        ""+cursor.getString(2),
+                        ""+cursor.getString(3),
+                        ""+cursor.getString(4)
+
+                );
+                records.add(model);
+            }while (cursor.moveToNext());
+        }
+        db.close();
+        return records;
+    }
     /*______________العدد الكلي في الداتا ______________*/
     public int getAllCounts(){
         String countQuery = "SELECT * FROM "+ DB_TABLE;
