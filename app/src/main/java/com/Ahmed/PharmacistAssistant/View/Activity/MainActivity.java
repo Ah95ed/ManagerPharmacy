@@ -73,11 +73,15 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.zxing.Result;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -337,7 +341,12 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id._import).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkImport();
+                try {
+                    importCSV();
+                } catch (IOException | CsvValidationException e) {
+                    throw new RuntimeException(e);
+                }
+//                checkImport();
                 bottomSheetDialog.dismiss();
             }
         });
@@ -369,7 +378,7 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id.delet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                db.deletedAll();
+                db.deletedAll();
 //                onResume();
 //                onStart();
                 bottomSheetDialog.dismiss();
@@ -423,47 +432,7 @@ public class MainActivity extends AppCompatActivity{
         }
         return false;
     }
-    private void importCSV() throws IOException, CsvValidationException {
-        String filePathAndName = Environment
-                .getExternalStorageDirectory() + "/" + "SQLiteBackup/" + "SQLite_Backup.csv";
-        File csvFile = new File(filePathAndName);
-        if (csvFile.exists()) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        CSVReader csvReader = new CSVReader(new FileReader(csvFile.getAbsolutePath()));
-                        String[] nextLine;
-                        while ((nextLine = csvReader.readNext()) != null) {
-                            String name = nextLine[0];
-                            String code = nextLine[1];
-                            String cost = nextLine[2];
-                            String sell = nextLine[3];
-//                            String id = nextLine[4];
-                            String date = nextLine[5];
-                            String quantity = nextLine[6];
-                            long getData = db.importData(new Model(name, code, cost, sell,date,quantity));
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
 
-                                onStart();
-                            }
-                        });
-
-                    } catch (Exception e) {
-
-                        Log.d("IMPORT",e.getMessage());
-                    }
-                }
-            });
-            thread.start();
-
-        } else {
-            Toast.makeText(this, "الفايل غير موجود", Toast.LENGTH_SHORT).show();
-        }
-    }
     private void requestPermission(){
         boolean minSDK= Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         isReadPermissionGranted = ContextCompat.checkSelfPermission(this,
@@ -562,9 +531,6 @@ public class MainActivity extends AppCompatActivity{
         intent.putExtra(Intent.EXTRA_TITLE, "my.csv");
         startActivityForResult(intent, 111);
 
-
-        Toast.makeText(MainActivity.this, "تم الاستخراج بنجاح" , Toast.LENGTH_LONG).show();
-
 //        } catch (Exception e) {
 //            Toast.makeText(MainActivity.this, "" + e.getMessage()+"1", Toast.LENGTH_LONG).show();
 //            Log.d("EXPORT",e.getMessage());
@@ -589,11 +555,13 @@ public class MainActivity extends AppCompatActivity{
                     Uri uri = data.getData();
                     db = new DBSqlite(this);
                     ArrayList<Model> recordArray = db.getAllRecords();
-                    String name = "my.csv";
                     try {
                         OutputStream outputStream = getContentResolver().openOutputStream(uri);
+//                        Arrays.toString(fw.getEncoding().getBytes(StandardCharsets.UTF_8));
+//                        Arrays.toString(outputStream.write(recordArray.get(i).getName().));
                         for (int i = 0; i < recordArray.size(); i++) {
-                            outputStream.write(recordArray.get(i).getName().getBytes());
+
+                            outputStream.write(recordArray.get(i).getName().getBytes(StandardCharsets.UTF_8));
                             outputStream.write("\n".getBytes());
 
                         }
@@ -605,8 +573,48 @@ public class MainActivity extends AppCompatActivity{
                     }
 
                 }
+                break;
+            }
+            case 1:{
+                if (data == null){
+                    Toast.makeText(this, "isEmpty", Toast.LENGTH_SHORT).show();
+                return;
+                }
+                Uri uri = data.getData();
+               ContentValues contentValues = new ContentValues();
+                try {
+                    InputStream inputStream =
+                            getContentResolver().openInputStream(uri);
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(inputStream));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        // Do something with the line
+                        Log.d("onActivityResult",
+                                "onActivityResult: " + line);
+//                        contentValues.put();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
             }
         }
+    }
+    private void importCSV() throws IOException, CsvValidationException {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/comma-separated-values");
+//        intent.setType("csv/text");
+        String[] mimeTypes = {"text/csv",
+                "text/comma-separated-values",
+                "application/vnd.ms-excel",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        startActivityForResult(intent, 1);
+//                String filePathAndName = Environment
+//                .getExternalStorageDirectory() + "/" + "SQLiteBackup/" + "SQLite_Backup.csv";
+
     }
     private void proImportCSV(File from){
         try {

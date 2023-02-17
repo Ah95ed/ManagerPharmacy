@@ -6,23 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\msi\.android\avd\API_32.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="34HDU19719001360" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <targetSelectedWithDropDown>
-      <Target>
-        <type value="QUICK_BOOT_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\msi\.android\avd\API_32.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-    </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-02-16T17:28:30.098198900Z" />
+    <timeTargetWasSelectedWithDropDown value="2023-02-17T11:17:47.450752600Z" />
   </component>
 </project>
