@@ -5,8 +5,11 @@ public class Model {
 
 
     public Model( String name,
-                 String code, String cost,
-                 String sell,String id, String date,
+                 String code,
+                  String cost,
+                 String sell,
+                  String id,
+                  String date,
                  String quantity) {
 
         this.name = name;

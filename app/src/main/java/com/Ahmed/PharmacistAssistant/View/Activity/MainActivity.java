@@ -51,6 +51,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.Ahmed.PharmacistAssistant.BuildConfig;
+
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.Ahmed.PharmacistAssistant.View.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.Controler.Service.MyJobService;
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity{
     private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton,voice;
     private RecyclerView recordRv;
     private BottomNavigationView navigationView;
+    private androidx.core.widget.ContentLoadingProgressBar progressBar;
     private DBSqlite db;
     private ActionBar actionBar;
     private static final byte CAMERA_REQUEST_CODE = 100;
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity{
     private boolean loading = true;
     private int pastVisibleItems,visibleItemCount,totalItemCount;
     private LinearLayoutManager layoutManager;
+    private AdapterRecord adapterRecord;
 
 
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
@@ -145,7 +149,9 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         db = new DBSqlite(this);
         array = new ArrayList<>();
-
+        progressBar = findViewById(R.id.progress);
+        progressBar.hide();
+        progressBar.setVisibility(View.GONE);
         mResultLauncher= registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
             @Override
             public void onActivityResult(Map<String, Boolean> result) {
@@ -276,13 +282,11 @@ public class MainActivity extends AppCompatActivity{
 
     @SuppressLint("NotifyDataSetChanged")
     private void getData(){
-        Log.d("totalItemCount",skip+"__skip__"+limit);
         ArrayList<Model> arrayList = db.getRecords(limit,skip);
         array.addAll(arrayList);
-        AdapterRecord adapterRecord = new AdapterRecord(this,array);
+        adapterRecord = new AdapterRecord(this,array);
         recordRv.setAdapter(adapterRecord);
-
-        System.out.println(array.size());
+        adapterRecord.notifyDataSetChanged();
 
     }
     private void loadRecords() {
@@ -346,7 +350,7 @@ public class MainActivity extends AppCompatActivity{
                 } catch (IOException | CsvValidationException e) {
                     throw new RuntimeException(e);
                 }
-//                checkImport();
+                checkImport();
                 bottomSheetDialog.dismiss();
             }
         });
@@ -546,108 +550,126 @@ public class MainActivity extends AppCompatActivity{
                 if (resultCode == RESULT_OK && data != null) {
                     result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     searchRecord(result.get(0));
-             }else {
-
-                }
+             }
                 break;
             case 111: {
                 if (resultCode == RESULT_OK){
                     Uri uri = data.getData();
-                    db = new DBSqlite(this);
-                    ArrayList<Model> recordArray = db.getAllRecords();
-                    try {
-                        OutputStream outputStream = getContentResolver().openOutputStream(uri);
-//                        Arrays.toString(fw.getEncoding().getBytes(StandardCharsets.UTF_8));
-//                        Arrays.toString(outputStream.write(recordArray.get(i).getName().));
-                        for (int i = 0; i < recordArray.size(); i++) {
-
-                            outputStream.write(recordArray.get(i).getName().getBytes(StandardCharsets.UTF_8));
-                            outputStream.write("\n".getBytes());
-
-                        }
-
-                        outputStream.close();
-                        outputStream.flush();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-
+                    exportData(uri);
                 }
-                break;
             }
+            break;
             case 1:{
                 if (data == null){
-                    Toast.makeText(this, "isEmpty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,
+                            "isEmpty",
+                            Toast.LENGTH_SHORT).show();
                 return;
                 }
                 Uri uri = data.getData();
-               ContentValues contentValues = new ContentValues();
+                importData(uri);
+
+            }
+            break;
+        }
+    }
+
+    private void exportData(Uri uri) {
+        progressBar.show();
+        array = db.getAllRecords();
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(uri);
+//            for (Model m : array) {
+//                for each is correct choice **//  true   //**
+//            }
+            for (int i = 0; i < array.size(); i++) {
+                outputStream.write(array.get(i).getName().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(",".getBytes());
+                outputStream.write(array.get(i).getCode().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(",".getBytes());
+                outputStream.write(array.get(i).getCost().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(",".getBytes());
+                outputStream.write(array.get(i).getSell().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(",".getBytes());
+                outputStream.write(array.get(i).getId().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(",".getBytes());
+                outputStream.write(array.get(i).getDate().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(",".getBytes());
+                outputStream.write(array.get(i).getQuantity().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(",".getBytes());
+                outputStream.write("\n".getBytes());
+
+            }
+
+            outputStream.close();
+            outputStream.flush();
+            progressBar.hide();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private void importData(Uri uri) {
+
+        progressBar.show();
+        progressBar.setVisibility(View.VISIBLE);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
                 try {
                     InputStream inputStream =
                             getContentResolver().openInputStream(uri);
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(inputStream));
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        // Do something with the line
-                        Log.d("onActivityResult",
-                                "onActivityResult: " + line);
-//                        contentValues.put();
+                        String[] name = line.split(",");
+                        String[] code = line.split(",");
+                        String[] cost = line.split(",");
+                        String[] sell = line.split(",");
+                        String[] id = line.split(",");
+                        String[] date = line.split(",");
+                        String[] quo = line.split(",");
+                        db.importData(
+                                new Model(
+                                        ""+ name[0],
+                                        ""+code[1],
+                                        ""+cost[2],
+                                        ""+sell[3],
+                                        ""+id[4],
+                                        ""+date[5],
+                                        ""+quo[6])
+                        );
+
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @SuppressLint("NotifyDataSetChanged")
+                        @Override
+                        public void run() {
+                            progressBar.hide();
+                            progressBar.setVisibility(View.INVISIBLE);
+                            onStart();
+                        }
+                    });
+                } catch (Exception e) {
+                            Log.d("IMPORT",e.getMessage());
                 }
-                break;
             }
-        }
+        });
+        thread.start();
+
     }
+
     private void importCSV() throws IOException, CsvValidationException {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/comma-separated-values");
-//        intent.setType("csv/text");
         String[] mimeTypes = {"text/csv",
                 "text/comma-separated-values",
                 "application/vnd.ms-excel",
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"};
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         startActivityForResult(intent, 1);
-//                String filePathAndName = Environment
-//                .getExternalStorageDirectory() + "/" + "SQLiteBackup/" + "SQLite_Backup.csv";
-
-    }
-    private void proImportCSV(File from){
-        try {
-            // Delete everything above here since we're reading from the File we already have
-            ContentValues cv = new ContentValues();
-            // reading CSV and writing table
-            CSVReader dataRead = new CSVReader(new FileReader(from)); // <--- This line is key, and why it was reading the wrong file
-
-//            SQLiteDatabase db = mHelper.getWritableDatabase(); // LEt's just put this here since you'll probably be using it a lot more than once
-            String[] vv = null;
-            while((vv = dataRead.readNext())!=null) {
-                cv.clear();
-                SimpleDateFormat currFormater  = new SimpleDateFormat("dd-MM-yyyy");
-                SimpleDateFormat postFormater = new SimpleDateFormat("yyyy-MM-dd");
-
-                String eDDte;
-                try {
-                    Date nDate = currFormater.parse(vv[0]);
-                    eDDte = postFormater.format(nDate);
-//                    cv.put(Table.DATA,eDDte);
-                }
-                catch (Exception e) {
-                }
-//                cv.put(Table.C,vv[1]);
-//                cv.put(Table.E,vv[2]);
-//                cv.put(Table.U,vv[3]);
-//                cv.put(Table.C,vv[4]);
-//                db.insert(Table.TABLE_NAME,null,cv);
-            } dataRead.close();
-
-        } catch (Exception e) { Log.e("TAG",e.toString());
-
-        }
     }
 
 
@@ -792,8 +814,8 @@ public class MainActivity extends AppCompatActivity{
             openCalculate();
         }else if (id == R.id.deleted){
             db.deletedAll();
-            onResume();
-            onStart();
+            getData();
+//            onStart();
         }
         return super.onOptionsItemSelected(item);
     }

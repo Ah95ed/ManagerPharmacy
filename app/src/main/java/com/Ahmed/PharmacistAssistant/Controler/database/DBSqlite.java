@@ -41,10 +41,10 @@ public class DBSqlite extends SQLiteAssetHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(C_NAME,model.getName());
-        cv.put(C_CODE,model.getCost());
+        cv.put(C_CODE,model.getCode());
         cv.put(C_COST,model.getCost());
         cv.put(C_PRICE,model.getSell());
-//        cv.put(C_ID,model.getId());
+        cv.put(C_ID,model.getId());
         cv.put(C_Date,model.getDate());
         cv.put(C_Quantity,model.getQuantity());
         long result = db.insert(DB_TABLE,null,cv);
