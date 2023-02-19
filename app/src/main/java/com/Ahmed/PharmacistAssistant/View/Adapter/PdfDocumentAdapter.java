@@ -8,6 +8,8 @@ import android.print.PageRange;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,7 +36,7 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
             layoutResultCallback.onLayoutCancelled();
         else {
             PrintDocumentInfo.Builder builder=
-                    new PrintDocumentInfo.Builder("First");
+                    new PrintDocumentInfo.Builder("PDF");
             builder.setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
                     .setPageCount(PrintDocumentInfo.PAGE_COUNT_UNKNOWN)
 
@@ -52,8 +54,8 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
         InputStream in=null;
         OutputStream out=null;
         try {
-            File file = new File(path);
-            in = new FileInputStream(file);
+//            File file = new File(path);
+            in = new FileInputStream(path);
             out=new FileOutputStream(parcelFileDescriptor.getFileDescriptor());
 
             byte[] buf=new byte[16384];
@@ -63,7 +65,6 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
                     && !cancellationSignal.isCanceled()) {
                 out.write(buf, 0, size);
             }
-
             if (cancellationSignal.isCanceled()) {
                 writeResultCallback.onWriteCancelled();
             }
@@ -76,17 +77,19 @@ public class PdfDocumentAdapter extends PrintDocumentAdapter {
         }
         catch (Exception e) {
             writeResultCallback.onWriteFailed(e.getMessage());
-//            Log.d("PDFTRUE",e.getMessage().toString());
+            Log.d("PDFTRUE",e.getMessage());
         }
         finally {
             try {
-                assert in != null;
-                in.close();
-                assert out != null;
-                out.close();
+                if (in != null){
+                    in.close();
+                }
+                if (out != null){
+                    out.close();
+                }
             }
             catch (IOException e) {
-//                Log.d("PDFTRUE",e.getMessage().toString());
+                Log.d("PDFTRUE",e.getMessage());
             }
         }
     }

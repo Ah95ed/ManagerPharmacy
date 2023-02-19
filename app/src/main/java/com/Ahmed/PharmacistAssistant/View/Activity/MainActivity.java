@@ -500,46 +500,12 @@ public class MainActivity extends AppCompatActivity{
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-    private boolean exportCSV() throws IOException {
-//        File folder = new File(Environment.getExternalStorageDirectory()
-//                + "/" + "SQLiteBackup");
-//        boolean isFolderCreate = false;
-//        if (!folder.exists()) {
-//            isFolderCreate = folder.mkdir();
-//        }
-//        String csvFileName = "SQLite_Backup.csv";
-//        String filePathAndName = folder.toString() + "/" + csvFileName;
-        db = new DBSqlite(this);
-        ArrayList<Model> recordArray = db.getAllRecords();
-        String name = "my.csv";
-
-//        try {
-//            FileWriter fw = new FileWriter(name);
-//            Arrays.toString(fw.getEncoding().getBytes(StandardCharsets.UTF_8));
-//            for (int i = 0; i < recordArray.size(); i++) {
-//                fw.append(recordArray.get(i).getName());
-//                fw.append(",");
-//                fw.append(recordArray.get(i).getCode());
-//                fw.append(",");
-//                fw.append(recordArray.get(i).getCost());
-//                fw.append(",");
-//                fw.append(recordArray.get(i).getSell());
-//                fw.append(",");
-//                fw.append("\n");
-//            }
-//
-//            fw.flush();
-//            fw.close();
+    private void exportCSV() throws IOException {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.setType("csv/write");
         intent.putExtra(Intent.EXTRA_TITLE, "my.csv");
         startActivityForResult(intent, 111);
 
-//        } catch (Exception e) {
-//            Toast.makeText(MainActivity.this, "" + e.getMessage()+"1", Toast.LENGTH_LONG).show();
-//            Log.d("EXPORT",e.getMessage());
-//        }
-        return false;
     }
 
     @Override

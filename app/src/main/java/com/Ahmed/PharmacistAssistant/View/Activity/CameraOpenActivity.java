@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.media.AudioManager;
@@ -31,6 +32,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.os.StrictMode;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
@@ -60,8 +62,11 @@ import com.google.firebase.installations.BuildConfig;
 import com.google.zxing.Result;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 
@@ -72,22 +77,15 @@ public class CameraOpenActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private CodeScanner codeScanner;
     private DBSqlite db;
+    private int numberPage;
+    private Uri uri;
     public TextView result;
-    private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
-    private EditText et_text;
     private String txt, id, named, selles, cost, code;
     private RecyclerView recyclerview;
     public double results;
-    private static final int REQUEST_CAMERA_PERMISSION = 201;
-    private String[] cameraPermissions;
-    private static final byte CAMERA_REQUEST_CODE = 100;
     private DB d;
     private double res, calc;
-    private int numberPage = 1;
     private AdapterTwo adapterRecord;
-    private String[] storagePermissions;
-    private ImageButton Flash, reFresh;
-    private boolean isFlash;
     private ToneGenerator toneGen1;
     private CodeScannerView scannerView;
 
@@ -101,7 +99,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         editor = preferences.edit();
         scannerView = findViewById(R.id.scanner_view);
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 150);
-        isFlash = false;
+
         codeScanner = new CodeScanner(this, scannerView);
 
         scannerView.setOnClickListener(new View.OnClickListener() {
@@ -111,11 +109,7 @@ public class CameraOpenActivity extends AppCompatActivity {
             }
         });
         d = new DB(this);
-        cameraPermissions = new String[]{Manifest.permission.CAMERA};
-        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
-                , Manifest.permission.READ_EXTERNAL_STORAGE};
         recyclerview = findViewById(R.id.recordR);
-        cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         StrictMode.VmPolicy.Builder builders = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builders.build());
         builders.detectFileUriExposure();
@@ -165,7 +159,6 @@ public class CameraOpenActivity extends AppCompatActivity {
             codeScanner.startPreview();
         }
         database.close();
-//        openCam();
         return models;
 
     }
@@ -191,9 +184,7 @@ public class CameraOpenActivity extends AppCompatActivity {
             codeScanner.startPreview();
         }
         database.close();
-
     }
-
     public void dialogNum() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("الكمية");
@@ -219,7 +210,6 @@ public class CameraOpenActivity extends AppCompatActivity {
         });
         builder.create().show();
     }
-
     private void addData() {
         Favorite m = new Favorite(named, cost, String.valueOf(res), code, id, String.valueOf(calc));
         boolean add = d.add(m);
@@ -232,7 +222,6 @@ public class CameraOpenActivity extends AppCompatActivity {
                 results = Double.parseDouble(result.getText().toString());
                 results += res;
                 result.setText(String.valueOf(results));
-
                 onStart();
             } else {
                 results += res;
@@ -278,190 +267,104 @@ public class CameraOpenActivity extends AppCompatActivity {
             editor2.clear();
             editor2.commit();
             result.setText("المجموع");
-
             results = 0.0;
-//            barcodeView.resume();
             onStart();
         } else if (ide == R.id.print) {
-
-            try {
-                if (checkStoragePermission()) {
-                    createPdf();
-                    printPDF();
-                } else
-                    getReadStoragePermission();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            sendData();
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void requestStoragePermissionImport() {
-        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE_IMPORT);
-    }
-
-    private void getReadStoragePermission() {
-        requestStoragePermissionImport();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                false == Environment.isExternalStorageManager()) {
-            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                false == Environment.isExternalStorageManager()) {
-            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
-                false == Environment.isExternalStorageManager()) {
-            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-        }
+    private void sendData() {
+//      Create a new folder using Intent
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("application/pdf");
+        intent.putExtra(Intent.EXTRA_TITLE, "PDF");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        startActivityForResult(intent, 2);
 
     }
+
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case CAMERA_REQUEST_CODE: {
-                boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                if (cameraAccepted && storageAccepted) {
-                    checkCameraPermission();
-                }
-                requestCameraPermission();
-            }
-            break;
-            case STORAGE_REQUEST_CODE_IMPORT: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+
+            //  ** /document/primary:My New PDF.pdf: open failed: ENOENT (No such file or directory)*/
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    uri = data.getData();
+                    int numberItem = 1;
+                    ArrayList<Favorite> arrayList = d.getFav(DB.code);
                     try {
+                        // Create a new PDF document
+                        PdfDocument document = new PdfDocument();
+                        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+                        PdfDocument.Page page = document.startPage(pageInfo);
+                        Canvas canvas = page.getCanvas();
+                        Paint paint = new Paint();
+                        paint.setColor(Color.BLACK);
+                        paint.setTextSize(12);
+                        int yHi = 60;
+                        canvas.drawText("مع تمنياتنا لكم بالشفاء العاجل", 200, 20, paint);
+                        canvas.drawText("اسم العلاج", 20, yHi, paint);
+                        canvas.drawText("الكمية", 235, yHi, paint);
+                        canvas.drawText("السعر", pageInfo.getPageWidth() - 60, yHi, paint);
+                        int StartY = 80;
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            canvas.drawText(String.valueOf(numberItem),
+                                    5, StartY, paint);
+                            canvas.drawText(arrayList.get(i).getName(),
+                                    22, StartY, paint);
+                            canvas.drawText(arrayList.get(i).getQuantity(),
+                                    235, StartY, paint);
+                            canvas.drawText(arrayList.get(i).getSell(),
+                                    pageInfo.getPageWidth() - 75,
+                                    StartY, paint);
+                            canvas.drawLine(10,
+                                    StartY + 4,
+                                    pageInfo.getPageWidth() - 10,
+                                    StartY + 4, paint);
 
-                    } catch (Exception e) {
-                        Toast.makeText(CameraOpenActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            StartY += 20;
+                            numberItem++;
+                            if (numberItem == 24) {
+                                numberPage += 1;
+                                document.finishPage(page);
+                                document.startPage(pageInfo);
+                            }
+                        }
+                        document.finishPage(page);
+                        OutputStream outputStream = getContentResolver().openOutputStream(uri);
+                        document.writeTo(outputStream);
+                        document.close();
+                        outputStream.close();
+                        arrayList.clear();
+                        db.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } else {
-                    Toast.makeText(this, "نحتاج صلاحيات للذاكرة" + requestCode, Toast.LENGTH_LONG).show();
+                 runOnUiThread(new Runnable() {
+                     @Override
+                     public void run() {
+                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                         shareIntent.setType("application/pdf");
+                         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                         startActivity(Intent.createChooser(shareIntent, "أرسال ملف PDF"));
+                     }
+                 });
                 }
-            }
-            break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + requestCode);
+            });
+            thread.start();
         }
     }
-
-    private boolean checkCameraPermission() {
-        boolean result1 = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-                (PackageManager.PERMISSION_GRANTED);
-        boolean result2 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                (PackageManager.PERMISSION_GRANTED);
-        return result1 && result2;
-    }
-
-    private void requestCameraPermission() {
-        ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
-    }
-
-    private boolean checkStoragePermission() {
-        boolean result = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                (PackageManager.PERMISSION_GRANTED);
-        return result;
-    }
-
-    @SuppressLint("ResourceAsColor")
-    private synchronized void createPdf() throws IOException {
-        int numberItem = 1;
-        ArrayList<Favorite> arrayList = d.getFav(DB.code);
-
-        PdfDocument pdfDocument = new PdfDocument();
-        Paint paint = new Paint();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(400,
-                600, numberPage)
-                .create();
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-        Canvas canvas = page.getCanvas();
-
-        File file = new File(
-                Environment.getExternalStorageDirectory(),
-                "/First.pdf"
-        );
-
-        paint.setTextSize(12);
-        int yHi = 60;
-        canvas.drawText("مع تمنياتنا لكم بالشفاء العاجل", 140, 16, paint);
-        canvas.drawText("اسم العلاج", 20, yHi, paint);
-        canvas.drawText("الكمية", 235, yHi, paint);
-        canvas.drawText("السعر", pageInfo.getPageWidth() - 60, yHi, paint);
-        int StartY = 80;
-
-        for (int i = 0; i < arrayList.size(); i++) {
-            canvas.drawText(String.valueOf(numberItem), 5, StartY, paint);
-            canvas.drawText(arrayList.get(i).getName(), 22, StartY, paint);
-            canvas.drawText(arrayList.get(i).getQuantity(), 235, StartY, paint);
-            canvas.drawText(arrayList.get(i).getSell(),
-                    pageInfo.getPageWidth() - 75,
-                    StartY, paint);
-            canvas.drawLine(10,
-                    StartY + 4,
-                    pageInfo.getPageWidth() - 10,
-                    StartY + 4, paint);
-
-            StartY += 20;
-            numberItem++;
-            if (numberItem == 24) {
-                numberPage += 1;
-                pdfDocument.finishPage(page);
-            }
-        }
-        paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(16f);
-        canvas.drawText(result.getText().toString() + " " + "دينار عراقي ",
-                180,
-                pageInfo.getPageHeight() - 12, paint);
-        pdfDocument.finishPage(page);
-
-        try {
-            pdfDocument.writeTo(new FileOutputStream(file));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        pdfDocument.close();
-    }
-
-    private void sendData() {
-        File fileWithinMyDir = new File(
-                Environment.getExternalStorageDirectory().getAbsolutePath() + "/First.pdf");
-        if (fileWithinMyDir.exists()) {
-
-            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-            intentShareFile.setType("application/pdf");
-            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileWithinMyDir));
-            startActivity(Intent.createChooser(intentShareFile, "Share File pdf"));
-        } else {
-            Toast.makeText(this,
-                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/not found",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void printPDF() {
-        PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
-        try {
-            PrintDocumentAdapter printAdapter = new
-                    PdfDocumentAdapter(this,
-                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/First.pdf");
-            printManager.print("Document", printAdapter, new PrintAttributes.Builder().build());
-        } catch (Exception e) {
-            Log.d("PDF", e.getMessage());
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         codeScanner.stopPreview();
-//        barcodeView.pause();
 
     }
 
