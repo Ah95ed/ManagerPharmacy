@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DBSqlite extends SQLiteAssetHelper {
     public static final String DB_NAME = "pharmacy.db";
-    public static final byte VERSION = 1;
+    public static final byte VERSION = 2;
     public static final String DB_TABLE = "Ahmed";
     public static final String C_ID = "ID";
     public static final String C_NAME = "Name";
@@ -149,7 +149,7 @@ public class DBSqlite extends SQLiteAssetHelper {
     /*______________البحث عن طريق الاسم______________*/
     public ArrayList<Model> Search(String query){
         ArrayList<Model> records = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + query + "%'";
+        String selectQuery = "SELECT * FROM " + DB_TABLE + " WHERE " + C_CODE + " LIKE '%" + query + "%'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
         if (cursor.moveToFirst()){

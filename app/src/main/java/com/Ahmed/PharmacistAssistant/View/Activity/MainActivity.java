@@ -941,9 +941,16 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void searchBar(String results) {
-        ArrayList<Model> array = db.Search(results);
-        System.out.println("ARRRRAY" + array.size());
-        AdapterRecord adapterRecord = new AdapterRecord(this, array);
+        array = db.getAllRecords();
+        ArrayList<Model> models = new ArrayList<>();
+
+        for (Model m : array) {
+            if (m.getCode().toLowerCase().contains(results.toLowerCase()))
+            {
+                models.add(m);
+            }
+        }
+        AdapterRecord adapterRecord = new AdapterRecord(this, models);
         recordRv.setAdapter(adapterRecord);
     }
     private void openCalculate() {

@@ -57,8 +57,7 @@ public class AddActivity extends AppCompatActivity {
 
         nameEt = findViewById(R.id.nameEt);
         codeEt = findViewById(R.id.barCodeEt);
-        cameraPermissions = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermissions = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        cameraPermissions = new String[]{Manifest.permission.CAMERA};
         CostPriceEt = findViewById(R.id.CostPrice);
         sellPriceEt = findViewById(R.id.sellPrice);
         dateEt = findViewById(R.id.date);

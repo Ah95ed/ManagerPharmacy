@@ -99,9 +99,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         editor = preferences.edit();
         scannerView = findViewById(R.id.scanner_view);
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 150);
-
         codeScanner = new CodeScanner(this, scannerView);
-
         scannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,8 +117,6 @@ public class CameraOpenActivity extends AppCompatActivity {
     }
 
     private void opeeen() {
-
-
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {

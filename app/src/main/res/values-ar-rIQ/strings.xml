@@ -50,4 +50,12 @@
     <string name="helping" translatable="false">للحصول على المفتاح</string>
     <string name="Here" translatable="false">هنا</string>
     <string name="SpeechToText" translatable="false">تحويل الكلام الى نص</string>
+    <string name="delete_all">حذف الكل</string>
+    <string name="expire_item">"تاريخ الانتهاء "</string>
+    <string name="date">التاريخ</string>
+    <string name="recipe_account">حساب الطلبات</string>
+    <string name="prices_update">تحديث الاسعار</string>
+    <string name="debts">الديون</string>
+    <string name="quantity_item">الكمية</string>
+    <string name="quantity">الكمية</string>
 </resources>
