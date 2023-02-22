@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Pharmacist assistant</string>
+    <string name="app_name" translatable="false">Pharmacist assistantPharmacist assistant</string>
     <string name="information" translatable="false"><![CDATA[ Hints ->
         This is the void is Purchasing Price —> if u need increment values input (+) before numbers or decrease input (-) before numbers
 But !!! Make sure

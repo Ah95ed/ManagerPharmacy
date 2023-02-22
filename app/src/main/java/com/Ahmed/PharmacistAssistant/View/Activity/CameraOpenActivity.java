@@ -80,15 +80,16 @@ public class CameraOpenActivity extends AppCompatActivity {
     private int numberPage;
     private Uri uri;
     public TextView result;
-    private String txt, id, named, selles, cost, code;
+    private String  id, named, selles, cost, code;
     private RecyclerView recyclerview;
     public double results;
     private DB d;
     private double res, calc;
     private AdapterTwo adapterRecord;
     private ToneGenerator toneGen1;
+    private String[] camera;
     private CodeScannerView scannerView;
-
+    private static int CAMERA_REQUEST_CODE = 100;
 
     @SuppressLint({"NotifyDataSetChanged", "MissingInflatedId"})
     @Override
@@ -97,6 +98,7 @@ public class CameraOpenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera_open);
         preferences = getSharedPreferences(savePrice, MODE_PRIVATE);
         editor = preferences.edit();
+        camera = new String[]{Manifest.permission.CAMERA};
         scannerView = findViewById(R.id.scanner_view);
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 150);
         codeScanner = new CodeScanner(this, scannerView);
@@ -112,7 +114,11 @@ public class CameraOpenActivity extends AppCompatActivity {
         StrictMode.setVmPolicy(builders.build());
         builders.detectFileUriExposure();
         result = findViewById(R.id.tv_total);
-        opeeen();
+        if (checkCameraPermission()){
+            opeeen();
+        }else {
+            requestCameraPermission();
+        }
         db = new DBSqlite(this);
     }
 
@@ -125,13 +131,22 @@ public class CameraOpenActivity extends AppCompatActivity {
                     public void run() {
                         getData(result.getText());
                         toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
-
                     }
                 });
             }
         });
     }
 
+    private boolean checkCameraPermission() {
+        boolean result = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) ==
+                (PackageManager.PERMISSION_GRANTED);
+
+        return result;
+    }
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, camera, CAMERA_REQUEST_CODE);
+    }
 
     private ArrayList<Model> getDataName(String N) {
         String selectQuery = "SELECT * FROM " + DBSqlite.DB_TABLE + " WHERE " + C_NAME + " LIKE '%" + N + "%'";
@@ -294,7 +309,7 @@ public class CameraOpenActivity extends AppCompatActivity {
 
                     uri = data.getData();
                     int numberItem = 1;
-                    ArrayList<Favorite> arrayList = d.getFav(DB.code);
+                    ArrayList<Favorite> arrayList = d.getFav(DB.id);
                     try {
                         // Create a new PDF document
                         PdfDocument document = new PdfDocument();
@@ -355,6 +370,8 @@ public class CameraOpenActivity extends AppCompatActivity {
                 }
             });
             thread.start();
+        }else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
+            opeeen();
         }
     }
     @Override

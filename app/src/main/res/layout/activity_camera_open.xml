@@ -73,31 +73,14 @@
             android:id="@+id/scanner_view"
 
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="@dimen/_250sdp"
             android:forceHasOverlappingRendering="true"
             app:autoFocusButtonColor="@color/teal_200"
             app:autoFocusButtonPaddingHorizontal="100dp"
             app:flashButtonColor="@color/teal_200"
             app:flashButtonPaddingHorizontal="100dp"
             app:frameColor="@color/teal_200"
-            app:frameCornersSize="100dp" />
-        <!--            <ImageButton-->
-        <!--                android:id="@+id/flash"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_margin="6dp"-->
-        <!--                android:src="@drawable/ic_flash_on" />-->
-
-        <!--            <ImageButton-->
-        <!--                android:id="@+id/refresh"-->
-        <!--                android:layout_width="58dp"-->
-        <!--                android:layout_height="54dp"-->
-        <!--                android:layout_gravity="start"-->
-        <!--                android:layout_marginTop="265dp"-->
-        <!--                android:src="@drawable/ic_refresh" />-->
-        <!--        </SurfaceView>-->
-
-        <!--        </com.journeyapps.barcodescanner.DecoratedBarcodeView>-->
+            app:frameCornersSize="@dimen/_75sdp" />
 
     </FrameLayout>
 

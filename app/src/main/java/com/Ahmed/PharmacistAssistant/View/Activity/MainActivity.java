@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -97,19 +98,14 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
-    ActivityResultLauncher<String []> mResultLauncher;
-    ActivityResultLauncher<Intent> mResultFile;
-    private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton,voice;
+    private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton;
     private RecyclerView recordRv;
     private BottomNavigationView navigationView;
     private androidx.core.widget.ContentLoadingProgressBar progressBar;
     private DBSqlite db;
     private ActionBar actionBar;
     private static final byte CAMERA_REQUEST_CODE = 100;
-    private static final byte STORAGE_REQUEST_CODE_EXPORT = 1;
-    private static final byte STORAGE_REQUEST_CODE_IMPORT = 2;
     private static final byte SPEECH_REQUEST = 101;
-    private String[] storagePermissions;
     private ArrayList<Model> array;
     //This class provides methods to play DTMF tones
     private ToneGenerator toneGen1;
@@ -128,18 +124,14 @@ public class MainActivity extends AppCompatActivity{
      int limit = 30;
      int skip = 0;
 
-    private EditText search;
-
-    private Boolean isReadPermissionGranted= false;
-    private Boolean isWritePermissionGranted= false;
+    private EditText search;;
 
     // var pagination
     private boolean loading = true;
     private int pastVisibleItems,visibleItemCount,totalItemCount;
     private LinearLayoutManager layoutManager;
     private AdapterRecord adapterRecord;
-
-
+    private androidx.coordinatorlayout.widget.CoordinatorLayout coordinatorLayout;
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,33 +144,26 @@ public class MainActivity extends AppCompatActivity{
         progressBar = findViewById(R.id.progress);
         progressBar.hide();
         progressBar.setVisibility(View.GONE);
-        mResultLauncher= registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-            @Override
-            public void onActivityResult(Map<String, Boolean> result) {
-           if (result.get(Manifest.permission.READ_EXTERNAL_STORAGE) != null){
-               isReadPermissionGranted = result.get(Manifest.permission.READ_EXTERNAL_STORAGE);
-           }
-           if (result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) != null){
-                    isWritePermissionGranted = result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-           }
-            }
-        });
-//        requestPermission();
-
         navigationView = findViewById(R.id.bottomnavigtionView);
         navigationView.setBackground(null);
         search = findViewById(R.id.search);
-
-//        mCustomBottomSheet = findViewById(R.id.Relative);
         search.setVisibility(View.GONE);
+        coordinatorLayout = findViewById(R.id.Relative);
+        coordinatorLayout.setOnClickListener((View view) -> {
+            getData();
+            System.out.println("______________________"+array.size());
+        });
 //        loadRecords();
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.camera:
-                        openCamera();
+                        if (checkCameraPermission()){
+                            openCamera();
+                        }else {
+                            requestCameraPermission();
+                        }
                         return true;
                     case R.id.search:
                         search.setVisibility(View.VISIBLE);
@@ -229,13 +214,11 @@ public class MainActivity extends AppCompatActivity{
             Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
             field.setAccessible(true);
             field.set(null, 100 * 1024 * 1024); //the 100MB is the new size
-            getPermission();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         cameraPermissions = new String[]{Manifest.permission.CAMERA};
-        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
-                , Manifest.permission.READ_EXTERNAL_STORAGE};
         floatingActionButton = findViewById(R.id.add_item);
 
         recordRv = findViewById(R.id.recordRv);
@@ -248,6 +231,7 @@ public class MainActivity extends AppCompatActivity{
                startActivity(new Intent(MainActivity.this,AddActivity.class));
             }
         });
+
         currentVersionCod = getCurrentVersionCode();
         remoteConfig = FirebaseRemoteConfig.getInstance();
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
@@ -255,7 +239,11 @@ public class MainActivity extends AppCompatActivity{
                 .build();
         remoteConfig.setConfigSettingsAsync(configSettings);
         recordRv.setLayoutManager(layoutManager);
-
+//        recordRv.setOnClickListener((View view) -> {
+//            getData();
+//            onStart();
+//            System.out.println("______________________"+array.size());
+//        });
         recordRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -287,16 +275,6 @@ public class MainActivity extends AppCompatActivity{
         adapterRecord = new AdapterRecord(this,array);
         recordRv.setAdapter(adapterRecord);
         adapterRecord.notifyDataSetChanged();
-
-    }
-    private void loadRecords() {
-
-        array =db.getAllRecords();
-        array.addAll(db.getAllRecords());
-        AdapterRecord adapter = new AdapterRecord(MainActivity.this,array);
-        recordRv.setAdapter(adapter);
-//        Log.d("DATABVASE_" ,array.get(0).getName()+"_____________");
-//        actionBar.setSubtitle("" + db.getAllCounts());
     }
     private void openBottomSheet() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
@@ -307,8 +285,6 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 if (ContextCompat.checkSelfPermission(MainActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                         PackageManager.PERMISSION_GRANTED)
@@ -318,25 +294,7 @@ public class MainActivity extends AppCompatActivity{
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-//                    ActivityCompat.requestPermissions(
-//                            MainActivity.this, new String[]
-//                                    {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
                 }
-
-
-
-
-//                selectCSVFile();
-//                try {
-//                try {
-//                    exportCSV();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-////                } catch (IOException e) {
-////                    throw new RuntimeException(e);
-////                }
-////                loadRecords();
 
                 bottomSheetDialog.dismiss();
             }
@@ -350,7 +308,6 @@ public class MainActivity extends AppCompatActivity{
                 } catch (IOException | CsvValidationException e) {
                     throw new RuntimeException(e);
                 }
-                checkImport();
                 bottomSheetDialog.dismiss();
             }
         });
@@ -380,11 +337,13 @@ public class MainActivity extends AppCompatActivity{
         });
 
         bottomSheetView.findViewById(R.id.delet).setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View view) {
                 db.deletedAll();
-//                onResume();
-//                onStart();
+                array.clear();
+                adapterRecord.notifyDataSetChanged();
+                onStart();
                 bottomSheetDialog.dismiss();
             }
         });
@@ -399,93 +358,6 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
-
-    private void checkImport() {
-
-
-        if (checkStoragePermission()) {
-
-            try {
-                importCSV();
-            } catch (IOException | CsvValidationException e) {
-                e.printStackTrace();
-            }
-        } else {
-
-            requestStoragePermissionImport();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                    false == Environment.isExternalStorageManager()) {
-                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-            }
-        }
-
-
-    }
-    private void selectCSVFile(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/comma-separated-values");
-        startActivityForResult(Intent.createChooser(intent, "Open CSV"), 111);
-    }
-
-    private static boolean isExternalStorageAvailable() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
-            return true;
-        }
-        return false;
-    }
-
-    private void requestPermission(){
-        boolean minSDK= Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
-        isReadPermissionGranted = ContextCompat.checkSelfPermission(this,
-
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-
-        isWritePermissionGranted = ContextCompat.checkSelfPermission(this,
-
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        isWritePermissionGranted = isWritePermissionGranted ||minSDK;
-        List<String> permissionRequest = new ArrayList<>();
-        if (!isReadPermissionGranted){
-            permissionRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        }
-        if (!isWritePermissionGranted){
-            permissionRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-
-        if (!permissionRequest.isEmpty()){
-            mResultLauncher.launch(permissionRequest.toArray(new String[0]));
-        }
-
-    }
-
-    private void checkExport() throws IOException {
-
-        if (checkStoragePermission()) {
-            exportCSV();
-        }
-        else {
-            requestStoragePermissionExport();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                    false == Environment.isExternalStorageManager()) {
-                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                    false == Environment.isExternalStorageManager()) {
-                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
-                    !Environment.isExternalStorageManager()) {
-                Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-            }
-        }
-
-    }
-
-
     private void speechToText() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -520,6 +392,7 @@ public class MainActivity extends AppCompatActivity{
                 break;
             case 111: {
                 if (resultCode == RESULT_OK){
+                    assert data != null;
                     Uri uri = data.getData();
                     exportData(uri);
                 }
@@ -545,9 +418,6 @@ public class MainActivity extends AppCompatActivity{
         array = db.getAllRecords();
         try {
             OutputStream outputStream = getContentResolver().openOutputStream(uri);
-//            for (Model m : array) {
-//                for each is correct choice **//  true   //**
-//            }
             for (int i = 0; i < array.size(); i++) {
                 outputStream.write(array.get(i).getName().getBytes(StandardCharsets.UTF_8));
                 outputStream.write(",".getBytes());
@@ -669,133 +539,21 @@ public class MainActivity extends AppCompatActivity{
         assert packageInfo != null;
         return packageInfo.versionCode;
     }
-    private static boolean isExternalStorageavailable() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
-            return true;
-        }
-        return false;
-    }
-    private static boolean isExternalStorageReadOnly() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
-            return true;
-        }
-        return false;
-    }
 
     private void searchRecord(String name) {
         array = db.getAllRecords();
         ArrayList<Model> models = new ArrayList<>();
 
         for (Model m : array) {
-            if (m.getName().toLowerCase().contains(name.toLowerCase()))
-            {
+            if (m.getName().toLowerCase().contains(name.toLowerCase())) {
                 models.add(m);
             }
         }
         AdapterRecord adapterRecord = new AdapterRecord(this, models);
         recordRv.setAdapter(adapterRecord);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-         super.onCreateOptionsMenu(menu);
-         getMenuInflater().inflate(R.menu.navigationbottom,menu);
-        MenuItem item = menu.findItem(R.id.search);
-        SearchView searchView = null;
-        searchView = (SearchView) item.getActionView();
-        assert searchView != null;
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchRecord(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                searchRecord(newText);
-                return true;
-            }
-        });
-        return true;
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.Backup) {
-            if (checkStoragePermission()) {
-                try {
-                    exportCSV();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                requestStoragePermissionExport();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                        false == Environment.isExternalStorageManager()) {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                        false == Environment.isExternalStorageManager()) {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2 &&
-                        false == Environment.isExternalStorageManager()) {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-                }
-            }
-
-        } else if (id == R.id.restore) {
-            if (checkStoragePermission()) {
-
-                try {
-                    importCSV();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (CsvValidationException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                requestStoragePermissionImport();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                        false == Environment.isExternalStorageManager()) {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-                }
-            }
-        } else if (id == R.id.listShow) {
-            openActivity();
-        } else if (id == R.id.camera) {
-            if (!checkCameraPermission()) {
-                requestCameraPermission();
-            }
-            openCamera();
-        } else if (id == R.id.update) {
-            updateAllCostAndSell();
-        } else if (id == R.id.Calculate) {
-            openCalculate();
-        }else if (id == R.id.deleted){
-            db.deletedAll();
-            getData();
-//            onStart();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void updateAllCostAndSell() {
         startActivity(new Intent(MainActivity.this, UpdateColumnActivity.class));
-    }
-
-    private boolean checkStoragePermission() {
-        boolean result = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                (PackageManager.PERMISSION_GRANTED);
-
-        return result;
     }
 
     private boolean checkCameraPermission() {
@@ -806,14 +564,6 @@ public class MainActivity extends AppCompatActivity{
         return result;
     }
 
-    private void requestStoragePermissionImport() {
-        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE_IMPORT);
-    }
-
-    private void requestStoragePermissionExport() {
-        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE_EXPORT);
-    }
-
     private void requestCameraPermission() {
         ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
     }
@@ -822,36 +572,14 @@ public class MainActivity extends AppCompatActivity{
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case STORAGE_REQUEST_CODE_EXPORT: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, grantResults.length+"_"+ grantResults[0], Toast.LENGTH_SHORT).show();
-                    try {
-                        exportCSV();
-                    } catch (Exception e) {
-                        Log.d("" + e.getMessage(), "GRANTED");
-                    }
-                } else {
-                    Toast.makeText(this, "نحتاج صلاحيات للذاكرة", Toast.LENGTH_LONG).show();
-                }
-            }
-            break;
-            case STORAGE_REQUEST_CODE_IMPORT: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    try {
-//                        importCSV();
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(this, "نحتاج صلاحيات للذاكرة" + requestCode, Toast.LENGTH_LONG).show();
-                }
-            }
-            break;
             case CAMERA_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] ==
                         PackageManager.PERMISSION_GRANTED) {
+                    openCamera();
                 } else {
-                    Toast.makeText(MainActivity.this, "تحتاج الى صلاحيات الكاميرا", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "تحتاج الى صلاحيات الكاميرا",
+                            Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -864,7 +592,6 @@ public class MainActivity extends AppCompatActivity{
         dialog.setCanceledOnTouchOutside(false);
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         scannerView = v.findViewById(R.id.scanner_view);
-//        scannerView = findViewById(R.id.scanner_view);
         codeScanner = new CodeScanner(this,scannerView);
         codeScanner.getAutoFocusMode();
         codeScanner.startPreview();
@@ -890,52 +617,7 @@ public class MainActivity extends AppCompatActivity{
                 codeScanner.startPreview();
             }
         });
-//        barcodeView = v.findViewById(R.id.barcode_scanner);
-//        cameraSettings =new CameraSettings();
-//        cameraSettings.setRequestedCameraId(0);
-//        cameraSettings.setAutoFocusEnabled(true);
-//        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-//        barcodeView.resume();
-//
-//        barcodeView.decodeSingle(new BarcodeCallback() {
-//            @Override
-//            public void barcodeResult(BarcodeResult result) {
-//                if (result.getText() != null) {
-//                    searchBar(result.getText());
-//                    barcodeView.pause();
-//                    dialog.dismiss();
-//                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT,160);
-//                    isFlash = false;
-//                    barcodeView.setTorchOff();
-//                }
-//            }
-//        });
-//        Button Close = v.findViewById(R.id.close);
-//        Button flash = v.findViewById(R.id.flash);
-//
-//        Close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//               barcodeView.pause();
-////                cameraSource.stop();
-//                dialog.dismiss();
-//                barcodeView.setTorchOff();
-//                isFlash = false;
-//            }
-//        });
-//        flash.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//               if (!isFlash) {
-//                   barcodeView.setTorchOn();
-//                   isFlash = true;
-//               }
-//               else {
-//                   barcodeView.setTorchOff();
-//                   isFlash = false;
-//               }
-//            }
-//        });
+
         dialog.setView(v);
         dialog.show();
     }
@@ -994,22 +676,9 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onStart() {
         super.onStart();
-//        loadRecords();
         getData();
         jobService();
-        getPermission();
         ref.child("Users").child(deviceId).child("TimeStamp").setValue(ServerValue.TIMESTAMP);
-    }
-    @SuppressLint("ObsoleteSdkInt")
-    private void getPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) ==
-                    PackageManager.PERMISSION_DENIED) {
-                requestPermissions(cameraPermissions, CAMERA_REQUEST_CODE);
-            } else {
-                checkSelfPermission(Manifest.permission.CAMERA);
-            }
-        }
     }
 
     public  void jobService() {
@@ -1037,5 +706,3 @@ public class MainActivity extends AppCompatActivity{
 
     }
 }
-
-// intent.setType("text/comma-separated-values");
