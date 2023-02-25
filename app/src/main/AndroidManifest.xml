@@ -88,11 +88,11 @@
         <activity
             android:name=".View.Activity.MainActivity"
             android:exported="true"/>
-        <activity
-            android:name=".Controler.Service.Capture"
-            android:screenOrientation="fullSensor"
-            android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme" />
+<!--        <activity-->
+<!--            android:name=".Controler.Service.Capture"-->
+<!--            android:screenOrientation="fullSensor"-->
+<!--            android:stateNotNeeded="true"-->
+<!--            android:theme="@style/zxing_CaptureTheme" />-->
 
         <service
             android:name=".Controler.Service.MyJobService"

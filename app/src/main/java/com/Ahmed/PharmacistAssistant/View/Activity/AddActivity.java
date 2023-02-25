@@ -29,18 +29,17 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
+//import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+//import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 public class AddActivity extends AppCompatActivity {
     private EditText nameEt,codeEt,CostPriceEt,sellPriceEt ,dateEt,quantityEt;
-    public static DecoratedBarcodeView barcodeView;
-    public static CameraSettings cameraSettings;
+//    public static DecoratedBarcodeView barcodeView;
+//    public static CameraSettings cameraSettings;
 
     private static final byte CAMERA_REQUEST_CODE=100;
     private static final byte STORAGE_REQUEST_CODE=102;
     private String[] cameraPermissions;
-    private String[] storagePermissions;
     public static String ID,name,code,cost,sell,date,quantity;
     private DBSqlite dataBase;
     private boolean isEditMode = false;
@@ -103,10 +102,8 @@ public class AddActivity extends AppCompatActivity {
         CostPriceEt.setText(cost);
         sellPriceEt.setText(sell);
         dateEt.setText(date);
-            System.out.println(date);
 
-
-        }
+                }
     }
     private void insertData() {
         name = nameEt.getText().toString();
@@ -234,38 +231,38 @@ public class AddActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    private boolean checkStoragePermission(){
-        boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result;
-    }
-    private void requestStoragePermission(){
-        ActivityCompat.requestPermissions(this,storagePermissions,STORAGE_REQUEST_CODE);
-    }
-    private boolean checkCameraPermissions(){
-        boolean result1 = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-        boolean result2 = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result1 && result2;
-    }
-    private void requestCameraPermission()
-    {
-        ActivityCompat.requestPermissions(this,cameraPermissions,CAMERA_REQUEST_CODE);
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case CAMERA_REQUEST_CODE:{
-                boolean cameraAccepted =grantResults[0]==PackageManager.PERMISSION_GRANTED;
-                boolean storageAccepted =grantResults[1]==PackageManager.PERMISSION_GRANTED;
-                if (cameraAccepted && storageAccepted)
-                {
-                    checkCameraPermissions();
-                    checkStoragePermission();
-                }else {
-                    requestCameraPermission();
-                    requestStoragePermission();
-                }
-            }
-        }
-    }
+//    private boolean checkStoragePermission(){
+//        boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+//        return result;
+//    }
+//    private void requestStoragePermission(){
+//        ActivityCompat.requestPermissions(this,storagePermissions,STORAGE_REQUEST_CODE);
+//    }
+//    private boolean checkCameraPermissions(){
+//        boolean result1 = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+//        boolean result2 = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+//        return result1 && result2;
+//    }
+//    private void requestCameraPermission()
+//    {
+//        ActivityCompat.requestPermissions(this,cameraPermissions,CAMERA_REQUEST_CODE);
+//    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        switch (requestCode){
+//            case CAMERA_REQUEST_CODE:{
+//                boolean cameraAccepted =grantResults[0]==PackageManager.PERMISSION_GRANTED;
+//                boolean storageAccepted =grantResults[1]==PackageManager.PERMISSION_GRANTED;
+//                if (cameraAccepted && storageAccepted)
+//                {
+//                    checkCameraPermissions();
+//                    checkStoragePermission();
+//                }else {
+//                    requestCameraPermission();
+//                    requestStoragePermission();
+//                }
+//            }
+//        }
+//    }
 }

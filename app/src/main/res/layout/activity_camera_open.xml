@@ -5,82 +5,28 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_alignParentStart="true"-->
-<!--        android:id="@+id/appBar"-->
-<!--        android:background="@color/teal_700"-->
-<!--        >-->
-<!--        <ImageButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/print"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:id="@+id/print"-->
-<!--            android:background="@android:color/transparent"/>-->
-<!--        <ImageButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_delete"-->
-<!--            android:id="@+id/de_all"-->
-<!--            android:maxWidth="20dp"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:layout_toEndOf="@+id/print"-->
-<!--            android:background="@android:color/transparent"/>-->
-
-<!--        <EditText-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_toEndOf="@+id/de_all"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:id="@+id/search"-->
-<!--            android:paddingEnd="6dp"-->
-<!--            android:backgroundTint="@color/teal_200"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="18sp"-->
-<!--            android:drawablePadding="6dp"-->
-<!--            android:drawableStart="@drawable/ic_search"-->
-<!--            />-->
-
-<!--    </RelativeLayout>-->
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="343dp"
+        android:layout_height="@dimen/_200sdp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginEnd="0dp"
         android:forceHasOverlappingRendering="true"
         android:keepScreenOn="true">
 
-        <!--        <com.journeyapps.barcodescanner.DecoratedBarcodeView-->
-        <!--            android:id="@+id/barcode_scanner"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="330dp"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            app:layout_constraintVertical_bias="0.0"-->
-        <!--            app:zxing_preview_scaling_strategy="centerCrop"-->
-        <!--            app:zxing_use_texture_view="false">-->
         <com.budiyev.android.codescanner.CodeScannerView
             android:id="@+id/scanner_view"
-
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_250sdp"
+            android:layout_height="@dimen/_200sdp"
             android:forceHasOverlappingRendering="true"
             app:autoFocusButtonColor="@color/teal_200"
-            app:autoFocusButtonPaddingHorizontal="100dp"
+            app:autoFocusButtonPaddingHorizontal="@dimen/_40sdp"
             app:flashButtonColor="@color/teal_200"
-            app:flashButtonPaddingHorizontal="100dp"
+            app:flashButtonPaddingHorizontal="@dimen/_40sdp"
             app:frameColor="@color/teal_200"
-            app:frameCornersSize="@dimen/_75sdp" />
+            app:frameCornersSize="@dimen/_50sdp" />
 
     </FrameLayout>
 
