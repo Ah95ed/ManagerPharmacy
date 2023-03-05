@@ -61,5 +61,6 @@ But !!! Make sure
     <string name="debts" translatable="false">Debts</string>
     <string name="quantity_item" translatable="false">quantity item</string>
     <string name="quantity" translatable="false">Quantity</string>
+    <string name="pharma_name" translatable="false">Pharma Name</string>
 
 </resources>

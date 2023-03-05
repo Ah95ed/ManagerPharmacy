@@ -58,4 +58,5 @@
     <string name="debts">الديون</string>
     <string name="quantity_item">الكمية</string>
     <string name="quantity">الكمية</string>
+    <string name="pharma_name">اسم الصيدلية</string>
 </resources>

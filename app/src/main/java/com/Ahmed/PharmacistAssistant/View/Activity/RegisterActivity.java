@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
-    private  String user , phone ,deviceId;
+    private  String user , phone,pharma ,deviceId;
     private DatabaseReference ref;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -66,6 +66,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 user = binding.user.getText().toString().trim();
                 phone =binding.phone.getText().toString();
+                pharma = binding.namePh.getText().toString();
+
 
                  deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                          Settings.Secure.ANDROID_ID);
@@ -85,19 +87,36 @@ public class RegisterActivity extends AppCompatActivity {
                             if (snapshot.hasChild(deviceId)) {
                                 Toast.makeText(RegisterActivity.this, "تم التسجيل مسبقاً", Toast.LENGTH_SHORT).show();
                             } else {
+                                Thread t = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                ref.child("Users").child(deviceId).child("User Name").setValue(user);
-                                ref.child("Users").child(deviceId).child("DateLogin").setValue(ServerValue.TIMESTAMP);
-                                ref.child("Users").child(deviceId).child("Expired").setValue(0);
-                                ref.child("Users").child(deviceId).child("User Phone").setValue(phone);
-                                ref.child("Users").child(deviceId).child("deviceId").setValue(deviceId);
-                                ref.child("Users").child(deviceId).child("key").setValue("");
-                                editor.putString("user",user);
-                                editor.putString("User Phone",phone);
-                                editor.putString("deviceId",deviceId);
-                                editor.commit();
-                                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
-                                finish();
+                                        ref.child("Users").child(deviceId).child("User Name").setValue(user);
+                                        ref.child("Users").child(deviceId).child("DateLogin").setValue(ServerValue.TIMESTAMP);
+                                        ref.child("Users").child(deviceId).child("Expired").setValue(0);
+                                        ref.child("Users").child(deviceId).child("User Phone").setValue(phone);
+                                        ref.child("Users").child(deviceId).child("Pharma Name").setValue(pharma);
+                                        ref.child("Users").child(deviceId).child("deviceId").setValue(deviceId);
+                                        ref.child("Users").child(deviceId).child("key").setValue("");
+                                        editor.putString("user",user);
+                                        editor.putString("User Phone",phone);
+                                        editor.putString("Pharma Name",pharma);
+                                        editor.putString("deviceId",deviceId);
+                                        editor.commit();
+
+                                        runOnUiThread(new Runnable() {
+                                            @SuppressLint("NotifyDataSetChanged")
+                                            @Override
+                                            public void run() {
+                                                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+                                                finish();
+                                            }
+                                        });
+                                    }
+                                });
+                                t.start();
+
+
                             }
                         }
 
