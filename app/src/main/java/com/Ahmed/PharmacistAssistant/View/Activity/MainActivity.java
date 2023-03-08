@@ -2,19 +2,13 @@
 package com.Ahmed.PharmacistAssistant.View.Activity;
 
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
@@ -22,8 +16,6 @@ import android.annotation.SuppressLint;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -31,7 +23,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.CursorWindow;
-import android.database.sqlite.SQLiteDatabase;
 import android.icu.util.Calendar;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -39,49 +30,43 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
-import com.Ahmed.PharmacistAssistant.BuildConfig;
-
-import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.Ahmed.PharmacistAssistant.Controler.database.DB;
 import com.Ahmed.PharmacistAssistant.View.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.Controler.Service.MyJobService;
 import com.Ahmed.PharmacistAssistant.Controler.Service.MyReceiver;
 import com.Ahmed.PharmacistAssistant.R;
 import com.Ahmed.PharmacistAssistant.Controler.database.DBSqlite;
 import com.Ahmed.PharmacistAssistant.model.Model;
+import com.Ahmed.PharmacistAssistant.model.Order;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.collect.Table;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.zxing.Result;
-import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -90,20 +75,19 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
     private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton;
     private RecyclerView recordRv;
+    private  ArrayList<Order> order;
     private BottomNavigationView navigationView;
     private androidx.core.widget.ContentLoadingProgressBar progressBar;
     private DBSqlite db;
     private ActionBar actionBar;
+    private FirebaseFirestore firestore ;
     private static final byte CAMERA_REQUEST_CODE = 100;
     private static final byte SPEECH_REQUEST = 101;
     private ArrayList<Model> array;
@@ -131,6 +115,7 @@ public class MainActivity extends AppCompatActivity{
     private int pastVisibleItems,visibleItemCount,totalItemCount;
     private LinearLayoutManager layoutManager;
     private AdapterRecord adapterRecord;
+    private DB db2 ;
     private androidx.coordinatorlayout.widget.CoordinatorLayout coordinatorLayout;
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
@@ -151,8 +136,8 @@ public class MainActivity extends AppCompatActivity{
         coordinatorLayout = findViewById(R.id.Relative);
         coordinatorLayout.setOnClickListener((View view) -> {
             getData();
-            System.out.println("______________________"+array.size());
         });
+
 //        loadRecords();
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -274,8 +259,8 @@ public class MainActivity extends AppCompatActivity{
         array.addAll(arrayList);
         adapterRecord = new AdapterRecord(this,array);
         recordRv.setAdapter(adapterRecord);
-        adapterRecord.notifyDataSetChanged();
     }
+    @SuppressLint("MissingInflatedId")
     private void openBottomSheet() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 MainActivity.this);
@@ -285,16 +270,16 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                        PackageManager.PERMISSION_GRANTED)
-                {
+//                if (ContextCompat.checkSelfPermission(MainActivity.this,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+//                        PackageManager.PERMISSION_GRANTED)
+//                {
                     try {
                         exportCSV();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                }
+//                }
 
                 bottomSheetDialog.dismiss();
             }
@@ -355,6 +340,63 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
+        bottomSheetView.findViewById(R.id.orders).setOnClickListener((View view) ->{
+            db2 = new DB(this);
+            String namePharm = preferences.getString("Pharma Name","null");
+           order = db2.getOrder();
+            Map<String, Object> pharmacy = new HashMap<>();
+
+
+            firestore = FirebaseFirestore.getInstance();
+
+            DocumentReference docID =  firestore.collection("pharmacy").document(namePharm);
+
+
+            pharmacy.put("name",namePharm);
+            pharmacy.put("orders",order);
+
+
+            docID.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()){
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()){
+                            Toast.makeText(
+                                    MainActivity.this,
+                                  "تم الارسال مسبقاً ... انتظر اكمال الطلب", Toast.LENGTH_SHORT).show();
+                            return;
+                        }else {
+
+                            firestore.collection(
+                                            "pharmacy")
+                                    .document(namePharm).
+                                    set(pharmacy).
+                                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+                                                Toast.makeText(
+                                                        MainActivity.this,
+                                                        R.string.done,
+                                                        Toast.LENGTH_SHORT).show();
+                                                try {
+                                                    exportCSV2();
+                                                } catch (IOException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+//                                order.clear();
+//                                db2.deleteOrder();
+
+                                            }
+                                        }
+                                    });
+
+                        }
+                    }
+                }
+            });
+        });
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
@@ -379,7 +421,13 @@ public class MainActivity extends AppCompatActivity{
         startActivityForResult(intent, 111);
 
     }
+    private void exportCSV2() throws IOException {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("csv/write");
+        intent.putExtra(Intent.EXTRA_TITLE, "my.csv");
+        startActivityForResult(intent, 123);
 
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -410,11 +458,39 @@ public class MainActivity extends AppCompatActivity{
 
             }
             break;
+            case 123: {
+                if (resultCode == RESULT_OK) {
+                    assert data != null;
+                    Uri uri = data.getData();
+                    exportData2(uri);
+                }
+            }
+            break;
+        }
+    }
+
+    private void exportData2(Uri uri) {
+        DB db = new DB(this);
+       order = db.getOrder();
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(uri);
+            for (int i = 0; i < order.size(); i++) {
+                outputStream.write(order.get(i).getName().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(",".getBytes());
+                outputStream.write("\n".getBytes());
+            }
+            outputStream.close();
+            outputStream.flush();
+            order.clear();
+            db.deleteOrder();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     private void exportData(Uri uri) {
-        progressBar.show();
+
         array = db.getAllRecords();
         try {
             OutputStream outputStream = getContentResolver().openOutputStream(uri);
@@ -560,7 +636,6 @@ public class MainActivity extends AppCompatActivity{
         boolean result = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA) ==
                 (PackageManager.PERMISSION_GRANTED);
-
         return result;
     }
 
@@ -665,6 +740,8 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
+        jobService();
+        ref.child("Users").child(deviceId).child("TimeStamp").setValue(ServerValue.TIMESTAMP);
         Expired();
     }
     private void Expired() {
@@ -677,8 +754,7 @@ public class MainActivity extends AppCompatActivity{
     public void onStart() {
         super.onStart();
         getData();
-        jobService();
-        ref.child("Users").child(deviceId).child("TimeStamp").setValue(ServerValue.TIMESTAMP);
+
     }
 
     public  void jobService() {

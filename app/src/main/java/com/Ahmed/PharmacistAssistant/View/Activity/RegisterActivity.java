@@ -90,7 +90,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 Thread t = new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-
                                         ref.child("Users").child(deviceId).child("User Name").setValue(user);
                                         ref.child("Users").child(deviceId).child("DateLogin").setValue(ServerValue.TIMESTAMP);
                                         ref.child("Users").child(deviceId).child("Expired").setValue(0);
@@ -103,12 +102,13 @@ public class RegisterActivity extends AppCompatActivity {
                                         editor.putString("Pharma Name",pharma);
                                         editor.putString("deviceId",deviceId);
                                         editor.commit();
-
                                         runOnUiThread(new Runnable() {
                                             @SuppressLint("NotifyDataSetChanged")
                                             @Override
                                             public void run() {
-                                                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+                                                startActivity(new Intent(
+                                                        RegisterActivity.this,
+                                                        LoginActivity.class));
                                                 finish();
                                             }
                                         });

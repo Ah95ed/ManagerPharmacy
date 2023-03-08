@@ -15,9 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -28,6 +32,7 @@ import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,6 +53,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.Ahmed.PharmacistAssistant.Controler.Service.MyJobService;
+import com.Ahmed.PharmacistAssistant.Controler.Service.MyReceiver;
 import com.Ahmed.PharmacistAssistant.View.Adapter.AdapterTwo;
 import com.Ahmed.PharmacistAssistant.View.Adapter.PdfDocumentAdapter;
 import com.Ahmed.PharmacistAssistant.R;
@@ -457,6 +464,31 @@ public class CameraOpenActivity extends AppCompatActivity {
         recyclerview.setLayoutManager(new LinearLayoutManager(CameraOpenActivity.this));
         recyclerview.hasFixedSize();
         recyclerview.setAdapter(adapterRecord);
+        jobService();
+
+    }
+    public  void jobService() {
+
+        MyReceiver receiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(receiver,filter);
+        ComponentName componentName = new ComponentName(CameraOpenActivity.this, MyJobService.class);
+        JobInfo info;
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N){
+            info= new JobInfo.Builder(10,componentName)
+                    .setPeriodic(5000)
+                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                    .build();
+        }
+        else
+        {
+            info= new JobInfo.Builder(10,componentName)
+                    .setMinimumLatency(5000)
+                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                    .build();
+        }
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.schedule(info);
 
     }
 

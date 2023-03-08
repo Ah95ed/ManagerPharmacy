@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:layout_toEndOf="@+id/moreBtn"
+            android:layout_toEndOf="@+id/moreLinear"
             android:text="@string/name"
             android:textColor="@color/black"
             android:textSize="18sp" />
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_name"
-            android:layout_toEndOf="@+id/moreBtn"
+            android:layout_toEndOf="@+id/moreLinear"
             android:padding="5dp"
             android:text="@string/purchase"
             android:textColor="@color/black"
@@ -40,23 +40,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_cost"
-            android:layout_toEndOf="@+id/moreBtn"
+            android:layout_toEndOf="@+id/moreLinear"
             android:padding="5dp"
             android:text="@string/sell"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
-        <ImageButton
-            android:id="@+id/moreBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="15dp"
-            android:background="@android:color/transparent"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            android:src="@drawable/ic_more"
-            tools:ignore="SpeakableTextPresentCheck" />
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/moreLinear"
+             android:layout_marginStart="5dp"
+             android:layout_marginTop="15dp"
+             android:background="@android:color/transparent"
+
+             android:orientation="vertical">
+             <ImageButton
+                 android:layout_width="wrap_content"
+                 android:id="@+id/moreBtn"
+                 android:layout_height="match_parent"
+                 android:src="@drawable/ic_more"
+                 android:background="@android:color/transparent"
+                 android:minWidth="48dp"
+                 android:minHeight="48dp"
+                 />
+             <ImageButton
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/send"
+                 android:src="@drawable/ic_add_black"
+                 android:background="@android:color/transparent"
+                 android:minWidth="48dp"
+                 android:minHeight="48dp"
+                 />
+         </LinearLayout>
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/moreBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:minWidth="48dp"-->
+<!--            android:minHeight="48dp"-->
+<!--            android:src="@drawable/ic_more"-->
+<!--            tools:ignore="SpeakableTextPresentCheck" />-->
 
     </RelativeLayout>
 

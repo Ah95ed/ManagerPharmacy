@@ -59,4 +59,6 @@
     <string name="quantity_item">الكمية</string>
     <string name="quantity">الكمية</string>
     <string name="pharma_name">اسم الصيدلية</string>
+    <string name="orders">ارسال الطلبات</string>
+    <string name="done">تم الارسال</string>
 </resources>

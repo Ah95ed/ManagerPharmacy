@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.Ahmed.PharmacistAssistant.model.Debts;
 import com.Ahmed.PharmacistAssistant.model.Favorite;
 import com.Ahmed.PharmacistAssistant.model.Model;
+import com.Ahmed.PharmacistAssistant.model.Order;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class DB extends SQLiteOpenHelper {
     public static final String id="id";
     public static final String quantity="quantity";
     public static final String DB_TABLE = "Favorite";
+    public static final String TB_ORDER = "ORD";
     public static final String TB_DEBT = "DEBTS";
     public static final String C_ID = "id";
     public static final String C_NAME = "name";
@@ -30,7 +32,7 @@ public class DB extends SQLiteOpenHelper {
     public static final String C_NUMBER = "number";
 //    public static final String TB_DEBT = "DEBTS";
     public DB(Context context) {
-        super(context, Dbname,null, 2);
+        super(context, Dbname,null, 4);
         SQLiteDatabase db =this.getWritableDatabase();
     }
 
@@ -43,6 +45,8 @@ public class DB extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL( " create table " + TB_DEBT +
                 "(" +C_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT ,number TEXT,time TEXT,description TEXT)" );
+        sqLiteDatabase.execSQL( " CREATE TABLE " + TB_ORDER +
+                "(" +C_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT UNIQUE NOT NULL )" );
 
     }
 
@@ -50,8 +54,21 @@ public class DB extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS " + DB_TABLE);
         sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS " + TB_DEBT);
+        sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS " + TB_ORDER);
         onCreate(sqLiteDatabase);
     }
+
+    public boolean addOrder(String name){
+        ContentValues cv = new ContentValues();
+        cv.put(C_NAME,name);
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.insert(TB_ORDER,null,cv);
+        if (result == -1)
+            return false;
+        else
+            return true;
+        }
+
     public boolean add(Favorite model) {
         ContentValues cv = new ContentValues();
         cv.put(name, model.getName());
@@ -81,6 +98,20 @@ public class DB extends SQLiteOpenHelper {
         else
             return true;
     }
+    public ArrayList<Order> getOrder(){
+        ArrayList<Order> orders = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TB_ORDER + " WHERE " + id;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if (cursor.moveToFirst()){
+            do {
+                Order order = new Order(cursor.getString(1));
+                orders.add(order);
+            }while (cursor.moveToNext());
+        }
+        db.close();
+        return orders;
+    }
     public ArrayList<Debts> getDebts(String id){
         ArrayList<Debts> debts = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TB_DEBT + " WHERE " + id;
@@ -102,7 +133,11 @@ public class DB extends SQLiteOpenHelper {
         db.close();
         return debts;
     }
-
+   public void deleteOrder(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TB_ORDER);
+        db.close();
+    }
     public void deletedItem(String id){
         SQLiteDatabase db=this.getWritableDatabase();
         db.delete(TB_DEBT,C_ID + " =?",new String[]{id});

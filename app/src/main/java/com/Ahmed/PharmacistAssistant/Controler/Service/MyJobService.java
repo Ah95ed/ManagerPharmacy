@@ -10,16 +10,13 @@ import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.Ahmed.PharmacistAssistant.View.Activity.RegisterActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.text.ParseException;
 import java.util.Date;
 
@@ -63,14 +60,14 @@ public class MyJobService extends JobService {
                     long differenceDates = difference / (24 * 60 * 60 * 1000);
                     String dayDifference = Long.toString(differenceDates);
                     /**
-                     * ُExpired that mean user in day use app
+                     * Expired that mean user in day use app
                      *
                      * أذا كان تاريخ الاستخدام اقل من differenceDates
                      */
                     if (differenceDates >= Expired){
                         ref.child("Users").child(deviceId).child("key").setValue("");
                         ref.child("Users").child(deviceId).child("DateLogin").setValue("");
-                        ref.child("Users").child(deviceId).child("Expired").setValue("");
+                        ref.child("Users").child(deviceId).child("Expired").setValue(0);
                         preferences = getSharedPreferences("My preferences", MODE_PRIVATE);
                     editor = preferences.edit();
                     editor.clear();
