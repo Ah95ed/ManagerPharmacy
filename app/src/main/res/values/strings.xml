@@ -64,5 +64,6 @@ But !!! Make sure
     <string name="pharma_name" translatable="false">Pharma Name</string>
     <string name="orders" translatable="false">Send Orders</string>
     <string name="done" translatable="false">send Done</string>
+    <string name="errors" translatable="false">error</string>
 
 </resources>

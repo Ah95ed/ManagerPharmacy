@@ -40,6 +40,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.Ahmed.PharmacistAssistant.Controler.GpsTracker;
 import com.Ahmed.PharmacistAssistant.Controler.database.DB;
 import com.Ahmed.PharmacistAssistant.View.Adapter.AdapterRecord;
 import com.Ahmed.PharmacistAssistant.Controler.Service.MyJobService;
@@ -84,7 +86,6 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView recordRv;
     private  ArrayList<Order> order;
     private BottomNavigationView navigationView;
-    private androidx.core.widget.ContentLoadingProgressBar progressBar;
     private DBSqlite db;
     private ActionBar actionBar;
     private FirebaseFirestore firestore ;
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity{
     private LinearLayoutManager layoutManager;
     private AdapterRecord adapterRecord;
     private DB db2 ;
+    private GpsTracker tracker;
     private androidx.coordinatorlayout.widget.CoordinatorLayout coordinatorLayout;
     @SuppressLint({"HardwareIds", "SimpleDateFormat", "MissingInflatedId"})
     @Override
@@ -126,9 +128,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         db = new DBSqlite(this);
         array = new ArrayList<>();
-        progressBar = findViewById(R.id.progress);
-        progressBar.hide();
-        progressBar.setVisibility(View.GONE);
+
         navigationView = findViewById(R.id.bottomnavigtionView);
         navigationView.setBackground(null);
         search = findViewById(R.id.search);
@@ -137,7 +137,17 @@ public class MainActivity extends AppCompatActivity{
         coordinatorLayout.setOnClickListener((View view) -> {
             getData();
         });
+        tracker = new GpsTracker(this);
+                if (ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
 
+
+                }
+                else  {
+                    askPermission();
+//                tracker.showSettingsAlert();
+                }
 //        loadRecords();
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -251,7 +261,13 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
-
+    private void askPermission() {
+        tracker.showSettingsAlert();
+        ActivityCompat.requestPermissions(
+                MainActivity.this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     private void getData(){
@@ -270,10 +286,6 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (ContextCompat.checkSelfPermission(MainActivity.this,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-//                        PackageManager.PERMISSION_GRANTED)
-//                {
                     try {
                         exportCSV();
                     } catch (IOException e) {
@@ -343,7 +355,7 @@ public class MainActivity extends AppCompatActivity{
         bottomSheetView.findViewById(R.id.orders).setOnClickListener((View view) ->{
             db2 = new DB(this);
             String namePharm = preferences.getString("Pharma Name","null");
-           order = db2.getOrder();
+            order = db2.getOrder();
             Map<String, Object> pharmacy = new HashMap<>();
 
 
@@ -354,6 +366,7 @@ public class MainActivity extends AppCompatActivity{
 
             pharmacy.put("name",namePharm);
             pharmacy.put("orders",order);
+            pharmacy.put("lati_long",tracker.getLatitude()+","+tracker.getLongitude());
 
 
             docID.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -367,31 +380,31 @@ public class MainActivity extends AppCompatActivity{
                                   "تم الارسال مسبقاً ... انتظر اكمال الطلب", Toast.LENGTH_SHORT).show();
                             return;
                         }else {
-
-                            firestore.collection(
-                                            "pharmacy")
-                                    .document(namePharm).
-                                    set(pharmacy).
-                                    addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()){
-                                                Toast.makeText(
-                                                        MainActivity.this,
-                                                        R.string.done,
-                                                        Toast.LENGTH_SHORT).show();
-                                                try {
-                                                    exportCSV2();
-                                                } catch (IOException e) {
-                                                    throw new RuntimeException(e);
+                            if (tracker.canGetLocation()){
+                                firestore.collection(
+                                                "pharmacy")
+                                        .document(namePharm).
+                                        set(pharmacy).
+                                        addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    Toast.makeText(
+                                                            MainActivity.this,
+                                                            R.string.done,
+                                                            Toast.LENGTH_SHORT).show();
+                                                    try {
+                                                        exportCSV2();
+                                                    } catch (IOException e) {
+                                                        throw new RuntimeException(e);
+                                                    }
+                                                    bottomSheetDialog.dismiss();
                                                 }
-//                                order.clear();
-//                                db2.deleteOrder();
-
                                             }
-                                        }
-                                    });
-
+                                        });
+                            }else {
+                                Toast.makeText(MainActivity.this, R.string.errors, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 }
@@ -515,7 +528,7 @@ public class MainActivity extends AppCompatActivity{
 
             outputStream.close();
             outputStream.flush();
-            progressBar.hide();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -524,8 +537,6 @@ public class MainActivity extends AppCompatActivity{
 
     private void importData(Uri uri) {
 
-        progressBar.show();
-        progressBar.setVisibility(View.VISIBLE);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -558,8 +569,6 @@ public class MainActivity extends AppCompatActivity{
                         @SuppressLint("NotifyDataSetChanged")
                         @Override
                         public void run() {
-                            progressBar.hide();
-                            progressBar.setVisibility(View.INVISIBLE);
                             onStart();
                         }
                     });

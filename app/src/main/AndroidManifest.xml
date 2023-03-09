@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
+
     <uses-permission
         android:name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,17 +26,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManagerPharmacy"
         tools:ignore="DataExtractionRules"
-        tools:targetApi="s">
+        tools:targetApi="s" >
+        <activity
+            android:name=".View.Activity.OrderActivity"
+            android:exported="true"/>
         <activity
             android:name=".View.Activity.Add_Debts_Activity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".View.Activity.DebtsActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -46,7 +53,7 @@
         <receiver
             android:name=".Controler.Service.MyReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action
                     android:name="android.net.conn.CONNECTIVITY_CHANGE"
@@ -58,13 +65,11 @@
         <activity
             android:name=".View.Activity.RegisterActivity"
             android:exported="true" >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".View.Activity.LoginActivity"
@@ -87,13 +92,11 @@
             android:exported="true" />
         <activity
             android:name=".View.Activity.MainActivity"
-            android:exported="true"/>
-<!--        <activity-->
-<!--            android:name=".Controler.Service.Capture"-->
-<!--            android:screenOrientation="fullSensor"-->
-<!--            android:stateNotNeeded="true"-->
-<!--            android:theme="@style/zxing_CaptureTheme" />-->
-
+            android:exported="true" /> <!-- <activity -->
+        <!-- android:name=".Controler.Service.Capture" -->
+        <!-- android:screenOrientation="fullSensor" -->
+        <!-- android:stateNotNeeded="true" -->
+        <!-- android:theme="@style/zxing_CaptureTheme" /> -->
         <service
             android:name=".Controler.Service.MyJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
@@ -102,7 +105,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.Ahmed.PharmacistAssistant.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/providerpaths" />
