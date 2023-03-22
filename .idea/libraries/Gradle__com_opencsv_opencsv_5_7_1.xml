@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.opencsv:opencsv:5.7.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.5-all/caches/modules-2/files-2.1/com.opencsv/opencsv/5.7.1/d707c095bc8c7c22fb3e377de774458a76229da4/opencsv-5.7.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-8.0-bin/caches/modules-2/files-2.1/com.opencsv/opencsv/5.7.1/d707c095bc8c7c22fb3e377de774458a76229da4/opencsv-5.7.1.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.5-all/caches/modules-2/files-2.1/com.opencsv/opencsv/5.7.1/1ed62adf91fffd260ce9fbc87736d8ea33ab138b/opencsv-5.7.1-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.opencsv/opencsv/5.7.1/1ed62adf91fffd260ce9fbc87736d8ea33ab138b/opencsv-5.7.1-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-7.5-all/caches/modules-2/files-2.1/com.opencsv/opencsv/5.7.1/b6c639c7975af3f1e21683eb237687db771d1856/opencsv-5.7.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.opencsv/opencsv/5.7.1/b6c639c7975af3f1e21683eb237687db771d1856/opencsv-5.7.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
