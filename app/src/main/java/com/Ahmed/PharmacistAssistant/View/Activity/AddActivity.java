@@ -48,7 +48,7 @@ public class AddActivity extends AppCompatActivity {
     private ToneGenerator toneGen1;
     private CodeScanner codeScanner;
     private CodeScannerView scannerView;
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,9 +68,10 @@ public class AddActivity extends AppCompatActivity {
                  C_year = calendar.get(Calendar.YEAR);
                  C_month = calendar.get(Calendar.MONTH);
                  C_day = calendar.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog dialog  =
+                @SuppressLint("ClickableViewAccessibility") DatePickerDialog dialog  =
                         new DatePickerDialog(
                                 AddActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         dateEt.setText(year+"-"+month+"-"+dayOfMonth);
@@ -172,44 +173,7 @@ public class AddActivity extends AppCompatActivity {
                 codeScanner.startPreview();
             }
         });
-//        barcodeView = v.findViewById(R.id.barcode_scanner);
-//        cameraSettings =new CameraSettings();
-//        cameraSettings.setRequestedCameraId(0);
-//        cameraSettings.setAutoFocusEnabled(true);
-//        barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-//        barcodeView.resume();
-//        barcodeView.decodeSingle(new BarcodeCallback() {
-//            @Override
-//            public void barcodeResult(BarcodeResult result) {
-//                if (result.getText() != null) {
-//                    codeEt.setText(result.getText());
-//                    barcodeView.pause();
-//                    dialog.dismiss();
-//                    isFlash =false;
-//                }
-//            }
-//        });
-//        AppCompatButton flash = v.findViewById(R.id.flash);
-//        AppCompatButton Close = v.findViewById(R.id.close);
-//        Close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                barcodeView.pause();
-//                dialog.dismiss();
-//            }
-//        });
-//        flash.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!isFlash){
-//                    barcodeView.setTorchOn();
-//                    isFlash = true;
-//                }else{
-//                    barcodeView.setTorchOff();
-//                    isFlash = false;
-//                }
-//            }
-//        });
+
         dialog.setView(v);
         dialog.show();
     }
@@ -231,38 +195,5 @@ public class AddActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-//    private boolean checkStoragePermission(){
-//        boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-//        return result;
-//    }
-//    private void requestStoragePermission(){
-//        ActivityCompat.requestPermissions(this,storagePermissions,STORAGE_REQUEST_CODE);
-//    }
-//    private boolean checkCameraPermissions(){
-//        boolean result1 = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-//        boolean result2 = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-//        return result1 && result2;
-//    }
-//    private void requestCameraPermission()
-//    {
-//        ActivityCompat.requestPermissions(this,cameraPermissions,CAMERA_REQUEST_CODE);
-//    }
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        switch (requestCode){
-//            case CAMERA_REQUEST_CODE:{
-//                boolean cameraAccepted =grantResults[0]==PackageManager.PERMISSION_GRANTED;
-//                boolean storageAccepted =grantResults[1]==PackageManager.PERMISSION_GRANTED;
-//                if (cameraAccepted && storageAccepted)
-//                {
-//                    checkCameraPermissions();
-//                    checkStoragePermission();
-//                }else {
-//                    requestCameraPermission();
-//                    requestStoragePermission();
-//                }
-//            }
-//        }
-//    }
+
 }

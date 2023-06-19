@@ -200,10 +200,10 @@ public class MainActivity extends AppCompatActivity{
         calendar = Calendar.getInstance();
         simple = new SimpleDateFormat("dd-MM-yyyy");
         date = simple.format(calendar.getTime());
-        ref = FirebaseDatabase.getInstance()
-                .getReferenceFromUrl("https://manager-pharmacy-default-rtdb.firebaseio.com/");
-        deviceId = Settings.Secure.getString(getApplicationContext().
-                getContentResolver(), Settings.Secure.ANDROID_ID);
+//        ref = FirebaseDatabase.getInstance()
+//                .getReferenceFromUrl("https://manager-pharmacy-default-rtdb.firebaseio.com/");
+//        deviceId = Settings.Secure.getString(getApplicationContext().
+//                getContentResolver(), Settings.Secure.ANDROID_ID);
         try {
             @SuppressLint("DiscouragedPrivateApi")
             Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
@@ -275,6 +275,10 @@ public class MainActivity extends AppCompatActivity{
         array.addAll(arrayList);
         adapterRecord = new AdapterRecord(this,array);
         recordRv.setAdapter(adapterRecord);
+int i =0;
+        for (Model md :arrayList ) {
+            Log.d("GETDATA___", md.getName()+"  " +  i++);
+        }
     }
     @SuppressLint("MissingInflatedId")
     private void openBottomSheet() {
@@ -749,9 +753,9 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        jobService();
-        ref.child("Users").child(deviceId).child("TimeStamp").setValue(ServerValue.TIMESTAMP);
-        Expired();
+//        jobService();
+//        ref.child("Users").child(deviceId).child("TimeStamp").setValue(ServerValue.TIMESTAMP);
+//        Expired();
     }
     private void Expired() {
         preferences = getSharedPreferences("My preferences", MODE_PRIVATE);
@@ -766,28 +770,28 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    public  void jobService() {
-
-        MyReceiver receiver = new MyReceiver();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(receiver,filter);
-        ComponentName componentName = new ComponentName(MainActivity.this, MyJobService.class);
-        JobInfo info;
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N){
-            info= new JobInfo.Builder(10,componentName)
-                    .setPeriodic(5000)
-                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                    .build();
-        }
-        else
-        {
-            info= new JobInfo.Builder(10,componentName)
-                    .setMinimumLatency(5000)
-                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                    .build();
-        }
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        scheduler.schedule(info);
-
-    }
+//    public  void jobService() {
+//
+//        MyReceiver receiver = new MyReceiver();
+//        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+//        registerReceiver(receiver,filter);
+//        ComponentName componentName = new ComponentName(MainActivity.this, MyJobService.class);
+//        JobInfo info;
+//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N){
+//            info= new JobInfo.Builder(10,componentName)
+//                    .setPeriodic(5000)
+//                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+//                    .build();
+//        }
+//        else
+//        {
+//            info= new JobInfo.Builder(10,componentName)
+//                    .setMinimumLatency(5000)
+//                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+//                    .build();
+//        }
+//        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+//        scheduler.schedule(info);
+//
+//    }
 }

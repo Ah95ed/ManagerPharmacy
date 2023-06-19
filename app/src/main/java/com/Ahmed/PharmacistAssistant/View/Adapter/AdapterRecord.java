@@ -10,11 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.Ahmed.PharmacistAssistant.Controler.database.DB;
 import com.Ahmed.PharmacistAssistant.View.Activity.AddActivity;
 import com.Ahmed.PharmacistAssistant.Controler.database.DBSqlite;
@@ -79,9 +77,9 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
 
             }
         });
-        holder.addBtn.setOnClickListener((View view) -> {
-            addData(name);
-        });
+//        holder.addBtn.setOnClickListener((View view) -> {
+//            addData(name);
+//        });
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -130,7 +128,7 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
             tv_cost = itemView.findViewById(R.id.tv_cost);
             tv_sell = itemView.findViewById(R.id.tv_sell);
             moreBtn = itemView.findViewById(R.id.moreBtn);
-            addBtn = itemView.findViewById(R.id.send);
+//            addBtn = itemView.findViewById(R.id.send);
         }
 
     }

@@ -64,13 +64,7 @@
 
         <activity
             android:name=".View.Activity.RegisterActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".View.Activity.LoginActivity"
             android:exported="true" />
@@ -92,7 +86,13 @@
             android:exported="true" />
         <activity
             android:name=".View.Activity.MainActivity"
-            android:exported="true" /> <!-- <activity -->
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- <activity -->
         <!-- android:name=".Controler.Service.Capture" -->
         <!-- android:screenOrientation="fullSensor" -->
         <!-- android:stateNotNeeded="true" -->
