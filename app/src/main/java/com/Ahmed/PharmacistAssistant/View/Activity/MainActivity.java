@@ -2,6 +2,8 @@
 package com.Ahmed.PharmacistAssistant.View.Activity;
 
 
+import static com.Ahmed.PharmacistAssistant.R.*;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -82,7 +84,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
-    private com.google.android.material.floatingactionbutton.FloatingActionButton floatingActionButton;
+    private com.google.android.material.floatingactionbutton.FloatingActionButton
+            floatingActionButton;
     private RecyclerView recordRv;
     private  ArrayList<Order> order;
     private BottomNavigationView navigationView;
@@ -195,15 +198,10 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
-//        jobService();
         calendar = Calendar.getInstance();
         simple = new SimpleDateFormat("dd-MM-yyyy");
         date = simple.format(calendar.getTime());
-//        ref = FirebaseDatabase.getInstance()
-//                .getReferenceFromUrl("https://manager-pharmacy-default-rtdb.firebaseio.com/");
-//        deviceId = Settings.Secure.getString(getApplicationContext().
-//                getContentResolver(), Settings.Secure.ANDROID_ID);
+
         try {
             @SuppressLint("DiscouragedPrivateApi")
             Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
@@ -336,8 +334,8 @@ int i =0;
                 bottomSheetDialog.dismiss();
             }
         });
-
-        bottomSheetView.findViewById(R.id.delet).setOnClickListener(new View.OnClickListener() {
+        bottomSheetView.findViewById(R.id.delet).setOnClickListener(
+                new View.OnClickListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View view) {
@@ -353,67 +351,66 @@ int i =0;
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this,DebtsActivity.class));
                 bottomSheetDialog.dismiss();
-
             }
         });
-        bottomSheetView.findViewById(R.id.orders).setOnClickListener((View view) ->{
-            db2 = new DB(this);
-            String namePharm = preferences.getString("Pharma Name","null");
-            order = db2.getOrder();
-            Map<String, Object> pharmacy = new HashMap<>();
-
-
-            firestore = FirebaseFirestore.getInstance();
-
-            DocumentReference docID =  firestore.collection("pharmacy").document(namePharm);
-
-
-            pharmacy.put("name",namePharm);
-            pharmacy.put("orders",order);
-            pharmacy.put("lati_long",tracker.getLatitude()+","+tracker.getLongitude());
-
-
-            docID.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()){
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()){
-                            Toast.makeText(
-                                    MainActivity.this,
-                                  "تم الارسال مسبقاً ... انتظر اكمال الطلب", Toast.LENGTH_SHORT).show();
-                            return;
-                        }else {
-                            if (tracker.canGetLocation()){
-                                firestore.collection(
-                                                "pharmacy")
-                                        .document(namePharm).
-                                        set(pharmacy).
-                                        addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()){
-                                                    Toast.makeText(
-                                                            MainActivity.this,
-                                                            R.string.done,
-                                                            Toast.LENGTH_SHORT).show();
-                                                    try {
-                                                        exportCSV2();
-                                                    } catch (IOException e) {
-                                                        throw new RuntimeException(e);
-                                                    }
-                                                    bottomSheetDialog.dismiss();
-                                                }
-                                            }
-                                        });
-                            }else {
-                                Toast.makeText(MainActivity.this, R.string.errors, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                }
-            });
-        });
+        bottomSheetView.findViewById(R.id.orders).setOnClickListener((View view) -> {
+            Toast.makeText(MainActivity.this,
+                    "Ahmed",
+                    Toast.LENGTH_SHORT).show();
+                });
+//        bottomSheetView.findViewById(R.id.orders).setOnClickListener((View view) ->{
+//            db2 = new DB(this);
+//            String namePharm = preferences.getString("Pharma Name","null");
+//            order = db2.getOrder();
+//            Map<String, Object> pharmacy = new HashMap<>();
+//            firestore = FirebaseFirestore.getInstance();
+//            DocumentReference docID =  firestore.collection("pharmacy").document(namePharm);
+//            pharmacy.put("name",namePharm);
+//            pharmacy.put("orders",order);
+//            pharmacy.put("lati_long",tracker.getLatitude()+","+tracker.getLongitude());
+//            docID.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()){
+//                        DocumentSnapshot document = task.getResult();
+//                        if (document.exists()){
+//                            Toast.makeText(
+//                                    MainActivity.this,
+//                                  "تم الارسال مسبقاً ... انتظر اكمال الطلب", Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }else {
+//                            if (tracker.canGetLocation()){
+//                                firestore.collection(
+//                                                "pharmacy")
+//                                        .document(namePharm).
+//                                        set(pharmacy).
+//                                        addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<Void> task) {
+//                                                if (task.isSuccessful()){
+//                                                    Toast.makeText(
+//                                                            MainActivity.this,
+//                                                            R.string.done,
+//                                                            Toast.LENGTH_SHORT).show();
+//                                                    try {
+//                                                        exportCSV2();
+//                                                    } catch (IOException e) {
+//                                                        throw new RuntimeException(e);
+//                                                    }
+//                                                    bottomSheetDialog.dismiss();
+//                                                }
+//                                            }
+//                                        });
+//                            }else {
+//                                Toast.makeText(MainActivity.this,
+//                                        R.string.errors,
+//                                        Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+//        });
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }

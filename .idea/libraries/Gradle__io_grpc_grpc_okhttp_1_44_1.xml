@@ -1,5 +1,6 @@
 <component name="libraryTable">
-  <library name="Gradle: io.grpc:grpc-okhttp:1.44.1">
+  <library name="Gradle: io.grpc:grpc-okhttp:1.44.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="io.grpc" artifactId="grpc-okhttp" version="1.44.1" />
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-okhttp/1.44.1/577c61816b27a2af018070d00ef8ff18c009b10a/grpc-okhttp-1.44.1.jar!/" />
     </CLASSES>

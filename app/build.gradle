@@ -5,7 +5,7 @@ plugins {
 
 android {
 
-    compileSdk 33
+    compileSdk 34
     buildFeatures {
         viewBinding true
     }
@@ -13,9 +13,10 @@ android {
     defaultConfig {
         applicationId "com.Ahmed.managerpharmacy"
         minSdk 24
-        targetSdk 33
-        versionCode 6
-        versionName "3.1"
+        //noinspection OldTargetApi
+        targetSdk 34
+        versionCode 7
+        versionName "3.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,4 +53,5 @@ dependencies {
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
+
 }

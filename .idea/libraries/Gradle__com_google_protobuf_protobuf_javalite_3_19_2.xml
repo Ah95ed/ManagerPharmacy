@@ -1,5 +1,6 @@
 <component name="libraryTable">
-  <library name="Gradle: com.google.protobuf:protobuf-javalite:3.19.2">
+  <library name="Gradle: com.google.protobuf:protobuf-javalite:3.19.2" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.google.protobuf" artifactId="protobuf-javalite" version="3.19.2" />
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-javalite/3.19.2/552a872042d49951a83b96b6eb5bcd9e8e4e42fd/protobuf-javalite-3.19.2.jar!/" />
     </CLASSES>
