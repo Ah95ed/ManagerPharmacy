@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity{
     private BottomNavigationView navigationView;
     private DBSqlite db;
     private ActionBar actionBar;
-    private FirebaseFirestore firestore ;
+//    private FirebaseFirestore firestore ;
     private static final byte CAMERA_REQUEST_CODE = 100;
     private static final byte SPEECH_REQUEST = 101;
     private ArrayList<Model> array;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity{
     private String[] cameraPermissions;
     private DatabaseReference ref;
     private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+//    private SharedPreferences.Editor editor;
     private String deviceId,date;
     private Calendar calendar;
     private SimpleDateFormat simple;
