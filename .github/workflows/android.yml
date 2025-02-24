@@ -27,5 +27,5 @@ jobs:
       - name: Upload APK Artifacts (Individual Files)
         uses: actions/upload-artifact@v4
         with:
-          path: app/release/app-pharm-release.apk
+          path: app/release/app-release.apk
 
