@@ -149,9 +149,8 @@ public class MainActivity extends AppCompatActivity{
                 }
                 else  {
                     askPermission();
-//                tracker.showSettingsAlert();
                 }
-//        loadRecords();
+
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -232,11 +231,6 @@ public class MainActivity extends AppCompatActivity{
                 .build();
         remoteConfig.setConfigSettingsAsync(configSettings);
         recordRv.setLayoutManager(layoutManager);
-//        recordRv.setOnClickListener((View view) -> {
-//            getData();
-//            onStart();
-//            System.out.println("______________________"+array.size());
-//        });
         recordRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
