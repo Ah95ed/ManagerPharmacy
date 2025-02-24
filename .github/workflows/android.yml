@@ -23,11 +23,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-
-      - name: Build APKs
         run: ./gradlew assembleRelease
       - name: Upload APK Artifacts (Individual Files)
         uses: actions/upload-artifact@v4
         with:
-          path: build/app/outputs/flutter-apk/app-Pharm-release.apk
+          path: build/app/outputs/flutter-apk/app-pharm-release.apk
 
