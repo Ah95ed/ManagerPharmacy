@@ -1,5 +1,6 @@
 package com.Ahmed.PharmacistAssistant.Controler.Service;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -29,10 +30,11 @@ public void onDestroy() {
         super.onDestroy();
         }
 
+@SuppressLint("ForegroundServiceType")
 @Override
 public int onStartCommand(Intent intent, int flags, int startId) {
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent =PendingIntent.getActivity(this,0,notificationIntent,0);
+        PendingIntent pendingIntent =PendingIntent.getActivity(this,0,notificationIntent, PendingIntent.FLAG_IMMUTABLE);
         Notification notification = new NotificationCompat.Builder(this,"CHANNEL_ID")
         .setContentTitle("Recording Service")
         .setContentText("Running")
