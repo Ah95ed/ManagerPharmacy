@@ -1,49 +1,47 @@
-name: Android CI
+name: Create Release
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v*' # يتم تشغيل الـ Workflow عند إنشاء تاج (مثل v1.0.0)
 
 jobs:
-  build:
-
+  build-and-release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get Current Date
-        id: date
-        run: echo "DATE=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Create Tag
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build AAB/APK
         run: |
-          git tag v1.0.${{ env.DATE }}
-          git push origin v1.0.${{ env.DATE }}
+          ./gradlew assembleRelease # لبناء APK موقعة
+          # أو استخدم:
+          # ./gradlew bundleRelease # لبناء AAB
 
-      - name: Create GitHub Release
+      - name: Get Version Name
+        id: version
+        run: |
+          VERSION=$(grep "versionName" app/build.gradle | awk '{print $2}' | tr -d '"')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v1.0.${{ env.DATE }}
-          files: app/build/outputs/apk/release/app-release.apk
+          tag_name: ${{ github.ref }}
+          name: Release ${{ steps.version.outputs.version }}
+          body: |
+            تم بناء التطبيق بنجاح. الملفات المرفقة:
+            - APK/AAB
+          files: |
+            app/build/outputs/apk/release/app-release.apk
+            # أو استخدم مسار AAB:
+            # app/build/outputs/bundle/release/app-release.aab
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#      - uses: actions/checkout@v4
-#      - name: set up JDK 11
-#        uses: actions/setup-java@v4
-#        with:
-#          java-version: '11'
-#          distribution: 'temurin'
-#          cache: gradle
-#
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x gradlew
-#      - name: Build with Gradle
-#        run: ./gradlew build
-#      - name: Create GitHub Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#           files: app/build/outputs/apk/release/app-release.apk
-#        env:
-#            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
