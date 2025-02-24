@@ -47,7 +47,7 @@ public class GpsTracker extends Service implements LocationListener {
         this.mContext = context;
         getLocation();
     }
-
+// get location
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
