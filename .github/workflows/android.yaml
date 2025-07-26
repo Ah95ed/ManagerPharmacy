@@ -23,11 +23,6 @@ jobs:
       - name: Grant execute permission for Gradle
         run: chmod +x ./gradlew
 
-      - name: Clean Project
-        run: ./gradlew clean
-
-      - name: Build Release APK
-        run: ./gradlew assembleRelease
 
       - name: Show APK directory contents
         run: ls -R app/build/outputs/apk/
@@ -45,13 +40,13 @@ jobs:
         run: ./gradlew assembleRelease
 
       # Debug: يمكنك إزالة هذا لاحقاً، فقط للتأكد أن الملف موجود
-      - name: Copy dummy file if APK missing (optional debug)
-        if: ${{ !startsWith(runner.os, 'Windows') }}
-        run: |
-          if [ ! -f app/build/outputs/apk/release/app-release.apk ]; then
-            echo "No APK found, adding dummy file."
-            echo "This is a dummy APK file" > app/build/outputs/apk/release/app-release.apk
-          fi
+#      - name: Copy dummy file if APK missing (optional debug)
+#        if: ${{ !startsWith(runner.os, 'Windows') }}
+#        run: |
+#          if [ ! -f app/build/outputs/apk/release/app-release.apk ]; then
+#            echo "No APK found, adding dummy file."
+#            echo "This is a dummy APK file" > app/build/outputs/apk/release/app-release.apk
+#          fi
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
