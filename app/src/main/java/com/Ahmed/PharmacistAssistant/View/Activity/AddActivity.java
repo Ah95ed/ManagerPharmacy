@@ -29,21 +29,14 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
-//import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-//import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 public class AddActivity extends AppCompatActivity {
     private EditText nameEt,codeEt,CostPriceEt,sellPriceEt ,dateEt,quantityEt;
-//    public static DecoratedBarcodeView barcodeView;
-//    public static CameraSettings cameraSettings;
-
-    private static final byte CAMERA_REQUEST_CODE=100;
-    private static final byte STORAGE_REQUEST_CODE=102;
     private String[] cameraPermissions;
     public static String ID,name,code,cost,sell,date,quantity;
     private DBSqlite dataBase;
     private boolean isEditMode = false;
-    private boolean isFlash = false ;
+//    private boolean isFlash = false ;
     private int C_day,C_month,C_year;
     private ToneGenerator toneGen1;
     private CodeScanner codeScanner;
