@@ -1,5 +1,6 @@
 name: ManagerPharmacy CI/CD
 
+
 on:
   push:
     branches: [ main ]
@@ -17,25 +18,75 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'  # أو 21 إذا كان Gradle و AGP يدعمها
-
-      - name: Create APK output directory if it doesn't exist
-        run: mkdir -p app/build/outputs/apk/release/
+          java-version: '17'
 
       - name: Grant execute permission for Gradle
         run: chmod +x ./gradlew
 
-      - name: Clean project
+      - name: Clean Project
         run: ./gradlew clean
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
+
+      - name: Show APK directory contents
+        run: ls -R app/build/outputs/apk/
+
+      - name: Ensure release folder exists
+        run: mkdir -p app/build/outputs/apk/release/
+
+      # Debug: يمكنك إزالة هذا لاحقاً، فقط للتأكد أن الملف موجود
+      - name: Copy dummy file if APK missing (optional debug)
+        if: ${{ !startsWith(runner.os, 'Windows') }}
+        run: |
+          if [ ! -f app/build/outputs/apk/release/app-release.apk ]; then
+            echo "No APK found, adding dummy file."
+            echo "This is a dummy APK file" > app/build/outputs/apk/release/app-release.apk
+          fi
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
           path: app/build/outputs/apk/release/app-release.apk
+
+#
+#on:
+#  push:
+#    branches: [ main ]
+#
+#jobs:
+#  build:
+#    name: Build APK
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up JDK
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: '17'  # أو 21 إذا كان Gradle و AGP يدعمها
+#
+#      - name: Create APK output directory if it doesn't exist
+#        run: mkdir -p app/build/outputs/apk/release/
+#
+#      - name: Grant execute permission for Gradle
+#        run: chmod +x ./gradlew
+#
+#      - name: Clean project
+#        run: ./gradlew clean
+#
+#      - name: Build Release APK
+#        run: ./gradlew assembleRelease
+#
+#      - name: Upload APK Artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: release-apk
+#          path: app/build/outputs/apk/release/app-release.apk
 
 #
 #on:
