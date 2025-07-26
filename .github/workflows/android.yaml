@@ -1,0 +1,86 @@
+name: ManagerPharmacy CI/CD
+name: Android Java CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # أو 21 إذا كان Gradle و AGP يدعمها
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x ./gradlew
+
+      - name: Clean project
+        run: ./gradlew clean
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: app/build/outputs/apk/release/app-release.apk
+
+#
+#on:
+#  push:
+#    branches: [ main ]
+#
+#jobs:
+#  build_android:
+#    name: APK Build
+#    runs-on: ubuntu-latest
+#
+#    strategy:
+#      matrix:
+#        abi: [armeabi-v7a, arm64-v8a, x86_64]
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up JDK
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: '21'
+#
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          channel: 'stable'
+#          flutter-version: '3.29.1'
+#
+#
+#
+#      - name: clean Project
+#        run: flutter clean
+#
+#      - name: Install dependencies
+#        run: flutter pub get
+#
+#      - name: Build APKs
+#        run: flutter build apk --split-per-abi
+#
+#      - name: Upload APK Artifacts (Individual Files)
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: apk-${{ matrix.abi }}
+#          path: build/app/outputs/flutter-apk/app-${{ matrix.abi }}-release.apk
+#
+#
+#
