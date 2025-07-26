@@ -42,11 +42,11 @@ jobs:
 #            echo "This is a dummy APK file" > app/build/outputs/apk/release/app-release.apk
 #          fi
 
-      - name: Upload APK Artifact
+      - name: Upload All APKs Found
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          name: all-apks
+          path: '**/*.apk'
 
 #
 #on:
