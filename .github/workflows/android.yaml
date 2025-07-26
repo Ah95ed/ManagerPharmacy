@@ -1,5 +1,4 @@
 name: ManagerPharmacy CI/CD
-name: Android Java CI/CD
 
 on:
   push:
