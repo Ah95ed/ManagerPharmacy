@@ -3,7 +3,6 @@ package com.Ahmed.PharmacistAssistant.View.Activity;
 
 
 import static com.Ahmed.PharmacistAssistant.R.*;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -42,7 +41,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.Ahmed.PharmacistAssistant.Controler.GpsTracker;
 import com.Ahmed.PharmacistAssistant.Controler.database.DB;
 import com.Ahmed.PharmacistAssistant.View.Adapter.AdapterRecord;
